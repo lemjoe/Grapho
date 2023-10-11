@@ -32,9 +32,8 @@ func main() {
 	http.HandleFunc("/add", UploadArticle)
 	http.HandleFunc("/upload", Upload)
 	http.HandleFunc("/", ArticleList)
-	http.HandleFunc("/callme", CallMe)
-	log.Print("Server is running on port 3608")
-	log.Fatal(http.ListenAndServe(":3608", nil))
+	log.Print("Server is running on port 4007")
+	log.Fatal(http.ListenAndServe(":4007", nil))
 }
 
 func ShowArticle(w http.ResponseWriter, r *http.Request) {
@@ -95,8 +94,8 @@ func DeleteArticle(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Print("MD file delete error: ", err)
 	}
-	w.Write([]byte("Successfully Deleted File\n"))
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+	log.Println("Successfully Deleted File")
 }
 
 func UploadArticle(w http.ResponseWriter, r *http.Request) {
@@ -126,8 +125,10 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	if handler.Header.Get("Content-Type") != "text/markdown" {
-		log.Println("File type must be text/markdown")
+
+	ftype := handler.Filename[len(handler.Filename)-3:]
+	if ftype != ".md" {
+		log.Println("File type must be text/markdown" + ftype)
 		return
 	}
 	defer file.Close()
@@ -153,7 +154,8 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 	// write this byte array to our temporary file
 	tempFile.Write(fileBytes)
 	// return that we have successfully uploaded our file!
-	w.Write([]byte("Successfully Uploaded File\n"))
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+	log.Println("Successfully Uploaded File")
 }
 
 func ArticleList(w http.ResponseWriter, r *http.Request) {
@@ -192,8 +194,4 @@ func ArticleList(w http.ResponseWriter, r *http.Request) {
 	if err != nil {                  // if there is an error
 		log.Print("template executing error: ", err) //log it
 	}
-}
-
-func CallMe(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("You called me!"))
 }

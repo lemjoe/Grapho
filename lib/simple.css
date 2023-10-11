@@ -15,8 +15,7 @@ html {
 
 @media (min-width: 768px) {
     html {
-        font-size: 125%;
-        max-width: 42em;
+        max-width: 52em;
  } }
 
 h1, h2, h3, h4 {
@@ -45,10 +44,11 @@ p code {
 
  pre {
     font-size: 14px;
+    overflow: auto;
     background-color: #eee;
     border: 1px solid grey;
     width: 80%;
-    border-left: 2px solid #fa6432;
+    border-left: 3px solid #fa6432;
     border-radius: 5px;
     padding: 14px;
   }

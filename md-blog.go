@@ -4,7 +4,10 @@ import (
 	"io"
 	"time"
 
+	"github.com/BurntSushi/toml"
 	"github.com/gomarkdown/markdown"
+	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"golang.org/x/text/language"
 
 	"html/template"
 	"log"
@@ -13,9 +16,16 @@ import (
 )
 
 type PageVariables struct {
-	Md        string
-	MDArticle template.HTML
+	Md         string
+	MDArticle  template.HTML
+	HomeButton string
+	AddButton  string
+	Title      string
+	Path       string
 }
+
+// Create a new i18n bundle with default language.
+var bundle = i18n.NewBundle(language.English)
 
 var toTheTop = []byte("\n<a href=\"#top\"><i>back to top</i></a>")
 
@@ -26,17 +36,27 @@ func init() {
 }
 
 func main() {
+	// Register a toml unmarshal function for i18n bundle.
+	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
+	// Load translations from toml files for non-default languages.
+	bundle.MustLoadMessageFile("./lang/active.ru.toml")
+
 	http.HandleFunc("/show", ShowArticle)
 	http.HandleFunc("/edit", Editor)
 	http.HandleFunc("/delete", DeleteArticle)
 	http.HandleFunc("/add", UploadArticle)
 	http.HandleFunc("/upload", Upload)
+	http.HandleFunc("/save", SaveFile)
 	http.HandleFunc("/", ArticleList)
 	log.Print("Server is running on port 4007")
 	log.Fatal(http.ListenAndServe(":4007", nil))
 }
 
 func ShowArticle(w http.ResponseWriter, r *http.Request) {
+
+	lang := r.FormValue("lang")
+	defaultLang := "en"
+	localizer := i18n.NewLocalizer(bundle, lang, defaultLang)
 
 	artclPath := r.URL.Query().Get("md")
 	md, err := os.ReadFile("articles/" + artclPath) // just pass the file name
@@ -47,12 +67,21 @@ func ShowArticle(w http.ResponseWriter, r *http.Request) {
 	md = markdown.NormalizeNewlines(md)
 	html := append(markdown.ToHTML(md, nil, nil), toTheTop[:]...)
 
+	homeButton := localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "HomeButton",
+			Other: "Back to home page",
+		},
+	})
+
 	HomePageVars := PageVariables{ //store the date and time in a struct
-		MDArticle: template.HTML(html),
+		MDArticle:  template.HTML(html),
+		Title:      artclPath,
+		HomeButton: homeButton,
 	}
 
-	t, err := template.ParseFiles("template.html") //parse the html file homepage.html
-	if err != nil {                                // if there is an error
+	t, err := template.ParseFiles("lib/templates/view.html") //parse the html file homepage.html
+	if err != nil {                                          // if there is an error
 		log.Print("template parsing error: ", err) // log it
 	}
 	err = t.Execute(w, HomePageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
@@ -70,15 +99,16 @@ func Editor(w http.ResponseWriter, r *http.Request) {
 	}
 	// always normalize newlines!
 	md = markdown.NormalizeNewlines(md)
-	html := markdown.ToHTML(md, nil, nil)
+	// html := markdown.ToHTML(md, nil, nil)
 
 	HomePageVars := PageVariables{ //store the date and time in a struct
-		Md:        string(md),
-		MDArticle: template.HTML(html),
+		Md: string(md),
+		// MDArticle: template.HTML(html),
+		Path: artclPath,
 	}
 
-	t, err := template.ParseFiles("markdown_editor.html") //parse the html file homepage.html
-	if err != nil {                                       // if there is an error
+	t, err := template.ParseFiles("lib/templates/editor.html") //parse the html file homepage.html
+	if err != nil {                                            // if there is an error
 		log.Print("template parsing error: ", err) // log it
 	}
 	err = t.Execute(w, HomePageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
@@ -100,14 +130,26 @@ func DeleteArticle(w http.ResponseWriter, r *http.Request) {
 
 func UploadArticle(w http.ResponseWriter, r *http.Request) {
 
-	t, err := template.ParseFiles("upload.html") //parse the html file homepage.html
-	if err != nil {                              // if there is an error
+	t, err := template.ParseFiles("lib/templates/upload.html") //parse the html file homepage.html
+	if err != nil {                                            // if there is an error
 		log.Print("template parsing error: ", err) // log it
 	}
 	err = t.Execute(w, time.Now()) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                // if there is an error
 		log.Print("template executing error: ", err) //log it
 	}
+}
+
+func SaveFile(w http.ResponseWriter, r *http.Request) {
+	md := []byte(r.FormValue("textEditArea"))
+	artclPath := r.FormValue("articlePath")
+	err := os.WriteFile("articles/"+artclPath, md, 0644)
+	if err != nil {
+		log.Print("MD file write error: ", err, artclPath)
+	} else {
+		log.Println("Successfully Edited File")
+	}
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func Upload(w http.ResponseWriter, r *http.Request) {
@@ -160,6 +202,54 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 
 func ArticleList(w http.ResponseWriter, r *http.Request) {
 
+	lang := r.FormValue("lang")
+	defaultLang := "en"
+	localizer := i18n.NewLocalizer(bundle, lang, defaultLang)
+
+	// Translation strings
+	listOfArticles := localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ListOfArticles",
+			Other: "List of available articles:",
+		},
+	})
+	editButton := localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "EditButton",
+			Other: "edit",
+		},
+	})
+	deleteButton := localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "DeleteButton",
+			Other: "delete",
+		},
+	})
+	homeButton := localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "HomeButton",
+			Other: "Back to home page",
+		},
+	})
+	addButton := localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "AddButton",
+			Other: "Add an article",
+		},
+	})
+	lastModification := localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "LastModification",
+			Other: "Last modification",
+		},
+	})
+	pageTitle := localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Title",
+			Other: "Articles list",
+		},
+	})
+
 	f, err := os.Open("articles")
 	if err != nil {
 		log.Print("Articles directory open error: ", err)
@@ -172,22 +262,25 @@ func ArticleList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	html := "<h2>List of available articles:</h2><ul>"
+	html := "<h1>" + listOfArticles + "</h1><ul>"
 
 	for _, v := range files {
 		if !v.IsDir() {
-			html += "<li>" + "<a href='show?md=" + v.Name() + "'>" + v.Name() + "</a><i> (Last modification: " + v.ModTime().Format("2006-Jan-02") + ") </i><a href='edit?md=" + v.Name() + "'><i>edit</i></a> | <a href='delete?md=" + v.Name() + "'><i>delete</i></a></li>"
+			html += "<li>" + "<a href='show?md=" + v.Name() + "'>" + v.Name() + "</a><i> (" + lastModification + ": " + v.ModTime().Format("2006-Jan-02") + ") </i><a href='edit?md=" + v.Name() + "'><i>" + editButton + "</i></a> | <a href='delete?md=" + v.Name() + "'><i>" + deleteButton + "</i></a></li>"
 		}
 	}
 
 	html += "</ul>"
 
 	HomePageVars := PageVariables{ //store the date and time in a struct
-		MDArticle: template.HTML(html),
+		MDArticle:  template.HTML(html),
+		HomeButton: homeButton,
+		AddButton:  addButton,
+		Title:      pageTitle,
 	}
 
-	t, err := template.ParseFiles("template.html") //parse the html file homepage.html
-	if err != nil {                                // if there is an error
+	t, err := template.ParseFiles("lib/templates/home.html") //parse the html file homepage.html
+	if err != nil {                                          // if there is an error
 		log.Print("template parsing error: ", err) // log it
 	}
 	err = t.Execute(w, HomePageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps

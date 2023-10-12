@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/lib/simple.css">
+    <title>Upload an article</title>
+  </head>
+  <body>
+    <a href="/">Back to home page</a>
+    <hr>
+    <div>
+        <form enctype="multipart/form-data" action="/upload" method="post">
+          <input type="file" name="myFile" accept=".md" />
+          <input type="submit" value="upload" />
+        </form>
+    </div>
+    <hr>
+    <p>© 2023</p>
+    <br>
+  </body>
+</html>

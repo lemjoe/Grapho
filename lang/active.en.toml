@@ -1,0 +1,7 @@
+AddButton = "Add an article"
+DeleteButton = "delete"
+EditButton = "edit"
+HomeButton = "Back to home page"
+LastModification = "Last modification"
+ListOfArticles = "List of available articles:"
+Title = "Articles list"

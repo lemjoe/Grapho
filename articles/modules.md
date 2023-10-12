@@ -1,5 +1,3 @@
-[Skip to the content.](#content)
-
 # Create a module meant for sharing
 
 ## A book on Go, contains fundamentals but also recipes

@@ -141,8 +141,8 @@ func MDConvert(w http.ResponseWriter, r *http.Request) {
 	result := rg.ReplaceAllString(str, "")
 	html = []byte(result)
 	w.Header().Set("Content-Type", "application/json")
-	data1 := map[string]string{"msg": string(html)}
-	json.NewEncoder(w).Encode(data1)
+	responseJSON := map[string]string{"msg": string(html)}
+	json.NewEncoder(w).Encode(responseJSON)
 }
 
 func UploadArticle(w http.ResponseWriter, r *http.Request) {

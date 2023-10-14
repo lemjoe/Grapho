@@ -14,7 +14,7 @@ cd md-blog
 go run main.go
 ~~~
 
-Then type `localhost:4007` in your browser address bar.
+Then type `localhost:4007` in your browser's address bar.
 
 ## Roadmap to beta:
 

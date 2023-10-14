@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"io"
+	"regexp"
 	"time"
 
 	"github.com/BurntSushi/toml"
@@ -46,6 +48,7 @@ func main() {
 	http.HandleFunc("/delete", DeleteArticle)
 	http.HandleFunc("/add", UploadArticle)
 	http.HandleFunc("/upload", Upload)
+	http.HandleFunc("/convert", MDConvert)
 	http.HandleFunc("/save", SaveFile)
 	http.HandleFunc("/", ArticleList)
 	log.Print("Server is running on port 4007")
@@ -99,12 +102,12 @@ func Editor(w http.ResponseWriter, r *http.Request) {
 	}
 	// always normalize newlines!
 	md = markdown.NormalizeNewlines(md)
-	// html := markdown.ToHTML(md, nil, nil)
+	html := markdown.ToHTML(md, nil, nil)
 
 	HomePageVars := PageVariables{ //store the date and time in a struct
-		Md: string(md),
-		// MDArticle: template.HTML(html),
-		Path: artclPath,
+		Md:        string(md),
+		MDArticle: template.HTML(html),
+		Path:      artclPath,
 	}
 
 	t, err := template.ParseFiles("lib/templates/editor.html") //parse the html file homepage.html
@@ -126,6 +129,20 @@ func DeleteArticle(w http.ResponseWriter, r *http.Request) {
 	}
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 	log.Println("Successfully Deleted File")
+}
+
+func MDConvert(w http.ResponseWriter, r *http.Request) {
+
+	data, _ := io.ReadAll(r.Body)
+	rg := regexp.MustCompile(`(?:[\t ]*(?:\r?\n|\r))`)
+	md := markdown.NormalizeNewlines(data)
+	html := markdown.ToHTML(md, nil, nil)
+	str := string(html)
+	result := rg.ReplaceAllString(str, "")
+	html = []byte(result)
+	w.Header().Set("Content-Type", "application/json")
+	data1 := map[string]string{"msg": string(html)}
+	json.NewEncoder(w).Encode(data1)
 }
 
 func UploadArticle(w http.ResponseWriter, r *http.Request) {

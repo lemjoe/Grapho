@@ -4,10 +4,21 @@
     <title>Edit article</title>
     <link rel="stylesheet" href="/lib/simple.css">
     <script src="/lib/scriptor.js" defer></script>
+    <script>
+      function SyncScroll() {
+        var id1 = document.getElementById("preview-area");
+        var id2 = document.getElementById("text-editor");
+        var step = id1.scrollHeight / id2.scrollHeight;
+        id1.scrollTop = id2.scrollTop * step;
+      }
+    </script>
   </head>
-  <body>
+  <body style="height: 100%;">
   <a href="/">Back to home page</a>
   <hr>
+    Preview:
+    <div id="preview-area" style="height: 55%; overflow-y: hidden;">{{.MDArticle}}</div>
+  <hr><br>
     <div>
       <button data-scriptor-btn value="#" htmltags="false" wrap="false" type="button">H1</button>
 
@@ -29,7 +40,7 @@
 
       <form enctype="multipart/form-data" action="/save" method="post">
         <input hidden type="text" name="articlePath" value="{{.Path}}"/>
-        <textarea id="text-editor" name="textEditArea" spellcheck="true" class="mt-3 d-block width-half" rows="15" cols="100">{{.Md}}</textarea>
+        <textarea id="text-editor" name="textEditArea" onscroll="SyncScroll()" spellcheck="false" rows="15" cols="150" style="width: 100%; resize: none;">{{.Md}}</textarea>
         <input type="submit" value="Save" />
       </form>
     </div>

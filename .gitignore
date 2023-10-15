@@ -14,8 +14,9 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
-# Misc files
-misc/
-
 # Logging
 *.log
+
+# User files
+articles/
+db/

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"io"
 	"regexp"
@@ -18,12 +20,15 @@ import (
 )
 
 type PageVariables struct {
-	Md         string
-	MDArticle  template.HTML
-	HomeButton string
-	AddButton  string
-	Title      string
-	Path       string
+	Md           string
+	MDArticle    template.HTML
+	HomeButton   string
+	AddButton    string
+	Title        string
+	Path         string
+	Author       string
+	CreationDate string
+	UpdateDate   string
 }
 
 // Create a new i18n bundle with default language.
@@ -34,7 +39,6 @@ var toTheTop = []byte("\n<a href=\"#top\"><i>back to top</i></a>")
 func init() {
 	http.Handle("/lib/", http.StripPrefix("/lib/", http.FileServer(http.Dir("lib"))))
 	http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("images"))))
-	// http.Handle("/articles/", http.StripPrefix("/articles/", http.FileServer(http.Dir("articles"))))
 }
 
 func main() {
@@ -42,6 +46,11 @@ func main() {
 	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
 	// Load translations from toml files for non-default languages.
 	bundle.MustLoadMessageFile("./lang/active.ru.toml")
+
+	if _, err := os.Stat("db"); os.IsNotExist(err) {
+		log.Println(err)
+		CreateDefaultDB()
+	}
 
 	http.HandleFunc("/show", ShowArticle)
 	http.HandleFunc("/edit", Editor)
@@ -77,10 +86,29 @@ func ShowArticle(w http.ResponseWriter, r *http.Request) {
 		},
 	})
 
+	article := &struct {
+		FileName         string    `clover:"file_name"`
+		Title            string    `clover:"article_title"`
+		Author           string    `clover:"article_author"`
+		CreationDate     time.Time `clover:"creation_date"`
+		ModificationDate time.Time `clover:"modification_date"`
+		IsLocked         bool      `clover:"is_locked"`
+	}{}
+
+	doc, err := RetrieveArticle(artclPath)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	doc.Unmarshal(article)
+
 	HomePageVars := PageVariables{ //store the date and time in a struct
-		MDArticle:  template.HTML(html),
-		Title:      artclPath,
-		HomeButton: homeButton,
+		MDArticle:    template.HTML(html),
+		Title:        article.Title,
+		HomeButton:   homeButton,
+		Author:       article.Author,
+		CreationDate: article.CreationDate.Format("2006-Jan-02 15:04 MST"),
+		UpdateDate:   article.ModificationDate.Format("2006-Jan-02 15:04 MST"),
 	}
 
 	t, err := template.ParseFiles("lib/templates/view.html") //parse the html file homepage.html
@@ -127,6 +155,12 @@ func DeleteArticle(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Print("MD file delete error: ", err)
 	}
+
+	err = DeleteArticleFromDB(artclPath)
+	if err != nil {
+		log.Print("DB entry delete error: ", err)
+	}
+
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 	log.Println("Successfully Deleted File")
 }
@@ -163,9 +197,17 @@ func SaveFile(w http.ResponseWriter, r *http.Request) {
 	err := os.WriteFile("articles/"+artclPath, md, 0644)
 	if err != nil {
 		log.Print("MD file write error: ", err, artclPath)
+		return
 	} else {
 		log.Println("Successfully Edited File")
 	}
+
+	err = UpdateArticle(artclPath)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
@@ -179,9 +221,9 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 	// it also returns the FileHeader so we can get the Filename,
 	// the Header and the size of the file
 	file, handler, err := r.FormFile("myFile")
+	title := r.FormValue("title")
 	if err != nil {
-		log.Println("Error Retrieving the File")
-		log.Println(err)
+		log.Print("Error Retrieving the File", err)
 		return
 	}
 
@@ -195,23 +237,31 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 	log.Printf("File Size: %+v\n", handler.Size)
 	log.Printf("MIME Header: %+v\n", handler.Header)
 
-	// Create a temporary file within our temp-images directory that follows
-	// a particular naming pattern
-
-	tempFile, err := os.Create("articles/" + handler.Filename)
-	if err != nil {
-		log.Println(err)
-	}
-	defer tempFile.Close()
-
 	// read all of the contents of our uploaded file into a
 	// byte array
 	fileBytes, err := io.ReadAll(file)
 	if err != nil {
 		log.Println(err)
 	}
+
+	// Create a temporary file within our temp-images directory that follows
+	// a particular naming pattern
+
+	hash := md5.Sum(fileBytes)
+	fileName := hex.EncodeToString(hash[:])
+	tempFile, err := os.Create("articles/" + fileName)
+	if err != nil {
+		log.Println(err)
+	}
+	defer tempFile.Close()
+
 	// write this byte array to our temporary file
 	tempFile.Write(fileBytes)
+
+	err = CreateNewArticle(fileName, title)
+	if err != nil {
+		log.Println(err)
+	}
 	// return that we have successfully uploaded our file!
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 	log.Println("Successfully Uploaded File")
@@ -267,24 +317,28 @@ func ArticleList(w http.ResponseWriter, r *http.Request) {
 		},
 	})
 
-	f, err := os.Open("articles")
+	docs, err := ReadArticlesList()
 	if err != nil {
-		log.Print("Articles directory open error: ", err)
-		return
+		log.Println(err)
 	}
 
-	files, err := f.Readdir(0)
-	if err != nil {
-		log.Print("Articles read error: ", err)
-		return
-	}
+	article := &struct {
+		FileName         string    `clover:"file_name"`
+		Title            string    `clover:"article_title"`
+		Author           string    `clover:"article_author"`
+		CreationDate     time.Time `clover:"creation_date"`
+		ModificationDate time.Time `clover:"modification_date"`
+		IsLocked         bool      `clover:"is_locked"`
+	}{}
 
 	html := "<h1>" + listOfArticles + "</h1><ul>"
 
-	for _, v := range files {
-		if !v.IsDir() {
-			html += "<li>" + "<a href='show?md=" + v.Name() + "'>" + v.Name() + "</a><i> (" + lastModification + ": " + v.ModTime().Format("2006-Jan-02") + ") </i><a href='edit?md=" + v.Name() + "'><i>" + editButton + "</i></a> | <a href='delete?md=" + v.Name() + "'><i>" + deleteButton + "</i></a></li>"
-		}
+	if len(docs) == 0 {
+		html += "<p>There is no articles here! Why don't you add one?"
+	}
+	for _, doc := range docs {
+		doc.Unmarshal(article)
+		html += "<li>" + "<a href='show?md=" + article.FileName + "'>" + article.Title + "</a><i> by <b>" + article.Author + "</b> (" + lastModification + ": " + article.ModificationDate.Format("2006-Jan-02 15:04 MST") + ") </i><a href='edit?md=" + article.FileName + "'><i>" + editButton + "</i></a> | <a href='delete?md=" + article.FileName + "'><i>" + deleteButton + "</i></a></li>"
 	}
 
 	html += "</ul>"
@@ -298,10 +352,10 @@ func ArticleList(w http.ResponseWriter, r *http.Request) {
 
 	t, err := template.ParseFiles("lib/templates/home.html") //parse the html file homepage.html
 	if err != nil {                                          // if there is an error
-		log.Print("template parsing error: ", err) // log it
+		log.Print("Template parsing error: ", err) // log it
 	}
 	err = t.Execute(w, HomePageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                  // if there is an error
-		log.Print("template executing error: ", err) //log it
+		log.Print("Template executing error: ", err) //log it
 	}
 }

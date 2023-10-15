@@ -9,8 +9,9 @@
     <hr>
     <div>
         <form enctype="multipart/form-data" action="/upload" method="post">
-          <input type="file" name="myFile" accept=".md" />
-          <input type="submit" value="upload" />
+          Article title: <input type="text" size="40" required="true" name="title" /><br>
+          <input type="file" required="true" name="myFile" accept=".md" /><br>
+          <input type="submit" value="Upload" />
         </form>
     </div>
     <hr>

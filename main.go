@@ -48,7 +48,8 @@ func main() {
 	bundle.MustLoadMessageFile("./lang/active.ru.toml")
 
 	if _, err := os.Stat("db"); os.IsNotExist(err) {
-		log.Println(err)
+		log.Println("Unable to connnect database: ", err)
+		log.Println("Trying to create a default one...")
 		CreateDefaultDB()
 	}
 
@@ -59,6 +60,8 @@ func main() {
 	http.HandleFunc("/upload", Upload)
 	http.HandleFunc("/convert", MDConvert)
 	http.HandleFunc("/save", SaveFile)
+	http.HandleFunc("/singup", SingUp)
+	http.HandleFunc("/singin", SingIn)
 	http.HandleFunc("/", ArticleList)
 	log.Print("Server is running on port 4007")
 	log.Fatal(http.ListenAndServe(":4007", nil))
@@ -183,6 +186,30 @@ func UploadArticle(w http.ResponseWriter, r *http.Request) {
 
 	t, err := template.ParseFiles("lib/templates/upload.html") //parse the html file homepage.html
 	if err != nil {                                            // if there is an error
+		log.Print("template parsing error: ", err) // log it
+	}
+	err = t.Execute(w, time.Now()) //execute the template and pass it the HomePageVars struct to fill in the gaps
+	if err != nil {                // if there is an error
+		log.Print("template executing error: ", err) //log it
+	}
+}
+
+func SingUp(w http.ResponseWriter, r *http.Request) {
+
+	t, err := template.ParseFiles("lib/templates/sing-up.html") //parse the html file homepage.html
+	if err != nil {                                             // if there is an error
+		log.Print("template parsing error: ", err) // log it
+	}
+	err = t.Execute(w, time.Now()) //execute the template and pass it the HomePageVars struct to fill in the gaps
+	if err != nil {                // if there is an error
+		log.Print("template executing error: ", err) //log it
+	}
+}
+
+func SingIn(w http.ResponseWriter, r *http.Request) {
+
+	t, err := template.ParseFiles("lib/templates/sing-in.html") //parse the html file homepage.html
+	if err != nil {                                             // if there is an error
 		log.Print("template parsing error: ", err) // log it
 	}
 	err = t.Execute(w, time.Now()) //execute the template and pass it the HomePageVars struct to fill in the gaps

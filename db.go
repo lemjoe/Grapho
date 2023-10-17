@@ -1,8 +1,6 @@
 package main
 
 import (
-	"crypto/md5"
-	"encoding/hex"
 	"log"
 	"os"
 	"time"
@@ -16,11 +14,11 @@ var username = "admin"
 
 func CreateDefaultDB() {
 
-	err := os.Mkdir("db", 0644)
+	err := os.Mkdir("db", 0740)
 	if err != nil {
 		log.Print("Unable to create database: ", err)
 	}
-	err = os.Mkdir("articles", 0644)
+	err = os.Mkdir("articles", 0740)
 	if err != nil {
 		log.Print("Unable to create articles folder: ", err)
 	}
@@ -39,7 +37,9 @@ func CreateDefaultDB() {
 
 	doc := d.NewDocument()
 	doc.Set("user_name", "admin")
+	doc.Set("passwd", Md5Hash([]byte("admin")))
 	doc.Set("full_name", "Administrator")
+	doc.Set("email", "")
 	doc.Set("creation_date", time.Now())
 	doc.Set("last_login", time.Date(2004, time.March, 19, 17, 36, 0, 0, time.UTC))
 	doc.Set("is_admin", true)
@@ -51,9 +51,8 @@ func CreateDefaultDB() {
 	}
 
 	md := []byte("# Welcome to **md-blog**, your Personal Blog/Wiki Page\n\nHere you can store, organize and collaborate on information in a way that suits you best. Create, explore and share your knowledge with ease!\n\n* Quickly access and edit your notes using the intuitive web-based interface\n* Customize your pages using Markdown markup language\n* Collaborate with friends and colleagues by inviting them to view or edit specific pages\n* Write your thoughts and share them with everyone ")
+	fileName := Md5Hash(md)
 
-	hash := md5.Sum(md)
-	fileName := hex.EncodeToString(hash[:])
 	err = os.WriteFile("articles/"+fileName, md, 0644)
 	if err != nil {
 		log.Print("MD file write error: ", err)

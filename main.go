@@ -10,6 +10,8 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/html"
+	"github.com/gomarkdown/markdown/parser"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/text/language"
 
@@ -67,6 +69,20 @@ func main() {
 	log.Fatal(http.ListenAndServe(":4007", nil))
 }
 
+func MdToHTML(md []byte) []byte {
+	// create markdown parser with extensions
+	extensions := parser.CommonExtensions | parser.Footnotes | parser.MathJax | parser.DefinitionLists | parser.Titleblock | parser.AutoHeadingIDs
+	p := parser.NewWithExtensions(extensions)
+	doc := p.Parse(md)
+
+	// create HTML renderer with extensions
+	htmlFlags := html.CommonFlags | html.HrefTargetBlank | html.FootnoteReturnLinks
+	opts := html.RendererOptions{Flags: htmlFlags}
+	renderer := html.NewRenderer(opts)
+
+	return markdown.Render(doc, renderer)
+}
+
 func ShowArticle(w http.ResponseWriter, r *http.Request) {
 
 	lang := r.FormValue("lang")
@@ -79,8 +95,7 @@ func ShowArticle(w http.ResponseWriter, r *http.Request) {
 		log.Print("MD file open error: ", err, artclPath)
 	}
 	// always normalize newlines!
-	md = markdown.NormalizeNewlines(md)
-	html := append(markdown.ToHTML(md, nil, nil), toTheTop[:]...)
+	html := append(MdToHTML(md), toTheTop[:]...)
 
 	homeButton := localizer.MustLocalize(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
@@ -131,9 +146,7 @@ func Editor(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Print("MD file open error: ", err)
 	}
-	// always normalize newlines!
-	md = markdown.NormalizeNewlines(md)
-	html := markdown.ToHTML(md, nil, nil)
+	html := MdToHTML(md)
 
 	HomePageVars := PageVariables{ //store the date and time in a struct
 		Md:        string(md),
@@ -170,10 +183,9 @@ func DeleteArticle(w http.ResponseWriter, r *http.Request) {
 
 func MDConvert(w http.ResponseWriter, r *http.Request) {
 
-	data, _ := io.ReadAll(r.Body)
+	md, _ := io.ReadAll(r.Body)
 	rg := regexp.MustCompile(`(?:[\t ]*(?:\r?\n|\r))`)
-	md := markdown.NormalizeNewlines(data)
-	html := markdown.ToHTML(md, nil, nil)
+	html := MdToHTML(md)
 	str := string(html)
 	result := rg.ReplaceAllString(str, "")
 	html = []byte(result)

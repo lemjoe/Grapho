@@ -108,7 +108,11 @@ table tbody {
     max-height: 70vh;
     overflow-y: auto;
  }
-table td, table th {
+table td {
+    padding: 0.25em;
+ }
+ table th {
+    background-color: rgba(100, 100, 100, 0.2);
     padding: 0.25em;
  }
 

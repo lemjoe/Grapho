@@ -43,7 +43,7 @@ var toTheTop = []byte("\n<a href=\"#top\"><i>back to top</i></a>")
 
 func init() {
 	http.Handle("/lib/", http.StripPrefix("/lib/", http.FileServer(http.Dir("lib"))))
-	http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("images"))))
+	http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("./images"))))
 }
 
 func main() {
@@ -363,18 +363,18 @@ func ArticleList(w http.ResponseWriter, r *http.Request) {
 			Other: "List of available articles:",
 		},
 	})
-	editButton := localizer.MustLocalize(&i18n.LocalizeConfig{
-		DefaultMessage: &i18n.Message{
-			ID:    "EditButton",
-			Other: "edit",
-		},
-	})
-	deleteButton := localizer.MustLocalize(&i18n.LocalizeConfig{
-		DefaultMessage: &i18n.Message{
-			ID:    "DeleteButton",
-			Other: "delete",
-		},
-	})
+	// editButton := localizer.MustLocalize(&i18n.LocalizeConfig{
+	// 	DefaultMessage: &i18n.Message{
+	// 		ID:    "EditButton",
+	// 		Other: "edit",
+	// 	},
+	// })
+	// deleteButton := localizer.MustLocalize(&i18n.LocalizeConfig{
+	// 	DefaultMessage: &i18n.Message{
+	// 		ID:    "DeleteButton",
+	// 		Other: "delete",
+	// 	},
+	// })
 	homeButton := localizer.MustLocalize(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
 			ID:    "HomeButton",
@@ -415,13 +415,15 @@ func ArticleList(w http.ResponseWriter, r *http.Request) {
 	}{}
 
 	html := "<h1>" + listOfArticles + "</h1><ul>"
+	editImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/edit-pen.png\" alt=\"Edit\" title=\"Edit\">"
+	deleteImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/red-trash-can.png\" alt=\"Edit\" title=\"Edit\">"
 
 	if len(docs) == 0 {
 		html += "<p>There is no articles here! Why don't you add one?"
 	}
 	for _, doc := range docs {
 		doc.Unmarshal(article)
-		html += "<li>" + "<a href='show?md=" + article.FileName + "'>" + article.Title + "</a><i> by <b>" + article.Author + "</b> (" + lastModification + ": " + article.ModificationDate.Format("2006-Jan-02 15:04 MST") + ") </i><a href='edit?md=" + article.FileName + "'><i>" + editButton + "</i></a> | <a href='delete?md=" + article.FileName + "'><i>" + deleteButton + "</i></a></li>"
+		html += "<li>" + "<a href='show?md=" + article.FileName + "'>" + article.Title + "</a><i> by <b>" + article.Author + "</b> (" + lastModification + ": " + article.ModificationDate.Format("2006-Jan-02 15:04 MST") + ") </i><a href='edit?md=" + article.FileName + "'><i>" + editImg + "</i></a> | <a href='delete?md=" + article.FileName + "'><i>" + deleteImg + "</i></a></li>"
 	}
 
 	html += "</ul>"

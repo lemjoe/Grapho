@@ -1,11 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
 	"io"
 	"regexp"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/BurntSushi/toml"
@@ -60,6 +63,7 @@ func main() {
 	http.HandleFunc("/delete", DeleteArticle)
 	http.HandleFunc("/add", UploadArticle)
 	http.HandleFunc("/upload", Upload)
+	http.HandleFunc("/download", DownloadArticle)
 	http.HandleFunc("/convert", MDConvert)
 	http.HandleFunc("/save", SaveFile)
 	http.HandleFunc("/singup", SingUp)
@@ -122,6 +126,7 @@ func ShowArticle(w http.ResponseWriter, r *http.Request) {
 
 	HomePageVars := PageVariables{ //store the date and time in a struct
 		MDArticle:    template.HTML(html),
+		Path:         artclPath,
 		Title:        article.Title,
 		HomeButton:   homeButton,
 		Author:       article.Author,
@@ -179,6 +184,45 @@ func DeleteArticle(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 	log.Println("Successfully Deleted File")
+}
+
+func DownloadArticle(w http.ResponseWriter, r *http.Request) {
+
+	artclPath := r.URL.Query().Get("md")
+	md, err := os.ReadFile("articles/" + artclPath) // just pass the file name
+	if err != nil {
+		log.Print("MD file open error: ", err)
+	}
+	reader := bytes.NewReader(md)
+
+	article := &struct {
+		FileName         string    `clover:"file_name"`
+		Title            string    `clover:"article_title"`
+		Author           string    `clover:"article_author"`
+		CreationDate     time.Time `clover:"creation_date"`
+		ModificationDate time.Time `clover:"modification_date"`
+		IsLocked         bool      `clover:"is_locked"`
+	}{}
+
+	doc, err := RetrieveArticle(artclPath)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	doc.Unmarshal(article)
+
+	fileName := strings.ReplaceAll(article.Title, " ", "_") + ".md"
+
+	w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
+	w.Header().Set("Content-Type", "text/markdown")
+	w.Header().Set("Content-Length", strconv.Itoa(len(md)))
+
+	//stream the body to the client without fully loading it into memory
+	_, err = io.Copy(w, reader)
+	if err != nil {
+		log.Print("Unable to download a file: ", err)
+		return
+	}
 }
 
 func MDConvert(w http.ResponseWriter, r *http.Request) {

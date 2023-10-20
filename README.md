@@ -33,3 +33,15 @@ Then type `localhost:4007` in your browser's address bar.
 | Authentication              |        :x:         |
 | Working editor with preview | :heavy_check_mark: |
 | Docker-ready                |        :x:         |
+
+## Roadmap to refactor:
+
+| Tasks                        |       Ready?       |
+| ---------------------------- | :----------------: |
+| init project structure       | :heavy_check_mark: |
+| add interfaces for Tables db |        :x:         |
+| implement db methods         |        :x:         |
+| add interfaces for services  |        :x:         |
+| implement services methods   |        :x:         |
+| porting handlers             |        :x:         |
+| add fs services              |        :x:         |

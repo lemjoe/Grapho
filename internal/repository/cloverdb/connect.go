@@ -3,7 +3,7 @@ package cloverdb
 import "github.com/ostafen/clover/v2"
 
 type DB struct {
-	db *clover.DB
+	DB *clover.DB
 }
 
 func ConnectDB(dir string) (*DB, error) {
@@ -12,9 +12,9 @@ func ConnectDB(dir string) (*DB, error) {
 		return nil, err
 	}
 	return &DB{
-		db: db,
+		DB: db,
 	}, nil
 }
 func (d *DB) Close() {
-	d.db.Close()
+	d.DB.Close()
 }

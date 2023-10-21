@@ -14,7 +14,7 @@ func NewApp() *App {
 	return &App{}
 }
 func (a *App) Run() error {
-	db, err := cloverdb.ConnectDB("db")
+	db, err := cloverdb.ConnectDB("./db")
 	if err != nil {
 		return err
 	}

@@ -30,9 +30,16 @@ func Init(db *c.DB) (*User, error) {
 		collectionName: "users",
 		db:             db,
 	}
-	err := db.CreateCollection(collection.collectionName)
+	//check if collection already exists
+	exists, err := db.HasCollection(collection.collectionName)
 	if err != nil {
-		return nil, fmt.Errorf("unable to create collection[%s]: %w", collection.collectionName, err)
+		return nil, fmt.Errorf("unable to check if collection[%s] exists: %w", collection.collectionName, err)
+	}
+	if !exists {
+		err := db.CreateCollection(collection.collectionName)
+		if err != nil {
+			return nil, fmt.Errorf("unable to create collection[%s]: %w", collection.collectionName, err)
+		}
 	}
 	return &collection, nil
 }

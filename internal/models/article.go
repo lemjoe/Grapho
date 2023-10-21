@@ -9,4 +9,5 @@ type Article struct {
 	CreationDate     time.Time `json:"creation_date"`
 	ModificationDate time.Time `json:"modification_date"`
 	IsLocked         bool      `json:"is_locked"`
+	Id               string    `json:"id"`
 }

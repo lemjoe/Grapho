@@ -11,4 +11,5 @@ type User struct {
 	IsAdmin      bool      `json:"is_admin"`
 	CreationDate time.Time `json:"creation_date"`
 	LastLogin    time.Time `json:"last_login"`
+	Id           string    `json:"id"`
 }

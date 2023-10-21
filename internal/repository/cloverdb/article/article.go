@@ -18,6 +18,7 @@ type articleSchema struct {
 	FileName         string    `json:"file_name"`
 	Title            string    `json:"article_title"`
 	Author           string    `json:"article_author"`
+	AuthorId         string    `json:"author_id"`
 	CreationDate     time.Time `json:"creation_date"`
 	ModificationDate time.Time `json:"modification_date"`
 	IsLocked         bool      `json:"is_locked"`
@@ -41,6 +42,7 @@ func (a *Article) CreateArticle(article models.Article) (models.Article, error) 
 	doc.Set("file_name", article.FileName)
 	doc.Set("article_title", article.Title)
 	doc.Set("article_author", article.Author)
+	doc.Set("author_id", article.AuthorId)
 	doc.Set("creation_date", time.Now())
 	doc.Set("modification_date", time.Now())
 	doc.Set("is_locked", article.IsLocked)
@@ -53,6 +55,7 @@ func (a *Article) CreateArticle(article models.Article) (models.Article, error) 
 		FileName:         article.FileName,
 		Title:            article.Title,
 		Author:           article.Author,
+		AuthorId:         article.AuthorId,
 		CreationDate:     time.Now(),
 		ModificationDate: time.Now(),
 		IsLocked:         article.IsLocked,
@@ -76,6 +79,7 @@ func (a *Article) GetAllArticles() ([]models.Article, error) {
 			FileName:         article.FileName,
 			Title:            article.Title,
 			Author:           article.Author,
+			AuthorId:         article.AuthorId,
 			CreationDate:     article.CreationDate,
 			ModificationDate: article.ModificationDate,
 			IsLocked:         article.IsLocked,
@@ -100,6 +104,7 @@ func (a *Article) GetArticleByFileName(fileName string) (models.Article, error) 
 		FileName:         article.FileName,
 		Title:            article.Title,
 		Author:           article.Author,
+		AuthorId:         article.AuthorId,
 		CreationDate:     article.CreationDate,
 		ModificationDate: article.ModificationDate,
 		IsLocked:         article.IsLocked,

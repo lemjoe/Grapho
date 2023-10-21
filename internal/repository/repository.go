@@ -8,6 +8,8 @@ import (
 )
 
 type User interface {
+	CreateUser(user models.User) (models.User, error)
+	GetUser(username string) (models.User, error)
 }
 type Article interface {
 	CreateArticle(article models.Article) (models.Article, error)

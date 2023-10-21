@@ -39,9 +39,9 @@ Then type `localhost:4007` in your browser's address bar.
 | Tasks                        |       Ready?       |
 | ---------------------------- | :----------------: |
 | init project structure       | :heavy_check_mark: |
-| add interfaces for Tables db |        :x:         |
-| implement db methods         |        :x:         |
-| add interfaces for services  |        :x:         |
-| implement services methods   |        :x:         |
+| add interfaces for Tables db | :heavy_check_mark: |
+| implement db methods         | :heavy_check_mark: |
+| add interfaces for services  | :heavy_check_mark: |
+| implement services methods   | :heavy_check_mark: |
 | porting handlers             |        :x:         |
-| add fs services              |        :x:         |
+| add fs services              | :heavy_check_mark: |

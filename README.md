@@ -32,6 +32,7 @@ Then type `localhost:4007` in your browser's address bar.
 | Integration with database   | :heavy_check_mark: |
 | Authentication              |        :x:         |
 | Working editor with preview | :heavy_check_mark: |
+| Code refactoring            |        :x:         |
 | Docker-ready                |        :x:         |
 
 ## Roadmap to refactor:

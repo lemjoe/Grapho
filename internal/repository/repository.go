@@ -17,6 +17,7 @@ type Article interface {
 	GetArticleByFileName(fileName string) (models.Article, error)
 	DeleteArticleByFileName(fileName string) error
 	UpdateArticleByFileName(fileName string) error
+	LockArticleByFileName(fileName string) error
 }
 type Repository struct {
 	User    User

@@ -7,7 +7,7 @@ type DB struct {
 }
 
 func ConnectDB(dir string) (*DB, error) {
-	db, err := clover.Open("db")
+	db, err := clover.Open(dir)
 	if err != nil {
 		return nil, err
 	}

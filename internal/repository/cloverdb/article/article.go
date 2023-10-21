@@ -130,3 +130,11 @@ func (a *Article) UpdateArticleByFileName(fileName string) error {
 	err := a.db.Update(q.NewQuery(a.collectionName).Where(q.Field("file_name").Eq(fileName)), changes)
 	return err
 }
+
+// LockArticleByFileName(fileName string) error
+func (a *Article) LockArticleByFileName(fileName string) error {
+	changes := make(map[string]interface{})
+	changes["is_locked"] = true
+	err := a.db.Update(q.NewQuery(a.collectionName).Where(q.Field("file_name").Eq(fileName)), changes)
+	return err
+}

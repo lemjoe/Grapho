@@ -39,7 +39,7 @@ func (a *articleService) CreateNewArticle(fileName, title string, author string,
 		return models.Article{}, err
 	}
 	//write to file
-	err = a.fileService.CreateNewFile(art.FileName, body)
+	err = a.fileService.CreateNewFile("articles/"+art.FileName, body)
 	if err != nil {
 		lockErr := a.repository.Article.LockArticleByFileName(art.FileName)
 		if lockErr != nil {
@@ -75,4 +75,18 @@ func (a *articleService) GetArticleBody(fileName string) ([]byte, error) {
 		return nil, err
 	}
 	return file, nil
+}
+
+// GetArticlesList() ([]models.Article, error)
+func (a *articleService) GetArticlesList() ([]models.Article, error) {
+	arts, err := a.repository.Article.GetAllArticles()
+	if err != nil {
+		return nil, err
+	}
+	return arts, nil
+}
+
+// UpdateArticle(fileName string) error
+func (a *articleService) UpdateArticle(fileName string) error {
+	return a.repository.Article.UpdateArticleByFileName(fileName)
 }

@@ -81,7 +81,11 @@ func (u *User) GetUser(username string) (models.User, error) {
 	if err != nil {
 		return models.User{}, err
 	}
-	var user models.User
+	if userRow == nil {
+		return models.User{}, fmt.Errorf("user not found")
+	}
+	//fmt.Printf("userRow[%s]: %v\n", username, userRow)
+	var user userSchema
 	err = userRow.Unmarshal(&user)
 	if err != nil {
 		return models.User{}, err

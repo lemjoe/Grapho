@@ -18,3 +18,6 @@ type FileService interface {
 	CreateFolder(path string) error
 	DeleteFile(path string) error
 }
+type MigrationService interface {
+	Migrate() error
+}

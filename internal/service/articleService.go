@@ -39,7 +39,7 @@ func (a *articleService) CreateNewArticle(fileName, title string, author string,
 		return models.Article{}, err
 	}
 	//write to file
-	err = a.fileService.CreateNewFile(art.FileName, body)
+	err = a.fileService.CreateNewFile("articles/"+art.FileName, body)
 	if err != nil {
 		lockErr := a.repository.Article.LockArticleByFileName(art.FileName)
 		if lockErr != nil {

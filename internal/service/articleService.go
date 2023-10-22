@@ -76,3 +76,17 @@ func (a *articleService) GetArticleBody(fileName string) ([]byte, error) {
 	}
 	return file, nil
 }
+
+// GetArticlesList() ([]models.Article, error)
+func (a *articleService) GetArticlesList() ([]models.Article, error) {
+	arts, err := a.repository.Article.GetAllArticles()
+	if err != nil {
+		return nil, err
+	}
+	return arts, nil
+}
+
+// UpdateArticle(fileName string) error
+func (a *articleService) UpdateArticle(fileName string) error {
+	return a.repository.Article.UpdateArticleByFileName(fileName)
+}

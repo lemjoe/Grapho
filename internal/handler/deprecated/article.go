@@ -253,7 +253,8 @@ func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
 	// byte array
 	fileBytes, err := io.ReadAll(file)
 	if err != nil {
-		log.Println(err)
+		log.Println("Error Reading File", err)
+		return
 	}
 
 	// Create a temporary file within our temp-images directory that follows
@@ -272,7 +273,8 @@ func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
 	//!WARN remove admin from author name
 	_, err = h.services.ArticleService.CreateNewArticle(fileName, title, "admin", fileBytes) //CreateNewArticle(fileName, title)
 	if err != nil {
-		log.Println(err)
+		log.Println("Error Creating Article", err)
+		return
 	}
 
 	// return that we have successfully uploaded our file!

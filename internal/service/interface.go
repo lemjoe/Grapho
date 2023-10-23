@@ -3,7 +3,7 @@ package service
 import "github.com/lemjoe/md-blog/internal/models"
 
 type ArticleService interface {
-	CreateNewArticle(string, string, string, []byte) (models.Article, error)
+	CreateNewArticle(string, string, []byte) (models.Article, error)
 	DeleteArticle(fileName string) error
 	UpdateArticle(fileName string) error
 	//GetArticle(fileName string) (string, error)

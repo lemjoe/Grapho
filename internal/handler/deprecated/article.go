@@ -2,8 +2,6 @@ package deprecated
 
 import (
 	"bytes"
-	"crypto/md5"
-	"encoding/hex"
 	"fmt"
 	"html/template"
 	"io"
@@ -157,12 +155,12 @@ func (h *handler) ArticleList(w http.ResponseWriter, r *http.Request) {
 func (h *handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 
 	artclPath := r.URL.Query().Get("md")
-	err := os.Remove("articles/" + artclPath)
-	if err != nil {
-		log.Print("MD file delete error: ", err)
-	}
+	// err := os.Remove(artclPath)
+	// if err != nil {
+	// 	log.Print("MD file delete error: ", err)
+	// }
 
-	err = h.services.ArticleService.DeleteArticle(artclPath)
+	err := h.services.ArticleService.DeleteArticle(artclPath)
 	if err != nil {
 		log.Print("DB entry delete error: ", err)
 	}
@@ -260,8 +258,8 @@ func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
 	// Create a temporary file within our temp-images directory that follows
 	// a particular naming pattern
 
-	hash := md5.Sum(fileBytes)
-	fileName := hex.EncodeToString(hash[:])
+	// hash := md5.Sum(fileBytes)
+	// fileName := hex.EncodeToString(hash[:])
 	// tempFile, err := os.Create("articles/" + fileName)
 	// if err != nil {
 	// 	log.Println(err)
@@ -271,7 +269,7 @@ func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
 	// write this byte array to our temporary file
 	//tempFile.Write(fileBytes)
 	//!WARN remove admin from author name
-	_, err = h.services.ArticleService.CreateNewArticle(fileName, title, "admin", fileBytes) //CreateNewArticle(fileName, title)
+	_, err = h.services.ArticleService.CreateNewArticle(title, "admin", fileBytes) //CreateNewArticle(fileName, title)
 	if err != nil {
 		log.Println("Error Creating Article", err)
 		return

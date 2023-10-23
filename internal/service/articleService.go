@@ -6,6 +6,7 @@ import (
 
 	"github.com/lemjoe/md-blog/internal/models"
 	"github.com/lemjoe/md-blog/internal/repository"
+	"github.com/lemjoe/md-blog/utils/hash"
 )
 
 type articleService struct {
@@ -21,7 +22,8 @@ func NewArticleService(repository *repository.Repository, fileService FileServic
 }
 
 // implement func ArticleService interface
-func (a *articleService) CreateNewArticle(fileName, title string, author string, body []byte) (models.Article, error) {
+func (a *articleService) CreateNewArticle(title string, author string, body []byte) (models.Article, error) {
+	fileName := hash.GetHash(body)
 	authorInfo, err := a.repository.User.GetUser(author)
 	if err != nil {
 		return models.Article{}, err

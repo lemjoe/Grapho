@@ -57,7 +57,7 @@ func (m *migrationService) Migrate() error {
 		}
 	}
 	if len(mods) == 0 || (err != nil && strings.Contains(err.Error(), "unable to find documents")) {
-		_, err := m.artService.CreateNewArticle("welcome.md", "Welcome words", "admin", []byte("# Welcome to my blog"))
+		_, err := m.artService.CreateNewArticle("Welcome words", "admin", helloMessage)
 		if err != nil {
 			return fmt.Errorf("migrate:\nunable to create article: %w", err)
 		}

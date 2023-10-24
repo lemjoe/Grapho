@@ -22,7 +22,7 @@ type articleSchema struct {
 	CreationDate     time.Time `json:"creation_date"`
 	ModificationDate time.Time `json:"modification_date"`
 	IsLocked         bool      `json:"is_locked"`
-	Id               string    `json:"id"`
+	Id               string    `json:"_id"`
 }
 
 func Init(db *c.DB) (*Article, error) {

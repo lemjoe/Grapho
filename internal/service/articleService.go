@@ -42,7 +42,7 @@ func (a *articleService) CreateNewArticle(title string, author string, body []by
 	//write to file
 	err = a.fileService.CreateNewFile("articles/"+art.Id, body)
 	if err != nil {
-		lockErr := a.repository.Article.LockArticleByFileName(art.Id)
+		lockErr := a.repository.Article.LockArticleById(art.Id)
 		if lockErr != nil {
 			return models.Article{}, fmt.Errorf("unable to create file and lock article[%s]: \nerr: %w\nlockErr: %w", art.Id, err, lockErr)
 		}
@@ -51,27 +51,27 @@ func (a *articleService) CreateNewArticle(title string, author string, body []by
 	return art, nil
 }
 
-func (a *articleService) DeleteArticle(fileName string) error {
-	err := a.fileService.DeleteFile("articles/" + fileName)
+func (a *articleService) DeleteArticle(id string) error {
+	err := a.fileService.DeleteFile("articles/" + id)
 	if err != nil {
-		return fmt.Errorf("unable to delete file[%s]: %w", fileName, err)
+		return fmt.Errorf("unable to delete file[%s]: %w", id, err)
 	}
-	err = a.repository.Article.DeleteArticleByFileName(fileName)
+	err = a.repository.Article.DeleteArticleById(id)
 	if err != nil {
-		return fmt.Errorf("unable to delete article[%s]: %w", fileName, err)
+		return fmt.Errorf("unable to delete article[%s]: %w", id, err)
 	}
 	return nil
 }
 
-func (a *articleService) GetArticleInfo(fileName string) (models.Article, error) {
-	art, err := a.repository.Article.GetArticleByFileName(fileName)
+func (a *articleService) GetArticleInfo(id string) (models.Article, error) {
+	art, err := a.repository.Article.GetArticleById(id)
 	if err != nil {
 		return models.Article{}, err
 	}
 	return art, nil
 }
-func (a *articleService) GetArticleBody(fileName string) ([]byte, error) {
-	file, err := a.fileService.ReadFile("articles/" + fileName)
+func (a *articleService) GetArticleBody(id string) ([]byte, error) {
+	file, err := a.fileService.ReadFile("articles/" + id)
 	if err != nil {
 		return nil, err
 	}
@@ -89,5 +89,5 @@ func (a *articleService) GetArticlesList() ([]models.Article, error) {
 
 // UpdateArticle(fileName string) error
 func (a *articleService) UpdateArticle(fileName string) error {
-	return a.repository.Article.UpdateArticleByFileName(fileName)
+	return a.repository.Article.UpdateArticleById(fileName)
 }

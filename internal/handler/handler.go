@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/lemjoe/md-blog/internal/handler/deprecated"
 	"github.com/lemjoe/md-blog/internal/service"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
@@ -22,18 +21,18 @@ func NewHandler(services *service.Service, bundle *i18n.Bundle) *Handler {
 }
 
 func (h *Handler) Run(port string) error {
-	// http.HandleFunc("/show", ShowArticle)
-	// http.HandleFunc("/edit", Editor)
-	// http.HandleFunc("/delete", DeleteArticle)
-	// http.HandleFunc("/add", UploadArticle)
-	// http.HandleFunc("/upload", Upload)
-	// http.HandleFunc("/download", DownloadArticle)
-	// http.HandleFunc("/convert", MDConvert)
-	// http.HandleFunc("/save", SaveFile)
-	// http.HandleFunc("/singup", SingUp)
-	// http.HandleFunc("/singin", SingIn)
-	// http.HandleFunc("/", ArticleList)
-	http.Handle("/", deprecated.Init(h.bundle, h.services).Router())
+	http.HandleFunc("/show", h.ShowArticle)
+	http.HandleFunc("/edit", h.Editor)
+	http.HandleFunc("/delete", h.DeleteArticle)
+	http.HandleFunc("/add", h.UploadArticle)
+	http.HandleFunc("/upload", h.Upload)
+	http.HandleFunc("/download", h.DownloadArticle)
+	http.HandleFunc("/convert", h.MDConvert)
+	http.HandleFunc("/save", h.SaveFile)
+	http.HandleFunc("/singup", h.SingUp)
+	http.HandleFunc("/singin", h.SingIn)
+	http.HandleFunc("/", h.GetArticlesList)
+	// http.Handle("/", deprecated.Init(h.bundle, h.services).Router())
 	http.Handle("/lib/", http.StripPrefix("/lib/", http.FileServer(http.Dir("lib"))))
 
 	http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("./images"))))

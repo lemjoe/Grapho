@@ -1,4 +1,4 @@
-package deprecated
+package handler
 
 import (
 	"bytes"
@@ -12,114 +12,21 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"github.com/lemjoe/md-blog/internal/models"
 )
 
-func (h *handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
+// Home page (Articles list)
+func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 
 	lang := r.FormValue("lang")
-	defaultLang := "en"
-	localizer := i18n.NewLocalizer(h.bundle, lang, defaultLang)
-
-	artclPath := r.URL.Query().Get("md")
-	md, err := os.ReadFile("articles/" + artclPath) // just pass the file name
-	if err != nil {
-		log.Print("MD file open error: ", err, artclPath)
-	}
-	// always normalize newlines!
-	html := append(MdToHTML(md), toTheTop[:]...)
-
-	homeButton := localizer.MustLocalize(&i18n.LocalizeConfig{
-		DefaultMessage: &i18n.Message{
-			ID:    "HomeButton",
-			Other: "Back to home page",
-		},
-	})
-
-	doc, err := h.services.ArticleService.GetArticleInfo(artclPath) //RetrieveArticle(artclPath)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	//doc.Unmarshal(article)
-
-	HomePageVars := PageVariables{ //store the date and time in a struct
-		MDArticle:    template.HTML(html),
-		Path:         artclPath,
-		Title:        doc.Title,
-		HomeButton:   homeButton,
-		Author:       doc.Author,
-		CreationDate: doc.CreationDate.Format("2006-Jan-02 15:04 MST"),
-		UpdateDate:   doc.ModificationDate.Format("2006-Jan-02 15:04 MST"),
-	}
-
-	t, err := template.ParseFiles("lib/templates/view.html") //parse the html file homepage.html
-	if err != nil {                                          // if there is an error
-		log.Print("template parsing error: ", err) // log it
-	}
-	err = t.Execute(w, HomePageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
-	if err != nil {                  // if there is an error
-		log.Print("template executing error: ", err) //log it
-	}
-}
-
-// ArticleList
-func (h *handler) ArticleList(w http.ResponseWriter, r *http.Request) {
-
-	lang := r.FormValue("lang")
-	defaultLang := "en"
-	localizer := i18n.NewLocalizer(h.bundle, lang, defaultLang)
-
-	// Translation strings
-	listOfArticles := localizer.MustLocalize(&i18n.LocalizeConfig{
-		DefaultMessage: &i18n.Message{
-			ID:    "ListOfArticles",
-			Other: "List of available articles:",
-		},
-	})
-	// editButton := localizer.MustLocalize(&i18n.LocalizeConfig{
-	// 	DefaultMessage: &i18n.Message{
-	// 		ID:    "EditButton",
-	// 		Other: "edit",
-	// 	},
-	// })
-	// deleteButton := localizer.MustLocalize(&i18n.LocalizeConfig{
-	// 	DefaultMessage: &i18n.Message{
-	// 		ID:    "DeleteButton",
-	// 		Other: "delete",
-	// 	},
-	// })
-	homeButton := localizer.MustLocalize(&i18n.LocalizeConfig{
-		DefaultMessage: &i18n.Message{
-			ID:    "HomeButton",
-			Other: "Back to home page",
-		},
-	})
-	addButton := localizer.MustLocalize(&i18n.LocalizeConfig{
-		DefaultMessage: &i18n.Message{
-			ID:    "AddButton",
-			Other: "Add an article",
-		},
-	})
-	lastModification := localizer.MustLocalize(&i18n.LocalizeConfig{
-		DefaultMessage: &i18n.Message{
-			ID:    "LastModification",
-			Other: "Last modification",
-		},
-	})
-	pageTitle := localizer.MustLocalize(&i18n.LocalizeConfig{
-		DefaultMessage: &i18n.Message{
-			ID:    "Title",
-			Other: "Articles list",
-		},
-	})
-
+	translation := Localizer([]string{"listOfArticles", "homeButton", "addButton", "lastModification", "pageTitle"}, lang, h.bundle)
+	// log.Println(translation)
 	docs, err := h.services.ArticleService.GetArticlesList()
 	if err != nil {
 		log.Println(err)
 	}
 
-	html := "<h1>" + listOfArticles + "</h1><ul>"
+	html := "<h1>" + translation["listOfArticles"] + "</h1><ul>"
 	editImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/edit-pen.png\" alt=\"Edit\" title=\"Edit\">"
 	deleteImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/red-trash-can.png\" alt=\"Edit\" title=\"Edit\">"
 
@@ -128,16 +35,16 @@ func (h *handler) ArticleList(w http.ResponseWriter, r *http.Request) {
 	}
 	for _, article := range docs {
 
-		html += "<li>" + "<a href='show?md=" + article.FileName + "'>" + article.Title + "</a><i> by <b>" + article.Author + "</b> (" + lastModification + ": " + article.ModificationDate.Format("2006-Jan-02 15:04 MST") + ") </i><a href='edit?md=" + article.FileName + "'><i>" + editImg + "</i></a> | <a href='delete?md=" + article.FileName + "'><i>" + deleteImg + "</i></a></li>"
+		html += "<li>" + "<a href='show?md=" + article.FileName + "'>" + article.Title + "</a><i> by <b>" + article.Author + "</b> (" + translation["lastModification"] + ": " + article.ModificationDate.Format("2006-Jan-02 15:04 MST") + ") </i><a href='edit?md=" + article.FileName + "'><i>" + editImg + "</i></a> | <a href='delete?md=" + article.FileName + "'><i>" + deleteImg + "</i></a></li>"
 	}
 
 	html += "</ul>"
 
-	HomePageVars := PageVariables{ //store the date and time in a struct
+	HomePageVars := models.PageVariables{ //store the date and time in a struct
 		MDArticle:  template.HTML(html),
-		HomeButton: homeButton,
-		AddButton:  addButton,
-		Title:      pageTitle,
+		HomeButton: translation["homeButton"],
+		AddButton:  translation["addButton"],
+		Title:      translation["pageTitle"],
 	}
 
 	t, err := template.ParseFiles("lib/templates/home.html") //parse the html file homepage.html
@@ -151,14 +58,51 @@ func (h *handler) ArticleList(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// DeleteArticle
-func (h *handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
+// Show article
+func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
+
+	lang := r.FormValue("lang")
+	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
 	artclPath := r.URL.Query().Get("md")
-	// err := os.Remove(artclPath)
-	// if err != nil {
-	// 	log.Print("MD file delete error: ", err)
-	// }
+	md, err := h.services.FileService.ReadFile("articles/" + artclPath)
+	if err != nil {
+		log.Print("MD file open error: ", err, artclPath)
+	}
+	// always normalize newlines!
+	html := append(MdToHTML(md), toTheTop[:]...)
+
+	doc, err := h.services.ArticleService.GetArticleInfo(artclPath) //RetrieveArticle(artclPath)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	//doc.Unmarshal(article)
+
+	ArticlePageVars := models.PageVariables{ //store the date and time in a struct
+		MDArticle:    template.HTML(html),
+		Path:         artclPath,
+		Title:        doc.Title,
+		HomeButton:   translation["homeButton"],
+		Author:       doc.Author,
+		CreationDate: doc.CreationDate.Format("2006-Jan-02 15:04 MST"),
+		UpdateDate:   doc.ModificationDate.Format("2006-Jan-02 15:04 MST"),
+	}
+
+	t, err := template.ParseFiles("lib/templates/view.html") //parse the html file homepage.html
+	if err != nil {                                          // if there is an error
+		log.Print("template parsing error: ", err) // log it
+	}
+	err = t.Execute(w, ArticlePageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
+	if err != nil {                     // if there is an error
+		log.Print("template executing error: ", err) //log it
+	}
+}
+
+// DeleteArticle
+func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
+
+	artclPath := r.URL.Query().Get("md")
 
 	err := h.services.ArticleService.DeleteArticle(artclPath)
 	if err != nil {
@@ -170,7 +114,7 @@ func (h *handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 }
 
 // UploadArticle
-func (h *handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("lib/templates/upload.html") //parse the html file homepage.html
 	if err != nil {                                            // if there is an error
 		log.Print("template parsing error: ", err) // log it
@@ -186,7 +130,7 @@ func (h *handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 }
 
 // DownloadArticle
-func (h *handler) DownloadArticle(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) DownloadArticle(w http.ResponseWriter, r *http.Request) {
 
 	artclPath := r.URL.Query().Get("md")
 	md, err := h.services.ArticleService.GetArticleBody(artclPath)
@@ -221,7 +165,7 @@ func (h *handler) DownloadArticle(w http.ResponseWriter, r *http.Request) {
 }
 
 // Upload
-func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
 	log.Println("File Upload Endpoint Hit")
 
 	// Parse our multipart form, 10 << 20 specifies a maximum
@@ -255,20 +199,6 @@ func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Create a temporary file within our temp-images directory that follows
-	// a particular naming pattern
-
-	// hash := md5.Sum(fileBytes)
-	// fileName := hex.EncodeToString(hash[:])
-	// tempFile, err := os.Create("articles/" + fileName)
-	// if err != nil {
-	// 	log.Println(err)
-	// }
-	// defer tempFile.Close()
-
-	// write this byte array to our temporary file
-	//tempFile.Write(fileBytes)
-	//!WARN remove admin from author name
 	_, err = h.services.ArticleService.CreateNewArticle(title, "admin", fileBytes) //CreateNewArticle(fileName, title)
 	if err != nil {
 		log.Println("Error Creating Article", err)
@@ -281,7 +211,7 @@ func (h *handler) Upload(w http.ResponseWriter, r *http.Request) {
 }
 
 // SaveFile
-func (h *handler) SaveFile(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) SaveFile(w http.ResponseWriter, r *http.Request) {
 	md := []byte(r.FormValue("textEditArea"))
 	artclPath := r.FormValue("articlePath")
 	err := os.WriteFile("articles/"+artclPath, md, 0644)

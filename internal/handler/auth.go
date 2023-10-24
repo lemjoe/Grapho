@@ -1,4 +1,4 @@
-package deprecated
+package handler
 
 import (
 	"html/template"
@@ -8,7 +8,7 @@ import (
 )
 
 // SingUp
-func (h *handler) SingUp(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) SingUp(w http.ResponseWriter, r *http.Request) {
 
 	t, err := template.ParseFiles("lib/templates/sing-up.html") //parse the html file homepage.html
 	if err != nil {                                             // if there is an error
@@ -19,7 +19,7 @@ func (h *handler) SingUp(w http.ResponseWriter, r *http.Request) {
 		log.Print("template executing error: ", err) //log it
 	}
 }
-func (h *handler) SingIn(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) SingIn(w http.ResponseWriter, r *http.Request) {
 
 	t, err := template.ParseFiles("lib/templates/sing-in.html") //parse the html file homepage.html
 	if err != nil {                                             // if there is an error

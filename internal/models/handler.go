@@ -1,4 +1,4 @@
-package deprecated
+package models
 
 import "html/template"
 

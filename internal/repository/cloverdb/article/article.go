@@ -55,7 +55,10 @@ func (a *Article) CreateArticle(article models.Article) (models.Article, error) 
 	doc.Set("is_locked", article.IsLocked)
 
 	docId, err := a.db.InsertOne(a.collectionName, doc)
-	a.db.UpdateById(a.collectionName, docId, map[string]interface{}{"id": docId})
+	// err = a.db.UpdateById(a.collectionName, docId, func(doc *d.Document) *d.Document {
+	// 	doc.Set("modification_date", time.Now())
+	// 	return doc
+	// })
 	if err != nil {
 		return models.Article{}, fmt.Errorf("unable to insert document[%s]: %w", a.collectionName, err)
 	}

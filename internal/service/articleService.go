@@ -6,7 +6,6 @@ import (
 
 	"github.com/lemjoe/md-blog/internal/models"
 	"github.com/lemjoe/md-blog/internal/repository"
-	"github.com/lemjoe/md-blog/utils/hash"
 )
 
 type articleService struct {
@@ -23,13 +22,13 @@ func NewArticleService(repository *repository.Repository, fileService FileServic
 
 // implement func ArticleService interface
 func (a *articleService) CreateNewArticle(title string, author string, body []byte) (models.Article, error) {
-	fileName := hash.GetHash(body)
+	// fileName := hash.GetHash(body)
 	authorInfo, err := a.repository.User.GetUser(author)
 	if err != nil {
 		return models.Article{}, err
 	}
 	art, err := a.repository.Article.CreateArticle(models.Article{
-		FileName:         fileName,
+		// FileName:         fileName,
 		Title:            title,
 		Author:           authorInfo.FullName,
 		AuthorId:         author,
@@ -41,13 +40,13 @@ func (a *articleService) CreateNewArticle(title string, author string, body []by
 		return models.Article{}, err
 	}
 	//write to file
-	err = a.fileService.CreateNewFile("articles/"+art.FileName, body)
+	err = a.fileService.CreateNewFile("articles/"+art.Id, body)
 	if err != nil {
-		lockErr := a.repository.Article.LockArticleByFileName(art.FileName)
+		lockErr := a.repository.Article.LockArticleByFileName(art.Id)
 		if lockErr != nil {
-			return models.Article{}, fmt.Errorf("unable to create file and lock article[%s]: \nerr: %w\nlockErr: %w", art.FileName, err, lockErr)
+			return models.Article{}, fmt.Errorf("unable to create file and lock article[%s]: \nerr: %w\nlockErr: %w", art.Id, err, lockErr)
 		}
-		return models.Article{}, fmt.Errorf("unable to create article file[%s]: %w", art.FileName, lockErr)
+		return models.Article{}, fmt.Errorf("unable to create article file[%s]: %w", art.Id, lockErr)
 	}
 	return art, nil
 }

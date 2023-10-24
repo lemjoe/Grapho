@@ -34,8 +34,8 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 		html += "<p>There is no articles here! Why don't you add one?"
 	}
 	for _, article := range docs {
-
-		html += "<li>" + "<a href='show?md=" + article.FileName + "'>" + article.Title + "</a><i> by <b>" + article.Author + "</b> (" + translation["lastModification"] + ": " + article.ModificationDate.Format("2006-Jan-02 15:04 MST") + ") </i><a href='edit?md=" + article.FileName + "'><i>" + editImg + "</i></a> | <a href='delete?md=" + article.FileName + "'><i>" + deleteImg + "</i></a></li>"
+		log.Println(article)
+		html += "<li>" + "<a href='show?md=" + article.Id + "'>" + article.Title + "</a><i> by <b>" + article.Author + "</b> (" + translation["lastModification"] + ": " + article.ModificationDate.Format("2006-Jan-02 15:04 MST") + ") </i><a href='edit?md=" + article.Id + "'><i>" + editImg + "</i></a> | <a href='delete?md=" + article.Id + "'><i>" + deleteImg + "</i></a></li>"
 	}
 
 	html += "</ul>"

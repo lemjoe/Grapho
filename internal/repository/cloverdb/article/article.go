@@ -15,7 +15,7 @@ type Article struct {
 	db             *c.DB
 }
 type articleSchema struct {
-	FileName         string    `json:"file_name"`
+	// FileName         string    `json:"file_name"`
 	Title            string    `json:"article_title"`
 	Author           string    `json:"article_author"`
 	AuthorId         string    `json:"author_id"`
@@ -46,7 +46,7 @@ func Init(db *c.DB) (*Article, error) {
 func (a *Article) CreateArticle(article models.Article) (models.Article, error) {
 	doc := d.NewDocument()
 
-	doc.Set("file_name", article.FileName)
+	// doc.Set("file_name", article.FileName)
 	doc.Set("article_title", article.Title)
 	doc.Set("article_author", article.Author)
 	doc.Set("author_id", article.AuthorId)
@@ -55,11 +55,12 @@ func (a *Article) CreateArticle(article models.Article) (models.Article, error) 
 	doc.Set("is_locked", article.IsLocked)
 
 	docId, err := a.db.InsertOne(a.collectionName, doc)
+	a.db.UpdateById(a.collectionName, docId, map[string]interface{}{"id": docId})
 	if err != nil {
 		return models.Article{}, fmt.Errorf("unable to insert document[%s]: %w", a.collectionName, err)
 	}
 	return models.Article{
-		FileName:         article.FileName,
+		// FileName:         article.FileName,
 		Title:            article.Title,
 		Author:           article.Author,
 		AuthorId:         article.AuthorId,
@@ -83,7 +84,7 @@ func (a *Article) GetAllArticles() ([]models.Article, error) {
 		}
 
 		articles = append(articles, models.Article{
-			FileName:         article.FileName,
+			// FileName:         article.FileName,
 			Title:            article.Title,
 			Author:           article.Author,
 			AuthorId:         article.AuthorId,
@@ -98,7 +99,7 @@ func (a *Article) GetAllArticles() ([]models.Article, error) {
 
 // GetArticleByFileName(fileName string) (models.Article, error)
 func (a *Article) GetArticleByFileName(fileName string) (models.Article, error) {
-	doc, err := a.db.FindFirst(q.NewQuery(a.collectionName).Where(q.Field("file_name").Eq(fileName)))
+	doc, err := a.db.FindFirst(q.NewQuery(a.collectionName).Where(q.Field("id").Eq(fileName)))
 	if err != nil {
 		return models.Article{}, fmt.Errorf("unable to find document[%s]: %w", a.collectionName, err)
 	}
@@ -108,7 +109,7 @@ func (a *Article) GetArticleByFileName(fileName string) (models.Article, error) 
 		return models.Article{}, fmt.Errorf("unable to unmarshal document[%s]: %w", a.collectionName, err)
 	}
 	return models.Article{
-		FileName:         article.FileName,
+		// FileName:         article.FileName,
 		Title:            article.Title,
 		Author:           article.Author,
 		AuthorId:         article.AuthorId,
@@ -121,7 +122,7 @@ func (a *Article) GetArticleByFileName(fileName string) (models.Article, error) 
 
 // DeleteArticleByFileName(fileName string) error
 func (a *Article) DeleteArticleByFileName(fileName string) error {
-	err := a.db.Delete(q.NewQuery(a.collectionName).Where(q.Field("file_name").Eq(fileName)))
+	err := a.db.Delete(q.NewQuery(a.collectionName).Where(q.Field("id").Eq(fileName)))
 	if err != nil {
 		return fmt.Errorf("unable to find document[%s]: %w", a.collectionName, err)
 	}
@@ -134,7 +135,7 @@ func (a *Article) UpdateArticleByFileName(fileName string) error {
 	changes := make(map[string]interface{})
 	changes["modification_date"] = time.Now()
 	changes["is_locked"] = false
-	err := a.db.Update(q.NewQuery(a.collectionName).Where(q.Field("file_name").Eq(fileName)), changes)
+	err := a.db.Update(q.NewQuery(a.collectionName).Where(q.Field("id").Eq(fileName)), changes)
 	return err
 }
 
@@ -142,6 +143,6 @@ func (a *Article) UpdateArticleByFileName(fileName string) error {
 func (a *Article) LockArticleByFileName(fileName string) error {
 	changes := make(map[string]interface{})
 	changes["is_locked"] = true
-	err := a.db.Update(q.NewQuery(a.collectionName).Where(q.Field("file_name").Eq(fileName)), changes)
+	err := a.db.Update(q.NewQuery(a.collectionName).Where(q.Field("id").Eq(fileName)), changes)
 	return err
 }

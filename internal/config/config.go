@@ -54,6 +54,7 @@ func InitConfig(confPath string) (models.ConfigDB, error) {
 			if err := CreateDefaultConfig(); err != nil {
 				return models.ConfigDB{}, fmt.Errorf("unable to create default config. You should create it manually")
 			}
+			godotenv.Load(confPath)
 		}
 
 	}
@@ -67,7 +68,7 @@ func InitConfig(confPath string) (models.ConfigDB, error) {
 	} else {
 		defaultConf.DbType = DB_TYPE
 	}
-	PATH, exist := os.LookupEnv("DB_PATH")
+	PATH, exist := os.LookupEnv("PATH")
 	if !exist {
 		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "PATH"))
 	} else {

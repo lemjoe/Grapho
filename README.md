@@ -11,21 +11,21 @@ Here you can store, organize and collaborate on information in a way that suits 
 - Collaborate with friends and colleagues by inviting them to view or edit specific pages
 - Write your thoughts and share them with everyone
 
-## config file
+## Config file
 
-- create a config file `.env` with the following content(remove comments):
+- Create a config file `.env` with the following content:
 
 ```
-DB_TYPE=cloverdb //todo add mongodb
-PATH=./db //for cloverdb
-HOST=localhost //for mongodb or postgresql
-PORT=5432 //for mongodb or postgresql
-DB_NAME=md_blog  //for mongodb or postgresql
+DB_TYPE=cloverdb # todo add mongodb
+PATH=./db # for cloverdb
+HOST=localhost # for mongodb or postgresql
+PORT=5432 # for mongodb or postgresql
+DB_NAME=md_blog  # for mongodb or postgresql
 ```
 
 ## Usage
 
-Just clone this repo and run the main and only Go file `main.go`.
+Just clone this repo and run the file `/cmd/main.go`.
 
 ```
 git clone https://github.com/lemjoe/md-blog.git

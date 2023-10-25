@@ -4,7 +4,6 @@ import (
 	"github.com/lemjoe/md-blog/internal/config"
 	"github.com/lemjoe/md-blog/internal/handler"
 	"github.com/lemjoe/md-blog/internal/repository"
-	"github.com/lemjoe/md-blog/internal/repository/cloverdb"
 	"github.com/lemjoe/md-blog/internal/service"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/text/language"
@@ -22,12 +21,11 @@ func (a *App) Run() error {
 		return err
 	}
 	_ = conf
-	db, err := cloverdb.ConnectDB("./db")
+	db, err := repository.InitializeDB(conf.DbType, conf)
 	if err != nil {
 		return err
 	}
-	defer db.Close()
-	repos, err := repository.NewRepository(db.DB)
+	repos, err := db.NewRepository()
 	if err != nil {
 		return err
 	}

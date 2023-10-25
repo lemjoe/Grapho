@@ -30,15 +30,30 @@ func fileExists(filename string) bool {
 	return !info.IsDir()
 }
 
+func CreateDefaultConfig() error {
+	input, err := os.ReadFile("./.env.default")
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile("./.env", input, 0644)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func InitConfig(confPath string) (models.ConfigDB, error) {
 	if confPath != "" {
 		if fileExists(confPath) { //if from dot env
 			if err := godotenv.Load(confPath); err != nil {
-				return models.ConfigDB{}, fmt.Errorf("InitConfig: no '%s' file open", confPath)
+				return models.ConfigDB{}, fmt.Errorf("InitConfig: unable to read file '%s'", confPath)
 			}
 
 		} else {
-			return models.ConfigDB{}, fmt.Errorf("InitConfig: '%s' file not exist", confPath)
+			if err := CreateDefaultConfig(); err != nil {
+				return models.ConfigDB{}, fmt.Errorf("unable to create default config. You should create it manually")
+			}
 		}
 
 	}

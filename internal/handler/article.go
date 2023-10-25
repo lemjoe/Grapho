@@ -14,8 +14,6 @@ import (
 	"github.com/lemjoe/md-blog/internal/models"
 )
 
-var userName = "admin" // Temporarily
-
 // Home page (Articles list)
 func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 

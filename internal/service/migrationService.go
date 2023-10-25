@@ -28,7 +28,7 @@ func (m *migrationService) Migrate() error {
 			return fmt.Errorf("migrate:\nunable to create articles folder: %w", err)
 		}
 	}
-	_, err := m.repository.User.GetUser("admin")
+	_, err := m.repository.User.GetUserByUsername("admin")
 	if err != nil {
 		if strings.Contains(err.Error(), "user not found") {
 			newUsr, err := m.repository.User.CreateUser(models.User{

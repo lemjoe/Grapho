@@ -4,7 +4,8 @@ import "github.com/lemjoe/md-blog/internal/models"
 
 type User interface {
 	CreateUser(user models.User) (models.User, error)
-	GetUser(username string) (models.User, error)
+	GetUserByUsername(username string) (models.User, error)
+	GetUserById(id string) (models.User, error)
 }
 type Article interface {
 	CreateArticle(article models.Article) (models.Article, error)

@@ -47,10 +47,82 @@ func Init(driver *mongo.Database) (*User, error) {
 	}, nil
 }
 func (u *User) CreateUser(user models.User) (models.User, error) {
-	return models.User{}, nil
+	usScheme := UserScheme{
+		UserName:     user.UserName,
+		FullName:     user.FullName,
+		Password:     user.Password,
+		Email:        user.Email,
+		IsAdmin:      user.IsAdmin,
+		LastLogin:    time.Now(),
+		CreationDate: time.Now(),
+	}
+	res, err := u.ct.InsertOne(context.TODO(), bson.M{
+		"user_name":     usScheme.UserName,
+		"full_name":     usScheme.FullName,
+		"passwd":        usScheme.Password,
+		"email":         usScheme.Email,
+		"is_admin":      usScheme.IsAdmin,
+		"last_login":    usScheme.LastLogin,
+		"creation_date": usScheme.CreationDate,
+	})
+	if err != nil {
+		return models.User{}, err
+	}
+	usScheme.Id = res.InsertedID.(primitive.ObjectID)
+	return models.User{
+		UserName:     usScheme.UserName,
+		FullName:     usScheme.FullName,
+		Password:     usScheme.Password,
+		Email:        usScheme.Email,
+		IsAdmin:      usScheme.IsAdmin,
+		Id:           usScheme.Id.Hex(),
+		LastLogin:    usScheme.LastLogin,
+		CreationDate: usScheme.CreationDate,
+	}, nil
 }
 
 // GetUser(username string) (models.User, error)
-func (u *User) GetUser(username string) (models.User, error) {
-	return models.User{}, nil
+func (u *User) GetUserByUsername(username string) (models.User, error) {
+	var findedUser UserScheme
+	err := u.ct.FindOne(context.TODO(), bson.M{"user_name": username}).Decode(&findedUser)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return models.User{}, fmt.Errorf("user not found")
+		}
+
+		return models.User{}, err
+	}
+	//fmt.Printf("findedUser: %+v\n", findedUser)
+	return models.User{
+		UserName:     findedUser.UserName,
+		FullName:     findedUser.FullName,
+		Password:     findedUser.Password,
+		Email:        findedUser.Email,
+		IsAdmin:      findedUser.IsAdmin,
+		Id:           findedUser.Id.Hex(),
+		LastLogin:    findedUser.LastLogin,
+		CreationDate: findedUser.CreationDate,
+	}, nil
+}
+
+// GetUserById(id string) (models.User, error)
+func (u *User) GetUserById(id string) (models.User, error) {
+	var findedUser UserScheme
+	err := u.ct.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&findedUser)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return models.User{}, fmt.Errorf("user not found")
+		}
+		return models.User{}, err
+	}
+	return models.User{
+		UserName:     findedUser.UserName,
+		FullName:     findedUser.FullName,
+		Password:     findedUser.Password,
+		Email:        findedUser.Email,
+		IsAdmin:      findedUser.IsAdmin,
+		Id:           findedUser.Id.Hex(),
+		LastLogin:    findedUser.LastLogin,
+		CreationDate: findedUser.CreationDate,
+	}, nil
 }

@@ -9,18 +9,19 @@ import (
 	"github.com/lemjoe/md-blog/internal/models"
 )
 
-func LookupAndParseEnvInt(envName string) (int, bool) {
+func LookupAndParseEnvInt(envName string, defaultVal int) (int, bool) {
 	env, exists := os.LookupEnv(envName)
 	if !exists {
-		return 0, false
+		return defaultVal, false
 	}
 	parsedInt, err := strconv.Atoi(env)
 	if err != nil {
 		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not valid: %w", envName, err))
-		return 0, false
+		return defaultVal, false
 	}
 	return parsedInt, true
 }
+
 func fileExists(filename string) bool {
 	info, err := os.Stat(filename)
 	if os.IsNotExist(err) {
@@ -28,6 +29,7 @@ func fileExists(filename string) bool {
 	}
 	return !info.IsDir()
 }
+
 func InitConfig(confPath string) (models.ConfigDB, error) {
 	if confPath != "" {
 		if fileExists(confPath) { //if from dot env

@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/lemjoe/md-blog/internal/service"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
@@ -21,21 +22,23 @@ func NewHandler(services *service.Service, bundle *i18n.Bundle) *Handler {
 }
 
 func (h *Handler) Run(port string) error {
-	http.HandleFunc("/show", h.ShowArticle)
-	http.HandleFunc("/edit", h.Editor)
-	http.HandleFunc("/delete", h.DeleteArticle)
-	http.HandleFunc("/add", h.UploadArticle)
-	http.HandleFunc("/upload", h.Upload)
-	http.HandleFunc("/download", h.DownloadArticle)
-	http.HandleFunc("/convert", h.MDConvert)
-	http.HandleFunc("/save", h.SaveFile)
-	http.HandleFunc("/singup", h.SingUp)
-	http.HandleFunc("/singin", h.SingIn)
-	http.HandleFunc("/", h.GetArticlesList)
-	// http.Handle("/", deprecated.Init(h.bundle, h.services).Router())
-	http.Handle("/lib/", http.StripPrefix("/lib/", http.FileServer(http.Dir("lib"))))
+	r := mux.NewRouter()
 
-	http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("./images"))))
+	r.Handle("/", http.HandlerFunc(h.GetArticlesList)).Methods("GET")
+	r.Handle("/show", http.HandlerFunc(h.ShowArticle)).Methods("GET")
+	r.Handle("/edit", http.HandlerFunc(h.Editor)).Methods("GET")
+	r.Handle("/delete", http.HandlerFunc(h.DeleteArticle)).Methods("GET")
+	r.Handle("/add", http.HandlerFunc(h.UploadArticle))
+	r.Handle("/upload", http.HandlerFunc(h.Upload))
+	r.Handle("/download", http.HandlerFunc(h.DownloadArticle))
+	r.Handle("/convert", http.HandlerFunc(h.MDConvert))
+	r.Handle("/save", http.HandlerFunc(h.SaveFile))
+	r.Handle("/singup", http.HandlerFunc(h.SingUp))
+	r.Handle("/singin", http.HandlerFunc(h.SingIn))
+
+	r.PathPrefix("/lib/").Handler(http.StripPrefix("/lib/", http.FileServer(http.Dir("./lib/"))))
+	r.PathPrefix("/images/").Handler(http.StripPrefix("/images/", http.FileServer(http.Dir("./images/"))))
+
 	log.Print("Server is running on port ", port)
-	return http.ListenAndServe(port, nil)
+	return http.ListenAndServe(port, r)
 }

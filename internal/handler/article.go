@@ -10,10 +10,11 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/lemjoe/md-blog/internal/models"
 )
+
+var userName = "admin" // Temporarily
 
 // Home page (Articles list)
 func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
@@ -21,6 +22,7 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 	lang := r.FormValue("lang")
 	translation := Localizer([]string{"listOfArticles", "homeButton", "addButton", "lastModification", "pageTitle"}, lang, h.bundle)
 	// log.Println(translation)
+
 	docs, err := h.services.ArticleService.GetArticlesList()
 	if err != nil {
 		log.Println(err)
@@ -45,6 +47,7 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 		HomeButton: translation["homeButton"],
 		AddButton:  translation["addButton"],
 		Title:      translation["pageTitle"],
+		UserName:   userName,
 	}
 
 	t, err := template.ParseFiles("lib/templates/home.html") //parse the html file homepage.html
@@ -88,6 +91,7 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 		Author:       doc.Author,
 		CreationDate: doc.CreationDate.Format("2006-Jan-02 15:04 MST"),
 		UpdateDate:   doc.ModificationDate.Format("2006-Jan-02 15:04 MST"),
+		UserName:     userName,
 	}
 
 	t, err := template.ParseFiles("lib/templates/view.html") //parse the html file homepage.html
@@ -116,14 +120,21 @@ func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 
 // UploadArticle
 func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
+	lang := r.FormValue("lang")
+	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
+
 	t, err := template.ParseFiles("lib/templates/upload.html") //parse the html file homepage.html
 	if err != nil {                                            // if there is an error
 		log.Print("template parsing error: ", err) // log it
 		fmt.Fprintln(w, "template parsing error: ", err)
 		return
 	}
-	err = t.Execute(w, time.Now()) //execute the template and pass it the HomePageVars struct to fill in the gaps
-	if err != nil {                // if there is an error
+	UploadPageVars := models.PageVariables{ //store the date and time in a struct
+		HomeButton: translation["homeButton"],
+		UserName:   userName,
+	}
+	err = t.Execute(w, UploadPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
+	if err != nil {                    // if there is an error
 		log.Print("template executing error: ", err) //log it
 		fmt.Fprintln(w, "template executing error: ", err)
 		return

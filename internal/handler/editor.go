@@ -13,6 +13,8 @@ import (
 )
 
 func (h *Handler) Editor(w http.ResponseWriter, r *http.Request) {
+	lang := r.FormValue("lang")
+	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
 	artclPath := r.URL.Query().Get("md")
 	md, err := os.ReadFile("articles/" + artclPath) // just pass the file name
@@ -22,9 +24,11 @@ func (h *Handler) Editor(w http.ResponseWriter, r *http.Request) {
 	html := MdToHTML(md)
 
 	HomePageVars := models.PageVariables{ //store the date and time in a struct
-		Md:        string(md),
-		MDArticle: template.HTML(html),
-		Path:      artclPath,
+		Md:         string(md),
+		MDArticle:  template.HTML(html),
+		Path:       artclPath,
+		HomeButton: translation["homeButton"],
+		UserName:   userName,
 	}
 
 	t, err := template.ParseFiles("lib/templates/editor.html") //parse the html file homepage.html

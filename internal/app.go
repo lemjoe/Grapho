@@ -20,7 +20,6 @@ func (a *App) Run() error {
 	if err != nil {
 		return err
 	}
-	_ = conf
 	db, err := repository.InitializeDB(conf.DbType, conf)
 	if err != nil {
 		return err

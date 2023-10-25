@@ -64,15 +64,15 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 	lang := r.FormValue("lang")
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
-	artclPath := r.URL.Query().Get("md")
-	md, err := h.services.FileService.ReadFile("articles/" + artclPath)
+	artId := r.URL.Query().Get("md")
+	md, err := h.services.FileService.ReadFile("articles/" + artId)
 	if err != nil {
-		log.Print("MD file open error: ", err, artclPath)
+		log.Print("MD file open error: ", err, artId)
 	}
 	// always normalize newlines!
 	html := append(MdToHTML(md), toTheTop[:]...)
 
-	doc, err := h.services.ArticleService.GetArticleInfo(artclPath) //RetrieveArticle(artclPath)
+	doc, err := h.services.ArticleService.GetArticleInfo(artId)
 	if err != nil {
 		log.Println(err)
 		return
@@ -81,7 +81,8 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 
 	ArticlePageVars := models.PageVariables{ //store the date and time in a struct
 		MDArticle:    template.HTML(html),
-		Path:         artclPath,
+		Path:         artId,
+		Id:           artId,
 		Title:        doc.Title,
 		HomeButton:   translation["homeButton"],
 		Author:       doc.Author,

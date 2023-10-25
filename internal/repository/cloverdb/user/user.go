@@ -20,7 +20,7 @@ type userSchema struct {
 	Password     string    `json:"passwd"`
 	Email        string    `json:"email"`
 	IsAdmin      bool      `json:"is_admin"`
-	Id           string    `json:"id"`
+	Id           string    `json:"_id"`
 	LastLogin    time.Time `json:"last_login"`
 	CreationDate time.Time `json:"creation_date"`
 }

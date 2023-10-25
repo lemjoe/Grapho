@@ -3,6 +3,7 @@ package models
 import "html/template"
 
 type PageVariables struct {
+	Id           string
 	Md           string
 	MDArticle    template.HTML
 	HomeButton   string

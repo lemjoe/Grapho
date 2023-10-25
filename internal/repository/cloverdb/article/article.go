@@ -22,7 +22,7 @@ type articleSchema struct {
 	CreationDate     time.Time `json:"creation_date"`
 	ModificationDate time.Time `json:"modification_date"`
 	IsLocked         bool      `json:"is_locked"`
-	Id               string    `json:"id"`
+	Id               string    `json:"_id"`
 }
 
 func Init(db *c.DB) (*Article, error) {
@@ -55,7 +55,10 @@ func (a *Article) CreateArticle(article models.Article) (models.Article, error) 
 	doc.Set("is_locked", article.IsLocked)
 
 	docId, err := a.db.InsertOne(a.collectionName, doc)
-	a.db.UpdateById(a.collectionName, docId, map[string]interface{}{"id": docId})
+	// err = a.db.UpdateById(a.collectionName, docId, func(doc *d.Document) *d.Document {
+	// 	doc.Set("modification_date", time.Now())
+	// 	return doc
+	// })
 	if err != nil {
 		return models.Article{}, fmt.Errorf("unable to insert document[%s]: %w", a.collectionName, err)
 	}
@@ -97,9 +100,9 @@ func (a *Article) GetAllArticles() ([]models.Article, error) {
 	return articles, nil
 }
 
-// GetArticleByFileName(fileName string) (models.Article, error)
-func (a *Article) GetArticleByFileName(fileName string) (models.Article, error) {
-	doc, err := a.db.FindFirst(q.NewQuery(a.collectionName).Where(q.Field("id").Eq(fileName)))
+// GetArticleById(id string) (models.Article, error)
+func (a *Article) GetArticleById(id string) (models.Article, error) {
+	doc, err := a.db.FindById(a.collectionName, id)
 	if err != nil {
 		return models.Article{}, fmt.Errorf("unable to find document[%s]: %w", a.collectionName, err)
 	}
@@ -120,9 +123,9 @@ func (a *Article) GetArticleByFileName(fileName string) (models.Article, error) 
 	}, nil
 }
 
-// DeleteArticleByFileName(fileName string) error
-func (a *Article) DeleteArticleByFileName(fileName string) error {
-	err := a.db.Delete(q.NewQuery(a.collectionName).Where(q.Field("id").Eq(fileName)))
+// DeleteArticleById(id string) error
+func (a *Article) DeleteArticleById(id string) error {
+	err := a.db.DeleteById(a.collectionName, id)
 	if err != nil {
 		return fmt.Errorf("unable to find document[%s]: %w", a.collectionName, err)
 	}
@@ -130,19 +133,26 @@ func (a *Article) DeleteArticleByFileName(fileName string) error {
 	return nil
 }
 
-// UpdateArticleByFileName(fileName string) error
-func (a *Article) UpdateArticleByFileName(fileName string) error {
-	changes := make(map[string]interface{})
-	changes["modification_date"] = time.Now()
-	changes["is_locked"] = false
-	err := a.db.Update(q.NewQuery(a.collectionName).Where(q.Field("id").Eq(fileName)), changes)
+// UpdateArticleById(id string) error
+func (a *Article) UpdateArticleById(id string) error {
+	// changes := make(map[string]interface{})
+	// changes["modification_date"] = time.Now()
+	// changes["is_locked"] = false
+	err := a.db.UpdateById(a.collectionName, id, func(doc *d.Document) *d.Document {
+		doc.Set("modification_date", time.Now())
+		doc.Set("is_locked", false)
+		return doc
+	})
 	return err
 }
 
-// LockArticleByFileName(fileName string) error
-func (a *Article) LockArticleByFileName(fileName string) error {
+// LockArticleById(id string) error
+func (a *Article) LockArticleById(id string) error {
 	changes := make(map[string]interface{})
 	changes["is_locked"] = true
-	err := a.db.Update(q.NewQuery(a.collectionName).Where(q.Field("id").Eq(fileName)), changes)
+	err := a.db.UpdateById(a.collectionName, id, func(doc *d.Document) *d.Document {
+		doc.Set("is_locked", true)
+		return doc
+	})
 	return err
 }

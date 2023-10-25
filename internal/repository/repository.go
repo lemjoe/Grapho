@@ -14,10 +14,10 @@ type User interface {
 type Article interface {
 	CreateArticle(article models.Article) (models.Article, error)
 	GetAllArticles() ([]models.Article, error) //todo add pagination
-	GetArticleByFileName(fileName string) (models.Article, error)
-	DeleteArticleByFileName(fileName string) error
-	UpdateArticleByFileName(fileName string) error
-	LockArticleByFileName(fileName string) error
+	GetArticleById(id string) (models.Article, error)
+	DeleteArticleById(id string) error
+	UpdateArticleById(id string) error
+	LockArticleById(id string) error
 }
 type Repository struct {
 	User    User

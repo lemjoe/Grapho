@@ -27,7 +27,7 @@ func (a *App) Run() error {
 	}
 	bundle := i18n.NewBundle(language.English)
 	services := service.NewService(repos)
-	err = services.Migrate()
+	err = services.MigrationService.Migrate()
 	if err != nil {
 		return err
 	}

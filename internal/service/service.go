@@ -3,10 +3,10 @@ package service
 import "github.com/lemjoe/md-blog/internal/repository"
 
 type Service struct {
-	repository *repository.Repository
-	FileService
-	ArticleService
-	MigrationService
+	repository       *repository.Repository
+	FileService      FileService
+	ArticleService   ArticleService
+	MigrationService MigrationService
 }
 
 func NewService(repository *repository.Repository) *Service {

@@ -56,13 +56,13 @@ func InitConfig(confPath string) (models.ConfigDB, error) {
 	} else {
 		defaultConf.Path = PATH
 	}
-	PORT, exist := os.LookupEnv("PORT")
+	PORT, exist := os.LookupEnv("DB_PORT")
 	if !exist {
 		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "PORT"))
 	} else {
 		defaultConf.Port = PORT
 	}
-	HOST, exist := os.LookupEnv("HOST")
+	HOST, exist := os.LookupEnv("DB_HOST")
 	if !exist {
 		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "HOST"))
 	} else {

@@ -5,5 +5,5 @@ type ConfigDB struct {
 	DbType string
 	Host   string
 	Port   string
-	Name   string
+	DBName string
 }

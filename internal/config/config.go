@@ -50,7 +50,12 @@ func InitConfig(confPath string) (models.ConfigDB, error) {
 	} else {
 		defaultConf.DbType = DB_TYPE
 	}
-
+	PATH, exist := os.LookupEnv("DB_PATH")
+	if !exist {
+		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "PATH"))
+	} else {
+		defaultConf.Path = PATH
+	}
 	PORT, exist := os.LookupEnv("PORT")
 	if !exist {
 		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "PORT"))
@@ -63,11 +68,11 @@ func InitConfig(confPath string) (models.ConfigDB, error) {
 	} else {
 		defaultConf.Host = HOST
 	}
-	NAME, exist := os.LookupEnv("NAME")
+	DB_NAME, exist := os.LookupEnv("DB_NAME")
 	if !exist {
-		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "NAME"))
+		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "DB_NAME"))
 	} else {
-		defaultConf.Name = NAME
+		defaultConf.DBName = DB_NAME
 	}
 	return defaultConf, nil
 }

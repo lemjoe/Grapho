@@ -5,15 +5,15 @@ import (
 	"time"
 
 	"github.com/lemjoe/md-blog/internal/models"
-	"github.com/lemjoe/md-blog/internal/repository"
+	"github.com/lemjoe/md-blog/internal/repository/repotypes"
 )
 
 type articleService struct {
-	repository  *repository.Repository
+	repository  *repotypes.Repository
 	fileService FileService
 }
 
-func NewArticleService(repository *repository.Repository, fileService FileService) *articleService {
+func NewArticleService(repository *repotypes.Repository, fileService FileService) *articleService {
 	return &articleService{
 		repository:  repository,
 		fileService: fileService,

@@ -7,15 +7,15 @@ import (
 	"time"
 
 	"github.com/lemjoe/md-blog/internal/models"
-	"github.com/lemjoe/md-blog/internal/repository"
+	"github.com/lemjoe/md-blog/internal/repository/repotypes"
 )
 
 type migrationService struct {
-	repository *repository.Repository
+	repository *repotypes.Repository
 	artService *articleService
 }
 
-func NewMigrationService(repository *repository.Repository, artService *articleService) *migrationService {
+func NewMigrationService(repository *repotypes.Repository, artService *articleService) *migrationService {
 	return &migrationService{
 		repository: repository,
 		artService: artService,

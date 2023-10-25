@@ -14,14 +14,14 @@ import (
 )
 
 type UserScheme struct {
-	UserName     string             `json:"user_name"`
-	FullName     string             `json:"full_name"`
-	Password     string             `json:"passwd"`
-	Email        string             `json:"email"`
-	IsAdmin      bool               `json:"is_admin"`
-	Id           primitive.ObjectID `json:"_id"`
-	LastLogin    time.Time          `json:"last_login"`
-	CreationDate time.Time          `json:"creation_date"`
+	UserName     string             `bson:"user_name"`
+	FullName     string             `bson:"full_name"`
+	Password     string             `bson:"passwd"`
+	Email        string             `bson:"email"`
+	IsAdmin      bool               `bson:"is_admin"`
+	Id           primitive.ObjectID `bson:"_id"`
+	LastLogin    time.Time          `bson:"last_login"`
+	CreationDate time.Time          `bson:"creation_date"`
 }
 type User struct {
 	ct *mongo.Collection

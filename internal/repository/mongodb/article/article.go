@@ -13,13 +13,13 @@ import (
 )
 
 type articleSchema struct {
-	Title            string             `json:"article_title"`
-	Author           string             `json:"article_author"`
-	AuthorId         primitive.ObjectID `json:"author_id"`
-	CreationDate     time.Time          `json:"creation_date"`
-	ModificationDate time.Time          `json:"modification_date"`
-	IsLocked         bool               `json:"is_locked"`
-	Id               primitive.ObjectID `json:"_id"`
+	Title            string             `bson:"article_title"`
+	Author           string             `bson:"article_author"`
+	AuthorId         primitive.ObjectID `bson:"author_id"`
+	CreationDate     time.Time          `bson:"creation_date"`
+	ModificationDate time.Time          `bson:"modification_date"`
+	IsLocked         bool               `bson:"is_locked"`
+	Id               primitive.ObjectID `bson:"_id"`
 }
 type Article struct {
 	ct *mongo.Collection

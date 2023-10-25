@@ -15,7 +15,7 @@ import (
 type articleSchema struct {
 	Title            string             `json:"article_title"`
 	Author           string             `json:"article_author"`
-	AuthorId         string             `json:"author_id"`
+	AuthorId         primitive.ObjectID `json:"author_id"`
 	CreationDate     time.Time          `json:"creation_date"`
 	ModificationDate time.Time          `json:"modification_date"`
 	IsLocked         bool               `json:"is_locked"`
@@ -45,29 +45,130 @@ func Init(driver *mongo.Database) (*Article, error) {
 	}, nil
 }
 
-// add interface empty methods
-// CreateArticle(article models.Article) (models.Article, error)
-//
-//	GetAllArticles() ([]models.Article, error) //todo add pagination
-//	GetArticleById(id string) (models.Article, error)
-//	DeleteArticleById(id string) error
-//	UpdateArticleById(id string) error
-//	LockArticleById(id string) error
 func (a *Article) CreateArticle(article models.Article) (models.Article, error) {
-	return models.Article{}, nil
+	authorIdObj, err := primitive.ObjectIDFromHex(article.AuthorId)
+	if err != nil {
+		return models.Article{}, err
+	}
+	art := articleSchema{
+		Title:            article.Title,
+		Author:           article.Author,
+		AuthorId:         authorIdObj,
+		CreationDate:     time.Now(),
+		ModificationDate: time.Now(),
+		IsLocked:         false,
+	}
+
+	res, err := a.ct.InsertOne(context.TODO(), bson.M{
+		"title":             art.Title,
+		"author":            art.Author,
+		"author_id":         art.AuthorId,
+		"creation_date":     art.CreationDate,
+		"modification_date": art.ModificationDate,
+		"is_locked":         art.IsLocked,
+	})
+	if err != nil {
+		return models.Article{}, err
+	}
+	art.Id = res.InsertedID.(primitive.ObjectID)
+	return models.Article{
+		Title:            art.Title,
+		Author:           art.Author,
+		AuthorId:         art.AuthorId.Hex(),
+		CreationDate:     art.CreationDate,
+		ModificationDate: art.ModificationDate,
+		IsLocked:         art.IsLocked,
+		Id:               art.Id.Hex(),
+	}, nil
 }
 func (a *Article) GetAllArticles() ([]models.Article, error) {
-	return []models.Article{}, nil
+	var findedArticles []models.Article
+	cur, err := a.ct.Find(context.TODO(), bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	defer cur.Close(context.TODO())
+	for cur.Next(context.TODO()) {
+		var art articleSchema
+		err := cur.Decode(&art)
+		if err != nil {
+			return nil, err
+		}
+		findedArticles = append(findedArticles, models.Article{
+			Title:            art.Title,
+			Author:           art.Author,
+			AuthorId:         art.AuthorId.Hex(),
+			CreationDate:     art.CreationDate,
+			ModificationDate: art.ModificationDate,
+			IsLocked:         art.IsLocked,
+			Id:               art.Id.Hex(),
+		})
+	}
+	if err := cur.Err(); err != nil {
+		return nil, err
+	}
+	return findedArticles, nil
 }
 func (a *Article) GetArticleById(id string) (models.Article, error) {
-	return models.Article{}, nil
+	artObjId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return models.Article{}, err
+	}
+	var art articleSchema
+	err = a.ct.FindOne(context.TODO(), bson.M{"_id": artObjId}).Decode(&art)
+	if err != nil {
+		return models.Article{}, err
+	}
+	return models.Article{
+		Title:            art.Title,
+		Author:           art.Author,
+		AuthorId:         art.AuthorId.Hex(),
+		CreationDate:     art.CreationDate,
+		ModificationDate: art.ModificationDate,
+		IsLocked:         art.IsLocked,
+		Id:               art.Id.Hex(),
+	}, nil
 }
 func (a *Article) DeleteArticleById(id string) error {
+	artObjId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+	_, err = a.ct.DeleteOne(context.TODO(), bson.M{"_id": artObjId})
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 func (a *Article) UpdateArticleById(id string) error {
+	artObjId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+	_, err = a.ct.UpdateOne(context.TODO(), bson.M{"_id": artObjId}, bson.M{"$set": bson.M{
+		"modification_date": time.Now(),
+		"is_locked":         false,
+	}})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 func (a *Article) LockArticleById(id string) error {
+	artObjId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+	_, err = a.ct.UpdateOne(context.TODO(), bson.M{"_id": artObjId}, bson.M{"$set": bson.M{
+		"is_locked": true,
+	}})
+	if err != nil {
+		return err
+	}
 	return nil
 }

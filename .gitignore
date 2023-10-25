@@ -20,3 +20,4 @@
 # User files
 articles/
 db/
+.env

@@ -47,7 +47,7 @@ func Init(db *c.DB) (*User, error) {
 // CreateUser(user models.User) (models.User, error)
 func (u *User) CreateUser(user models.User) (models.User, error) {
 	//check if user already exists
-	_, err := u.GetUser(user.UserName)
+	_, err := u.GetUserByUsername(user.UserName)
 	if err == nil {
 		return models.User{}, fmt.Errorf("user already exists")
 	}
@@ -76,7 +76,7 @@ func (u *User) CreateUser(user models.User) (models.User, error) {
 }
 
 // GetUser(username string) (models.User, error)
-func (u *User) GetUser(username string) (models.User, error) {
+func (u *User) GetUserByUsername(username string) (models.User, error) {
 	userRow, err := u.db.FindFirst(q.NewQuery(u.collectionName).Where(q.Field("user_name").Eq(username)))
 	if err != nil {
 		return models.User{}, err
@@ -101,4 +101,32 @@ func (u *User) GetUser(username string) (models.User, error) {
 		LastLogin:    user.LastLogin,
 		CreationDate: user.CreationDate,
 	}, nil
+}
+
+// GetUserById(id string) (models.User, error)
+func (u *User) GetUserById(id string) (models.User, error) {
+	userRow, err := u.db.FindFirst(q.NewQuery(u.collectionName).Where(q.Field("_id").Eq(id)))
+	if err != nil {
+		return models.User{}, err
+	}
+	if userRow == nil {
+		return models.User{}, fmt.Errorf("user not found")
+	}
+	//fmt.Printf("userRow[%s]: %v\n", username, userRow)
+	var user userSchema
+	err = userRow.Unmarshal(&user)
+	if err != nil {
+		return models.User{}, err
+	}
+	return models.User{
+		UserName:     user.UserName,
+		FullName:     user.FullName,
+		Password:     user.Password,
+		Email:        user.Email,
+		IsAdmin:      user.IsAdmin,
+		Id:           user.Id,
+		LastLogin:    user.LastLogin,
+		CreationDate: user.CreationDate,
+	}, nil
+
 }

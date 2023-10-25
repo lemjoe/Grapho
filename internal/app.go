@@ -1,9 +1,9 @@
 package internal
 
 import (
+	"github.com/lemjoe/md-blog/internal/config"
 	"github.com/lemjoe/md-blog/internal/handler"
 	"github.com/lemjoe/md-blog/internal/repository"
-	"github.com/lemjoe/md-blog/internal/repository/cloverdb"
 	"github.com/lemjoe/md-blog/internal/service"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/text/language"
@@ -16,12 +16,16 @@ func NewApp() *App {
 	return &App{}
 }
 func (a *App) Run() error {
-	db, err := cloverdb.ConnectDB("./db")
+	conf, err := config.InitConfig("./.env")
 	if err != nil {
 		return err
 	}
-	defer db.Close()
-	repos, err := repository.NewRepository(db.DB)
+	_ = conf
+	db, err := repository.InitializeDB(conf.DbType, conf)
+	if err != nil {
+		return err
+	}
+	repos, err := db.NewRepository()
 	if err != nil {
 		return err
 	}

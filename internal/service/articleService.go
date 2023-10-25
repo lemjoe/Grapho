@@ -5,15 +5,15 @@ import (
 	"time"
 
 	"github.com/lemjoe/md-blog/internal/models"
-	"github.com/lemjoe/md-blog/internal/repository"
+	"github.com/lemjoe/md-blog/internal/repository/repotypes"
 )
 
 type articleService struct {
-	repository  *repository.Repository
+	repository  *repotypes.Repository
 	fileService FileService
 }
 
-func NewArticleService(repository *repository.Repository, fileService FileService) *articleService {
+func NewArticleService(repository *repotypes.Repository, fileService FileService) *articleService {
 	return &articleService{
 		repository:  repository,
 		fileService: fileService,
@@ -23,7 +23,7 @@ func NewArticleService(repository *repository.Repository, fileService FileServic
 // implement func ArticleService interface
 func (a *articleService) CreateNewArticle(title string, author string, body []byte) (models.Article, error) {
 	// fileName := hash.GetHash(body)
-	authorInfo, err := a.repository.User.GetUser(author)
+	authorInfo, err := a.repository.User.GetUserByUsername(author)
 	if err != nil {
 		return models.Article{}, err
 	}
@@ -31,7 +31,7 @@ func (a *articleService) CreateNewArticle(title string, author string, body []by
 		// FileName:         fileName,
 		Title:            title,
 		Author:           authorInfo.FullName,
-		AuthorId:         author,
+		AuthorId:         authorInfo.Id,
 		CreationDate:     time.Now(),
 		ModificationDate: time.Now(),
 		IsLocked:         false,

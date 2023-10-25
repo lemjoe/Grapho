@@ -7,15 +7,15 @@ import (
 	"time"
 
 	"github.com/lemjoe/md-blog/internal/models"
-	"github.com/lemjoe/md-blog/internal/repository"
+	"github.com/lemjoe/md-blog/internal/repository/repotypes"
 )
 
 type migrationService struct {
-	repository *repository.Repository
+	repository *repotypes.Repository
 	artService *articleService
 }
 
-func NewMigrationService(repository *repository.Repository, artService *articleService) *migrationService {
+func NewMigrationService(repository *repotypes.Repository, artService *articleService) *migrationService {
 	return &migrationService{
 		repository: repository,
 		artService: artService,
@@ -28,7 +28,7 @@ func (m *migrationService) Migrate() error {
 			return fmt.Errorf("migrate:\nunable to create articles folder: %w", err)
 		}
 	}
-	_, err := m.repository.User.GetUser("admin")
+	_, err := m.repository.User.GetUserByUsername("admin")
 	if err != nil {
 		if strings.Contains(err.Error(), "user not found") {
 			newUsr, err := m.repository.User.CreateUser(models.User{

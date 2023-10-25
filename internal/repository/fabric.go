@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 
+	"github.com/lemjoe/md-blog/internal/models"
 	"github.com/lemjoe/md-blog/internal/repository/cloverdb"
 	"github.com/lemjoe/md-blog/internal/repository/repotypes"
 )
@@ -11,11 +12,8 @@ type DB interface {
 	Close()
 	NewRepository() (*repotypes.Repository, error)
 }
-type ConfigDB struct {
-	Path string
-}
 
-func InitializeDB(dbType string, conf ConfigDB) (DB, error) {
+func InitializeDB(dbType string, conf models.ConfigDB) (DB, error) {
 	switch dbType {
 	case "cloverdb":
 		return cloverdb.ConnectDB(conf.Path)

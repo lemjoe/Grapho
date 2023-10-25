@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"github.com/lemjoe/md-blog/internal/config"
 	"github.com/lemjoe/md-blog/internal/handler"
 	"github.com/lemjoe/md-blog/internal/repository"
 	"github.com/lemjoe/md-blog/internal/repository/cloverdb"
@@ -16,6 +17,11 @@ func NewApp() *App {
 	return &App{}
 }
 func (a *App) Run() error {
+	conf, err := config.InitConfig("./.env")
+	if err != nil {
+		return err
+	}
+	_ = conf
 	db, err := cloverdb.ConnectDB("./db")
 	if err != nil {
 		return err

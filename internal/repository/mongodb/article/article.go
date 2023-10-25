@@ -60,8 +60,8 @@ func (a *Article) CreateArticle(article models.Article) (models.Article, error) 
 	}
 
 	res, err := a.ct.InsertOne(context.TODO(), bson.M{
-		"title":             art.Title,
-		"author":            art.Author,
+		"article_title":     art.Title,
+		"article_author":    art.Author,
 		"author_id":         art.AuthorId,
 		"creation_date":     art.CreationDate,
 		"modification_date": art.ModificationDate,

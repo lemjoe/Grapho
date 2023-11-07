@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 
@@ -31,6 +32,7 @@ func fileExists(filename string) bool {
 }
 
 func CreateDefaultConfig() error {
+	log.Println("Config file is missing. Creating default config")
 	input, err := os.ReadFile("./.env.default")
 	if err != nil {
 		return err
@@ -68,23 +70,23 @@ func InitConfig(confPath string) (models.ConfigDB, error) {
 	} else {
 		defaultConf.DbType = DB_TYPE
 	}
-	PATH, exist := os.LookupEnv("PATH")
+	DB_PATH, exist := os.LookupEnv("DB_PATH")
 	if !exist {
-		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "PATH"))
+		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "DB_PATH"))
 	} else {
-		defaultConf.Path = PATH
+		defaultConf.Path = DB_PATH
 	}
-	PORT, exist := os.LookupEnv("DB_PORT")
+	DB_PORT, exist := os.LookupEnv("DB_PORT")
 	if !exist {
-		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "PORT"))
+		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "DB_PORT"))
 	} else {
-		defaultConf.Port = PORT
+		defaultConf.Port = DB_PORT
 	}
-	HOST, exist := os.LookupEnv("DB_HOST")
+	DB_HOST, exist := os.LookupEnv("DB_HOST")
 	if !exist {
-		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "HOST"))
+		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "DB_HOST"))
 	} else {
-		defaultConf.Host = HOST
+		defaultConf.Host = DB_HOST
 	}
 	DB_NAME, exist := os.LookupEnv("DB_NAME")
 	if !exist {

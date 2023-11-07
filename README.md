@@ -17,9 +17,9 @@ Here you can store, organize and collaborate on information in a way that suits 
 
 ```
 DB_TYPE=cloverdb # todo add mongodb
-PATH=./db # for cloverdb
-HOST=localhost # for mongodb or postgresql
-PORT=5432 # for mongodb or postgresql
+DB_PATH=./db # for cloverdb
+DB_HOST=localhost # for mongodb or postgresql
+DB_PORT=5432 # for mongodb or postgresql
 DB_NAME=md_blog  # for mongodb or postgresql
 ```
 

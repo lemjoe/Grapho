@@ -25,6 +25,8 @@ func (h *Handler) SingUp(w http.ResponseWriter, r *http.Request) {
 		log.Print("template executing error: ", err) //log it
 	}
 }
+
+// SingIn
 func (h *Handler) SingIn(w http.ResponseWriter, r *http.Request) {
 	lang := r.FormValue("lang")
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)

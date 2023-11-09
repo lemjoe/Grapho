@@ -94,5 +94,17 @@ func InitConfig(confPath string) (models.ConfigDB, error) {
 	} else {
 		defaultConf.DBName = DB_NAME
 	}
+	DB_USER, exist := os.LookupEnv("DB_USER")
+	if !exist {
+		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "DB_USER"))
+	} else {
+		defaultConf.User = DB_USER
+	}
+	DB_PASSWD, exist := os.LookupEnv("DB_PASSWD")
+	if !exist {
+		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "DB_PASSWD"))
+	} else {
+		defaultConf.Password = DB_PASSWD
+	}
 	return defaultConf, nil
 }

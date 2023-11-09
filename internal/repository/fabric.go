@@ -19,7 +19,7 @@ func InitializeDB(dbType string, conf models.ConfigDB) (DB, error) {
 	case "cloverdb":
 		return cloverdb.ConnectDB(conf.Path)
 	case "mongodb":
-		return mongodb.ConnectDB(conf.Host+":"+conf.Port, conf.DBName)
+		return mongodb.ConnectDB(conf.Host+":"+conf.Port, conf.DBName, conf.User, conf.Password)
 	default:
 		return nil, fmt.Errorf("invalid db type: %s", dbType)
 	}

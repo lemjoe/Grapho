@@ -20,8 +20,13 @@ type DB struct {
 	client      *mongo.Client
 }
 
-func ConnectDB(url, dbname string) (*DB, error) {
-	fmt.Printf("url: %s,dbname: %s\n", url, dbname)
+func ConnectDB(url, dbname string, user string, password string) (*DB, error) {
+	if user == "" {
+		url = "mongodb://" + url
+	} else {
+		url = "mongodb://" + user + ":" + password + "@" + url
+	}
+	fmt.Printf("url: %s, dbname: %s\n", url, dbname)
 	//var collection *mongo.Collection
 	var ctx = context.TODO()
 	clientOptions := options.Client().ApplyURI(url)

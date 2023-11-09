@@ -9,3 +9,7 @@ type ConfigDB struct {
 	User     string
 	Password string
 }
+
+type ConfigApp struct {
+	Port string
+}

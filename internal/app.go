@@ -16,11 +16,11 @@ func NewApp() *App {
 	return &App{}
 }
 func (a *App) Run() error {
-	conf, err := config.InitConfig("./.env")
+	confDB, confApp, err := config.InitConfig("./.env")
 	if err != nil {
 		return err
 	}
-	db, err := repository.InitializeDB(conf.DbType, conf)
+	db, err := repository.InitializeDB(confDB.DbType, confDB)
 	if err != nil {
 		return err
 	}
@@ -36,6 +36,6 @@ func (a *App) Run() error {
 	}
 
 	handlers := handler.NewHandler(services, bundle)
-	err = handlers.Run(":4007")
+	err = handlers.Run(":" + confApp.Port)
 	return err
 }

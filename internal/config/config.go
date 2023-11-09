@@ -45,22 +45,33 @@ func CreateDefaultConfig() error {
 	return nil
 }
 
-func InitConfig(confPath string) (models.ConfigDB, error) {
+func InitConfig(confPath string) (models.ConfigDB, models.ConfigApp, error) {
 	if confPath != "" {
 		if fileExists(confPath) { //if from dot env
 			if err := godotenv.Load(confPath); err != nil {
-				return models.ConfigDB{}, fmt.Errorf("InitConfig: unable to read file '%s'", confPath)
+				return models.ConfigDB{}, models.ConfigApp{}, fmt.Errorf("InitConfig: unable to read file '%s'", confPath)
 			}
 
 		} else {
 			if err := CreateDefaultConfig(); err != nil {
-				return models.ConfigDB{}, fmt.Errorf("unable to create default config. You should create it manually")
+				return models.ConfigDB{}, models.ConfigApp{}, fmt.Errorf("unable to create default config. You should create it manually")
 			}
 			godotenv.Load(confPath)
 		}
 
 	}
-	defaultConf := models.ConfigDB{
+
+	defaultConfApp := models.ConfigApp{
+		Port: "4007",
+	}
+	APP_PORT, exist := os.LookupEnv("APP_PORT")
+	if !exist {
+		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "APP_PORT"))
+	} else {
+		defaultConfApp.Port = APP_PORT
+	}
+
+	defaultConfDB := models.ConfigDB{
 		DbType: "cloverdb",
 		Path:   "./db",
 	}
@@ -68,43 +79,43 @@ func InitConfig(confPath string) (models.ConfigDB, error) {
 	if !exist {
 		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "DB_TYPE"))
 	} else {
-		defaultConf.DbType = DB_TYPE
+		defaultConfDB.DbType = DB_TYPE
 	}
 	DB_PATH, exist := os.LookupEnv("DB_PATH")
 	if !exist {
 		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "DB_PATH"))
 	} else {
-		defaultConf.Path = DB_PATH
+		defaultConfDB.Path = DB_PATH
 	}
 	DB_PORT, exist := os.LookupEnv("DB_PORT")
 	if !exist {
 		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "DB_PORT"))
 	} else {
-		defaultConf.Port = DB_PORT
+		defaultConfDB.Port = DB_PORT
 	}
 	DB_HOST, exist := os.LookupEnv("DB_HOST")
 	if !exist {
 		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "DB_HOST"))
 	} else {
-		defaultConf.Host = DB_HOST
+		defaultConfDB.Host = DB_HOST
 	}
 	DB_NAME, exist := os.LookupEnv("DB_NAME")
 	if !exist {
 		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "DB_NAME"))
 	} else {
-		defaultConf.DBName = DB_NAME
+		defaultConfDB.DBName = DB_NAME
 	}
 	DB_USER, exist := os.LookupEnv("DB_USER")
 	if !exist {
 		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "DB_USER"))
 	} else {
-		defaultConf.User = DB_USER
+		defaultConfDB.User = DB_USER
 	}
 	DB_PASSWD, exist := os.LookupEnv("DB_PASSWD")
 	if !exist {
 		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "DB_PASSWD"))
 	} else {
-		defaultConf.Password = DB_PASSWD
+		defaultConfDB.Password = DB_PASSWD
 	}
-	return defaultConf, nil
+	return defaultConfDB, defaultConfApp, nil
 }

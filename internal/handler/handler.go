@@ -36,6 +36,7 @@ func (h *Handler) Run(port string) error {
 	r.Handle("/singup", http.HandlerFunc(h.SingUp))
 	r.Handle("/singin", http.HandlerFunc(h.SingIn))
 
+	// import resources
 	r.PathPrefix("/lib/").Handler(http.StripPrefix("/lib/", http.FileServer(http.Dir("./lib/"))))
 	r.PathPrefix("/images/").Handler(http.StripPrefix("/images/", http.FileServer(http.Dir("./images/"))))
 

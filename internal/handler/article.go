@@ -179,8 +179,8 @@ func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
 	log.Println("File Upload Endpoint Hit")
 
 	// Parse our multipart form, 10 << 20 specifies a maximum
-	// upload of 10 MB files.
-	r.ParseMultipartForm(10 << 20)
+	// upload of 1 MB files.
+	r.ParseMultipartForm(1 << 20)
 	// FormFile returns the first file for the given key `myFile`
 	// it also returns the FileHeader so we can get the Filename,
 	// the Header and the size of the file
@@ -209,7 +209,7 @@ func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = h.services.ArticleService.CreateNewArticle(title, "admin", fileBytes) //CreateNewArticle(fileName, title)
+	_, err = h.services.ArticleService.CreateNewArticle(title, "admin", fileBytes)
 	if err != nil {
 		log.Println("Error Creating Article", err)
 		return

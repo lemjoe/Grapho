@@ -61,6 +61,7 @@ func InitConfig(confPath string) (models.ConfigDB, models.ConfigApp, error) {
 
 	}
 
+	// Application config
 	defaultConfApp := models.ConfigApp{
 		Port: "4007",
 	}
@@ -71,6 +72,7 @@ func InitConfig(confPath string) (models.ConfigDB, models.ConfigApp, error) {
 		defaultConfApp.Port = APP_PORT
 	}
 
+	// Database config
 	defaultConfDB := models.ConfigDB{
 		DbType: "cloverdb",
 		Path:   "./db",

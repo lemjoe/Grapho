@@ -11,5 +11,6 @@ type ConfigDB struct {
 }
 
 type ConfigApp struct {
-	Port string
+	Port      string
+	JwtSecret string
 }

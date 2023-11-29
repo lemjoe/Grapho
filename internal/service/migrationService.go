@@ -8,6 +8,7 @@ import (
 
 	"github.com/lemjoe/md-blog/internal/models"
 	"github.com/lemjoe/md-blog/internal/repository/repotypes"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type migrationService struct {
@@ -31,10 +32,11 @@ func (m *migrationService) Migrate() error {
 	_, err := m.repository.User.GetUserByUsername("admin")
 	if err != nil {
 		if strings.Contains(err.Error(), "user not found") {
+			password, _ := bcrypt.GenerateFromPassword([]byte("admin"), 10)
 			newUsr, err := m.repository.User.CreateUser(models.User{
 				UserName:     "admin",
 				FullName:     "Administrator",
-				Password:     "admin",
+				Password:     string(password),
 				Email:        "",
 				IsAdmin:      true,
 				Id:           "",

@@ -2,7 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="/lib/light.css">
-    <title>Sing up form</title>
+    <title>Sign up form</title>
   </head>
   <body>
     <tr>
@@ -11,14 +11,14 @@
     <a href="URL"><img style="padding: 0px;" width="16" height="16" align="right" src="../images/day-night.png" alt="Switch mode" title="Switch mode"></a>
     <hr>
     <div>
-        <form enctype="multipart/form-data" action="/sing-up" method="post">
+        <form enctype="multipart/form-data" action="/signup" method="post">
             <b>login</b> <i> (Only latin downcase letters and numbers)</i><br>
-            <input type="text" size="40" required pattern="[a-z0-9]{4,20}" name="title" /><br>
+            <input type="text" size="40" required pattern="[a-z0-9]{4,20}" name="login" /><br>
             <b>password</b> <i> (Must contain upcase, downcase, number and at least 8 characters)</i><br>
-            <input type="password" size="40" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="title" /><br>
+            <input type="password" size="40" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="password" /><br>
             <b>e-mail</b> <i> (Must be a valid e-mail address)</i><br>
-            <input type="text" size="40" required pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" name="title" /><br>
-            <b>full name</b><br> <input type="text" size="40" name="title" /><br>
+            <input type="text" size="40" required pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" name="email" /><br>
+            <b>full name</b><br> <input type="text" size="40" name="fullname" /><br>
             <input type="submit" value="Submit" />
         </form>
     </div>

@@ -23,7 +23,6 @@ func NewHandler(services *service.Service, bundle *i18n.Bundle) *Handler {
 
 func (h *Handler) Run(port string) error {
 	r := mux.NewRouter()
-
 	r.Handle("/", http.HandlerFunc(h.GetArticlesList)).Methods("GET")
 	r.Handle("/show", http.HandlerFunc(h.ShowArticle)).Methods("GET")
 	r.Handle("/edit", http.HandlerFunc(h.Editor)).Methods("GET")
@@ -33,8 +32,10 @@ func (h *Handler) Run(port string) error {
 	r.Handle("/download", http.HandlerFunc(h.DownloadArticle))
 	r.Handle("/convert", http.HandlerFunc(h.MDConvert))
 	r.Handle("/save", http.HandlerFunc(h.SaveFile))
-	r.Handle("/singup", http.HandlerFunc(h.SingUp))
-	r.Handle("/singin", http.HandlerFunc(h.SingIn))
+	r.Handle("/signup", http.HandlerFunc(h.SignUp)).Methods("GET")
+	r.Handle("/signin", http.HandlerFunc(h.SignIn)).Methods("GET")
+	r.Handle("/signup", http.HandlerFunc(h.SignUpPost)).Methods("POST")
+	r.Handle("/signin", http.HandlerFunc(h.SignInPost)).Methods("POST")
 
 	// import resources
 	r.PathPrefix("/lib/").Handler(http.StripPrefix("/lib/", http.FileServer(http.Dir("./lib/"))))

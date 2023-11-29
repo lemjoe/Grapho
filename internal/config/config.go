@@ -63,13 +63,20 @@ func InitConfig(confPath string) (models.ConfigDB, models.ConfigApp, error) {
 
 	// Application config
 	defaultConfApp := models.ConfigApp{
-		Port: "4007",
+		Port:      "4007",
+		JwtSecret: "default_secret",
 	}
 	APP_PORT, exist := os.LookupEnv("APP_PORT")
 	if !exist {
 		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "APP_PORT"))
 	} else {
 		defaultConfApp.Port = APP_PORT
+	}
+	JWT_SECRET, exist := os.LookupEnv("JWT_SECRET")
+	if !exist {
+		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "JWT_SECRET"))
+	} else {
+		defaultConfApp.JwtSecret = JWT_SECRET
 	}
 
 	// Database config

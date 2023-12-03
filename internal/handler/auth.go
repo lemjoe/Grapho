@@ -112,3 +112,19 @@ func (h *Handler) SignInPost(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &cookie)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
+
+func (h *Handler) Logout(w http.ResponseWriter, r *http.Request) {
+
+	// Set cookie
+	cookie := http.Cookie{
+		Name:     "Authorization",
+		Value:    "",
+		Path:     "",
+		MaxAge:   0,
+		HttpOnly: true,
+		Secure:   false,
+		SameSite: http.SameSiteLaxMode,
+	}
+	http.SetCookie(w, &cookie)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}

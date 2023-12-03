@@ -1,9 +1,12 @@
 package handler
 
 import (
+	"log"
+
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
+	"github.com/lemjoe/md-blog/internal/models"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
@@ -19,6 +22,18 @@ func MdToHTML(md []byte) []byte {
 	renderer := html.NewRenderer(opts)
 
 	return markdown.Render(doc, renderer)
+}
+func (h *Handler) getCurrentUser(userID string) *models.User {
+	curUser, err := h.services.UserService.GetUserById(userID)
+	if err != nil {
+		log.Println(err)
+		return &models.User{
+			UserName: "guest",
+			FullName: "Guest",
+			IsAdmin:  false,
+		}
+	}
+	return &curUser
 }
 
 func Localizer(input []string, lang string, bundle *i18n.Bundle) map[string]string {

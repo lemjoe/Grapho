@@ -4,22 +4,18 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"time"
-
-	"github.com/lemjoe/md-blog/internal/models"
-	"github.com/lemjoe/md-blog/internal/repository/repotypes"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type migrationService struct {
-	repository *repotypes.Repository
-	artService *articleService
+	artService  *articleService
+	userService *userService
 }
 
-func NewMigrationService(repository *repotypes.Repository, artService *articleService) *migrationService {
+func NewMigrationService(artService *articleService, userService *userService) *migrationService {
 	return &migrationService{
-		repository: repository,
-		artService: artService,
+
+		artService:  artService,
+		userService: userService,
 	}
 }
 func (m *migrationService) Migrate() error {
@@ -29,20 +25,11 @@ func (m *migrationService) Migrate() error {
 			return fmt.Errorf("migrate:\nunable to create articles folder: %w", err)
 		}
 	}
-	_, err := m.repository.User.GetUserByUsername("admin")
+
+	_, err := m.userService.GetUserByName("admin")
 	if err != nil {
 		if strings.Contains(err.Error(), "user not found") {
-			password, _ := bcrypt.GenerateFromPassword([]byte("admin"), 10)
-			newUsr, err := m.repository.User.CreateUser(models.User{
-				UserName:     "admin",
-				FullName:     "Administrator",
-				Password:     string(password),
-				Email:        "",
-				IsAdmin:      true,
-				Id:           "",
-				LastLogin:    time.Now(),
-				CreationDate: time.Now(),
-			})
+			newUsr, err := m.userService.CreateNewUser("admin", "Administrator", "adminADMIN1", "admin", true)
 			fmt.Printf("migrate:\nadmin user created:[%+v]\n", newUsr)
 			if err != nil {
 				return fmt.Errorf("migrate:\nunable to create admin user: %w", err)

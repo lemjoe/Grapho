@@ -17,6 +17,10 @@ import (
 // Home page (Articles list)
 func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 
+	curUser := h.getCurrentUser(w.Header().Get("userID"))
+
+	log.Println("Current user: " + curUser.FullName)
+
 	lang := r.FormValue("lang")
 	translation := Localizer([]string{"listOfArticles", "homeButton", "addButton", "lastModification", "pageTitle"}, lang, h.bundle)
 	// log.Println(translation)
@@ -45,7 +49,7 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 		HomeButton: translation["homeButton"],
 		AddButton:  translation["addButton"],
 		Title:      translation["pageTitle"],
-		UserName:   userName,
+		UserName:   curUser.FullName,
 	}
 
 	t, err := template.ParseFiles("lib/templates/home.html") //parse the html file homepage.html
@@ -61,6 +65,10 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 
 // Show article
 func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
+
+	curUser := h.getCurrentUser(w.Header().Get("userID"))
+
+	log.Println("Current user: " + curUser.FullName)
 
 	lang := r.FormValue("lang")
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
@@ -89,7 +97,7 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 		Author:       doc.Author,
 		CreationDate: doc.CreationDate.Format("2006-Jan-02 15:04 MST"),
 		UpdateDate:   doc.ModificationDate.Format("2006-Jan-02 15:04 MST"),
-		UserName:     userName,
+		UserName:     curUser.FullName,
 	}
 
 	t, err := template.ParseFiles("lib/templates/view.html") //parse the html file homepage.html
@@ -105,6 +113,16 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 // DeleteArticle
 func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 
+	curUser := h.getCurrentUser(w.Header().Get("userID"))
+
+	log.Println("Current user: " + curUser.FullName)
+
+	if curUser.UserName == "guest" {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("401 - Authorization required!"))
+		return
+	}
+
 	artclPath := r.URL.Query().Get("md")
 
 	err := h.services.ArticleService.DeleteArticle(artclPath)
@@ -118,6 +136,17 @@ func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 
 // UploadArticle
 func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
+
+	curUser := h.getCurrentUser(w.Header().Get("userID"))
+
+	log.Println("Current user: " + curUser.FullName)
+
+	if curUser.UserName == "guest" {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("401 - Authorization required!"))
+		return
+	}
+
 	lang := r.FormValue("lang")
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
@@ -129,7 +158,7 @@ func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 	}
 	UploadPageVars := models.PageVariables{ //store the date and time in a struct
 		HomeButton: translation["homeButton"],
-		UserName:   userName,
+		UserName:   curUser.FullName,
 	}
 	err = t.Execute(w, UploadPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error
@@ -141,6 +170,10 @@ func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 
 // DownloadArticle
 func (h *Handler) DownloadArticle(w http.ResponseWriter, r *http.Request) {
+
+	curUser := h.getCurrentUser(w.Header().Get("userID"))
+
+	log.Println("Current user: " + curUser.FullName)
 
 	artclPath := r.URL.Query().Get("md")
 	md, err := h.services.ArticleService.GetArticleBody(artclPath)
@@ -176,6 +209,17 @@ func (h *Handler) DownloadArticle(w http.ResponseWriter, r *http.Request) {
 
 // Upload
 func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
+
+	curUser := h.getCurrentUser(w.Header().Get("userID"))
+
+	log.Println("Current user: " + curUser.FullName)
+
+	if curUser.UserName == "guest" {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("401 - Authorization required!"))
+		return
+	}
+
 	log.Println("File Upload Endpoint Hit")
 
 	// Parse our multipart form, 10 << 20 specifies a maximum

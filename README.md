@@ -42,7 +42,7 @@ Then type `localhost:4007` in your browser's address bar.
 | --------------------------- | :----------------: |
 | Translation en-ru           |        :x:         |
 | Integration with database   | :heavy_check_mark: |
-| Authentication              |        :x:         |
+| Authentication              | :heavy_check_mark: |
 | Working editor with preview | :heavy_check_mark: |
 | Code refactoring            | :heavy_check_mark: |
 | Docker-ready                |        :x:         |

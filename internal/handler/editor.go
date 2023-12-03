@@ -13,6 +13,17 @@ import (
 )
 
 func (h *Handler) Editor(w http.ResponseWriter, r *http.Request) {
+
+	curUser := h.getCurrentUser(w.Header().Get("userID"))
+
+	log.Println("Current user: " + curUser.FullName)
+
+	if curUser.UserName == "guest" {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte("401 - Authorization required!"))
+		return
+	}
+
 	lang := r.FormValue("lang")
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
@@ -28,9 +39,8 @@ func (h *Handler) Editor(w http.ResponseWriter, r *http.Request) {
 		MDArticle:  template.HTML(html),
 		Path:       artclPath,
 		HomeButton: translation["homeButton"],
-		UserName:   userName,
+		UserName:   curUser.FullName,
 	}
-
 	t, err := template.ParseFiles("lib/templates/editor.html") //parse the html file homepage.html
 	if err != nil {                                            // if there is an error
 		log.Print("template parsing error: ", err) // log it

@@ -13,8 +13,9 @@ type Service struct {
 func NewService(repository *repotypes.Repository) *Service {
 	fileServiceInstance := NewFileService()
 	artService := NewArticleService(repository, fileServiceInstance)
-	migrateService := NewMigrationService(repository, artService)
 	userService := NewUserService(repository)
+	migrateService := NewMigrationService(artService, userService)
+
 	return &Service{
 		repository:       repository,
 		FileService:      fileServiceInstance,

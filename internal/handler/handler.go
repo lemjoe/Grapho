@@ -36,6 +36,8 @@ func (h *Handler) Run(port string) error {
 	r.Handle("/signin", http.HandlerFunc(h.SignIn)).Methods("GET")
 	r.Handle("/signup", http.HandlerFunc(h.SignUpPost)).Methods("POST")
 	r.Handle("/signin", http.HandlerFunc(h.SignInPost)).Methods("POST")
+	r.Handle("/logout", http.HandlerFunc(h.Logout))
+	r.Use(authMiddleware) // JWT check
 
 	// import resources
 	r.PathPrefix("/lib/").Handler(http.StripPrefix("/lib/", http.FileServer(http.Dir("./lib/"))))

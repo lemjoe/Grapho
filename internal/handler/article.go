@@ -17,7 +17,7 @@ import (
 // Home page (Articles list)
 func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 
-	curUser := h.getCurrentUser(w.Header().Get("userID"))
+	curUser := h.GetCurrentUser(w.Header().Get("userID"))
 
 	log.Println("Current user: " + curUser.FullName)
 
@@ -66,7 +66,7 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 // Show article
 func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 
-	curUser := h.getCurrentUser(w.Header().Get("userID"))
+	curUser := h.GetCurrentUser(w.Header().Get("userID"))
 
 	log.Println("Current user: " + curUser.FullName)
 
@@ -113,13 +113,13 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 // DeleteArticle
 func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 
-	curUser := h.getCurrentUser(w.Header().Get("userID"))
+	curUser := h.GetCurrentUser(w.Header().Get("userID"))
 
 	log.Println("Current user: " + curUser.FullName)
 
+	// Send 401 if unauthorized
 	if curUser.UserName == "guest" {
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte("401 - Authorization required!"))
+		h.SendCode(w, r, statusCodes[http.StatusUnauthorized])
 		return
 	}
 
@@ -137,13 +137,13 @@ func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 // UploadArticle
 func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 
-	curUser := h.getCurrentUser(w.Header().Get("userID"))
+	curUser := h.GetCurrentUser(w.Header().Get("userID"))
 
 	log.Println("Current user: " + curUser.FullName)
 
+	// Send 401 if unauthorized
 	if curUser.UserName == "guest" {
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte("401 - Authorization required!"))
+		h.SendCode(w, r, statusCodes[http.StatusUnauthorized])
 		return
 	}
 
@@ -171,7 +171,7 @@ func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 // DownloadArticle
 func (h *Handler) DownloadArticle(w http.ResponseWriter, r *http.Request) {
 
-	curUser := h.getCurrentUser(w.Header().Get("userID"))
+	curUser := h.GetCurrentUser(w.Header().Get("userID"))
 
 	log.Println("Current user: " + curUser.FullName)
 
@@ -210,13 +210,13 @@ func (h *Handler) DownloadArticle(w http.ResponseWriter, r *http.Request) {
 // Upload
 func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
 
-	curUser := h.getCurrentUser(w.Header().Get("userID"))
+	curUser := h.GetCurrentUser(w.Header().Get("userID"))
 
 	log.Println("Current user: " + curUser.FullName)
 
+	// Send 401 if unauthorized
 	if curUser.UserName == "guest" {
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte("401 - Authorization required!"))
+		h.SendCode(w, r, statusCodes[http.StatusUnauthorized])
 		return
 	}
 

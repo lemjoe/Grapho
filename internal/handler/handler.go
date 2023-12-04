@@ -37,6 +37,7 @@ func (h *Handler) Run(port string) error {
 	r.Handle("/signup", http.HandlerFunc(h.SignUpPost)).Methods("POST")
 	r.Handle("/signin", http.HandlerFunc(h.SignInPost)).Methods("POST")
 	r.Handle("/logout", http.HandlerFunc(h.Logout))
+	r.NotFoundHandler = http.HandlerFunc(h.PageNotFound)
 	r.Use(authMiddleware) // JWT check
 
 	// import resources

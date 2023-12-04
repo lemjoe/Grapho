@@ -14,4 +14,6 @@ type PageVariables struct {
 	CreationDate string
 	UpdateDate   string
 	UserName     string
+	BodyLoudText string
+	BodyText     string
 }

@@ -23,7 +23,8 @@ func MdToHTML(md []byte) []byte {
 
 	return markdown.Render(doc, renderer)
 }
-func (h *Handler) getCurrentUser(userID string) *models.User {
+
+func (h *Handler) GetCurrentUser(userID string) *models.User {
 	curUser, err := h.services.UserService.GetUserById(userID)
 	if err != nil {
 		log.Println(err)

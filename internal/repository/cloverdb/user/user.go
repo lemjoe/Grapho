@@ -15,14 +15,15 @@ type User struct {
 	db             *c.DB
 }
 type userSchema struct {
-	UserName     string    `json:"user_name"`
-	FullName     string    `json:"full_name"`
-	Password     string    `json:"passwd"`
-	Email        string    `json:"email"`
-	IsAdmin      bool      `json:"is_admin"`
-	Id           string    `json:"_id"`
-	LastLogin    time.Time `json:"last_login"`
-	CreationDate time.Time `json:"creation_date"`
+	UserName     string            `json:"user_name"`
+	FullName     string            `json:"full_name"`
+	Password     string            `json:"passwd"`
+	Email        string            `json:"email"`
+	IsAdmin      bool              `json:"is_admin"`
+	Id           string            `json:"_id"`
+	LastLogin    time.Time         `json:"last_login"`
+	CreationDate time.Time         `json:"creation_date"`
+	Settings     map[string]string `json:"settings"`
 }
 
 func Init(db *c.DB) (*User, error) {
@@ -59,6 +60,7 @@ func (u *User) CreateUser(user models.User) (models.User, error) {
 	doc.Set("is_admin", user.IsAdmin)
 	doc.Set("creation_date", time.Now())
 	doc.Set("last_login", time.Now())
+	doc.Set("settings", user.Settings)
 	docId, err := u.db.InsertOne(u.collectionName, doc)
 	if err != nil {
 		return models.User{}, fmt.Errorf("unable to insert document[%s]: %w", u.collectionName, err)
@@ -72,6 +74,7 @@ func (u *User) CreateUser(user models.User) (models.User, error) {
 		Id:           docId,
 		LastLogin:    time.Now(),
 		CreationDate: time.Now(),
+		Settings:     user.Settings,
 	}, nil
 }
 
@@ -100,6 +103,7 @@ func (u *User) GetUserByUsername(username string) (models.User, error) {
 		Id:           user.Id,
 		LastLogin:    user.LastLogin,
 		CreationDate: user.CreationDate,
+		Settings:     user.Settings,
 	}, nil
 }
 
@@ -127,6 +131,7 @@ func (u *User) GetUserById(id string) (models.User, error) {
 		Id:           user.Id,
 		LastLogin:    user.LastLogin,
 		CreationDate: user.CreationDate,
+		Settings:     user.Settings,
 	}, nil
 
 }

@@ -24,6 +24,7 @@ func (u *userService) CreateNewUser(username string, fullname string, password s
 	if err != nil {
 		return models.User{}, err
 	}
+
 	user, err := u.repository.User.CreateUser(models.User{
 		// FileName:         fileName,
 		UserName:     username,
@@ -33,6 +34,7 @@ func (u *userService) CreateNewUser(username string, fullname string, password s
 		IsAdmin:      isadmin,
 		CreationDate: time.Now(),
 		LastLogin:    time.Unix(int64(0), int64(0)),
+		Settings:     defaultUserSettings,
 	})
 	if err != nil {
 		return models.User{}, err

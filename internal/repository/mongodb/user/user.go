@@ -22,6 +22,7 @@ type UserScheme struct {
 	Id           primitive.ObjectID `bson:"_id"`
 	LastLogin    time.Time          `bson:"last_login"`
 	CreationDate time.Time          `bson:"creation_date"`
+	Settings     map[string]string  `bson:"settings"`
 }
 type User struct {
 	ct *mongo.Collection
@@ -55,6 +56,7 @@ func (u *User) CreateUser(user models.User) (models.User, error) {
 		IsAdmin:      user.IsAdmin,
 		LastLogin:    time.Now(),
 		CreationDate: time.Now(),
+		Settings:     user.Settings,
 	}
 	res, err := u.ct.InsertOne(context.TODO(), bson.M{
 		"user_name":     usScheme.UserName,
@@ -64,6 +66,7 @@ func (u *User) CreateUser(user models.User) (models.User, error) {
 		"is_admin":      usScheme.IsAdmin,
 		"last_login":    usScheme.LastLogin,
 		"creation_date": usScheme.CreationDate,
+		"settings":      usScheme.Settings,
 	})
 	if err != nil {
 		return models.User{}, err
@@ -78,6 +81,7 @@ func (u *User) CreateUser(user models.User) (models.User, error) {
 		Id:           usScheme.Id.Hex(),
 		LastLogin:    usScheme.LastLogin,
 		CreationDate: usScheme.CreationDate,
+		Settings:     user.Settings,
 	}, nil
 }
 
@@ -102,6 +106,7 @@ func (u *User) GetUserByUsername(username string) (models.User, error) {
 		Id:           findedUser.Id.Hex(),
 		LastLogin:    findedUser.LastLogin,
 		CreationDate: findedUser.CreationDate,
+		Settings:     findedUser.Settings,
 	}, nil
 }
 
@@ -124,5 +129,6 @@ func (u *User) GetUserById(id string) (models.User, error) {
 		Id:           findedUser.Id.Hex(),
 		LastLogin:    findedUser.LastLogin,
 		CreationDate: findedUser.CreationDate,
+		Settings:     findedUser.Settings,
 	}, nil
 }

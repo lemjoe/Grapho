@@ -16,4 +16,5 @@ type PageVariables struct {
 	UserName     string
 	BodyLoudText string
 	BodyText     string
+	Theme        string
 }

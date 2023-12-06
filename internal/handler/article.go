@@ -21,7 +21,7 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Current user: " + curUser.FullName)
 
-	lang := r.FormValue("lang")
+	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"listOfArticles", "homeButton", "addButton", "lastModification", "pageTitle"}, lang, h.bundle)
 	// log.Println(translation)
 
@@ -50,6 +50,7 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 		AddButton:  translation["addButton"],
 		Title:      translation["pageTitle"],
 		UserName:   curUser.FullName,
+		Theme:      curUser.Settings["theme"],
 	}
 
 	t, err := template.ParseFiles("lib/templates/home.html") //parse the html file homepage.html

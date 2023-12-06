@@ -34,7 +34,7 @@ func (u *userService) CreateNewUser(username string, fullname string, password s
 		IsAdmin:      isadmin,
 		CreationDate: time.Now(),
 		LastLogin:    time.Unix(int64(0), int64(0)),
-		Settings:     defaultUserSettings,
+		Settings:     DefaultUserSettings,
 	})
 	if err != nil {
 		return models.User{}, err

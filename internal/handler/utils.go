@@ -7,6 +7,7 @@ import (
 	"github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
 	"github.com/lemjoe/md-blog/internal/models"
+	"github.com/lemjoe/md-blog/internal/service"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
@@ -32,6 +33,7 @@ func (h *Handler) GetCurrentUser(userID string) *models.User {
 			UserName: "guest",
 			FullName: "Guest",
 			IsAdmin:  false,
+			Settings: service.DefaultUserSettings,
 		}
 	}
 	return &curUser

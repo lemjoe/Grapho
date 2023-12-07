@@ -57,3 +57,11 @@ func (u *userService) GetUserByName(username string) (models.User, error) {
 	}
 	return user, nil
 }
+
+func (u *userService) ChangeUserSettings(id string, settings map[string]string) error {
+	err := u.repository.User.ChangeUserSettings(id, settings)
+	if err != nil {
+		return err
+	}
+	return nil
+}

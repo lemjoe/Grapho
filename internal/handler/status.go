@@ -17,7 +17,9 @@ type StatusCode struct {
 }
 
 func (h *Handler) SendCode(w http.ResponseWriter, r *http.Request, status StatusCode) {
-	lang := r.FormValue("lang")
+	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+
+	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
 	intCode, err := strconv.Atoi(status.Code)
@@ -39,6 +41,7 @@ func (h *Handler) SendCode(w http.ResponseWriter, r *http.Request, status Status
 		Title:        status.Code + " - " + status.Title,
 		BodyLoudText: status.Title,
 		BodyText:     status.Description,
+		Theme:        curUser.Settings["theme"],
 	}
 	err = t.Execute(w, StatusPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error

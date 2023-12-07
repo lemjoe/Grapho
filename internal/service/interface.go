@@ -25,4 +25,5 @@ type UserService interface {
 	CreateNewUser(string, string, string, string, bool) (models.User, error)
 	GetUserById(string) (models.User, error)
 	GetUserByName(string) (models.User, error)
+	ChangeUserSettings(string, map[string]string) error
 }

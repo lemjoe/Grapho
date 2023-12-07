@@ -132,3 +132,17 @@ func (u *User) GetUserById(id string) (models.User, error) {
 		Settings:     findedUser.Settings,
 	}, nil
 }
+
+func (u *User) ChangeUserSettings(id string, settings map[string]string) error {
+	usrObjId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+	_, err = u.ct.UpdateOne(context.TODO(), bson.M{"_id": usrObjId}, bson.M{"$set": bson.M{
+		"settings": settings,
+	}})
+	if err != nil {
+		return err
+	}
+	return nil
+}

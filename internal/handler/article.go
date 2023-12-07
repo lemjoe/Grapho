@@ -21,6 +21,7 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Current user: " + curUser.FullName)
 
+	theme := curUser.Settings["theme"]
 	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"listOfArticles", "homeButton", "addButton", "lastModification", "pageTitle"}, lang, h.bundle)
 	// log.Println(translation)
@@ -31,8 +32,8 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 	}
 
 	html := "<h1>" + translation["listOfArticles"] + "</h1><ul>"
-	editImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/edit-pen.png\" alt=\"Edit\" title=\"Edit\">"
-	deleteImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/red-trash-can.png\" alt=\"Edit\" title=\"Edit\">"
+	editImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/" + theme + "/edit-pen.png\" alt=\"Edit\" title=\"Edit\">"
+	deleteImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/" + theme + "/red-trash-can.png\" alt=\"Edit\" title=\"Edit\">"
 
 	if len(docs) == 0 {
 		html += "<p>There is no articles here! Why don't you add one?"
@@ -50,7 +51,7 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 		AddButton:  translation["addButton"],
 		Title:      translation["pageTitle"],
 		UserName:   curUser.FullName,
-		Theme:      curUser.Settings["theme"],
+		Theme:      theme,
 	}
 
 	t, err := template.ParseFiles("lib/templates/home.html") //parse the html file homepage.html
@@ -71,7 +72,7 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Current user: " + curUser.FullName)
 
-	lang := r.FormValue("lang")
+	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
 	artId := r.URL.Query().Get("md")
@@ -99,6 +100,7 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 		CreationDate: doc.CreationDate.Format("2006-Jan-02 15:04 MST"),
 		UpdateDate:   doc.ModificationDate.Format("2006-Jan-02 15:04 MST"),
 		UserName:     curUser.FullName,
+		Theme:        curUser.Settings["theme"],
 	}
 
 	t, err := template.ParseFiles("lib/templates/view.html") //parse the html file homepage.html
@@ -148,7 +150,7 @@ func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	lang := r.FormValue("lang")
+	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
 	t, err := template.ParseFiles("lib/templates/upload.html") //parse the html file homepage.html
@@ -160,6 +162,7 @@ func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 	UploadPageVars := models.PageVariables{ //store the date and time in a struct
 		HomeButton: translation["homeButton"],
 		UserName:   curUser.FullName,
+		Theme:      curUser.Settings["theme"],
 	}
 	err = t.Execute(w, UploadPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error

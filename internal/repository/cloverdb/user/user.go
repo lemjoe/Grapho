@@ -135,3 +135,12 @@ func (u *User) GetUserById(id string) (models.User, error) {
 	}, nil
 
 }
+
+// ChangeUserSettings(id string, settings map[string]string) error
+func (u *User) ChangeUserSettings(id string, settings map[string]string) error {
+	err := u.db.UpdateById(u.collectionName, id, func(doc *d.Document) *d.Document {
+		doc.Set("settings", settings)
+		return doc
+	})
+	return err
+}

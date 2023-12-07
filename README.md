@@ -47,4 +47,4 @@ Then type `localhost:4007` in your browser's address bar.
 | Code refactoring            | :heavy_check_mark: |
 | Docker-ready                |        :x:         |
 | Add PostgreSQL              |        :x:         |
-| Dark/light theme            |        :x:         |
+| Dark/light theme            | :heavy_check_mark: |

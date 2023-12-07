@@ -24,7 +24,7 @@ func (h *Handler) Editor(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	lang := r.FormValue("lang")
+	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
 	artclPath := r.URL.Query().Get("md")
@@ -40,6 +40,7 @@ func (h *Handler) Editor(w http.ResponseWriter, r *http.Request) {
 		Path:       artclPath,
 		HomeButton: translation["homeButton"],
 		UserName:   curUser.FullName,
+		Theme:      curUser.Settings["theme"],
 	}
 	t, err := template.ParseFiles("lib/templates/editor.html") //parse the html file homepage.html
 	if err != nil {                                            // if there is an error

@@ -15,7 +15,9 @@ import (
 
 // SingUp
 func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
-	lang := r.FormValue("lang")
+	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+
+	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
 	t, err := template.ParseFiles("lib/templates/sign-up.html") //parse the html file homepage.html
@@ -24,6 +26,7 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 	SingUpPageVars := models.PageVariables{ //store the date and time in a struct
 		HomeButton: translation["homeButton"],
+		Theme:      curUser.Settings["theme"],
 	}
 	err = t.Execute(w, SingUpPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error
@@ -56,7 +59,9 @@ func (h *Handler) SignUpPost(w http.ResponseWriter, r *http.Request) {
 
 // SingIn
 func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
-	lang := r.FormValue("lang")
+	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+
+	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
 	t, err := template.ParseFiles("lib/templates/sign-in.html") //parse the html file homepage.html
@@ -65,6 +70,7 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 	}
 	SingInPageVars := models.PageVariables{ //store the date and time in a struct
 		HomeButton: translation["homeButton"],
+		Theme:      curUser.Settings["theme"],
 	}
 	err = t.Execute(w, SingInPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error

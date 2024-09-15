@@ -88,7 +88,7 @@ func (h *Handler) SignInPost(w http.ResponseWriter, r *http.Request) {
 		log.Print("invalid login or password: ", err)
 		return
 	}
-	bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		log.Print("invalid login or password: ", err)
 		return

@@ -128,13 +128,25 @@ func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 
 	artclPath := r.URL.Query().Get("md")
 
-	err := h.services.ArticleService.DeleteArticle(artclPath)
+	doc, err := h.services.ArticleService.GetArticleInfo(artclPath)
 	if err != nil {
-		log.Print("DB entry delete error: ", err)
+		log.Println(err)
+		return
 	}
 
-	http.Redirect(w, r, "/", http.StatusSeeOther)
-	log.Println("Successfully Deleted File")
+	// Send 403 wrong user
+	if curUser.Id != doc.AuthorId {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	} else {
+		log.Println("OK user!")
+		err := h.services.ArticleService.DeleteArticle(artclPath)
+		if err != nil {
+			log.Print("DB entry delete error: ", err)
+		}
+
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		log.Println("Successfully Deleted File")
+	}
 }
 
 // UploadArticle
@@ -215,6 +227,7 @@ func (h *Handler) DownloadArticle(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
 
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	curUserString := curUser.UserName
 
 	log.Println("Current user: " + curUser.FullName)
 
@@ -257,7 +270,7 @@ func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = h.services.ArticleService.CreateNewArticle(title, "admin", fileBytes)
+	_, err = h.services.ArticleService.CreateNewArticle(title, curUserString, fileBytes)
 	if err != nil {
 		log.Println("Error Creating Article", err)
 		return

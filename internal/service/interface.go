@@ -19,7 +19,7 @@ type FileService interface {
 	DeleteFile(path string) error
 }
 type MigrationService interface {
-	Migrate() error
+	Migrate(string) error
 }
 type UserService interface {
 	CreateNewUser(string, string, string, string, bool) (models.User, error)

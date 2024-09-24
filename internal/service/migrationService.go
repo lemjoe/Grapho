@@ -18,7 +18,7 @@ func NewMigrationService(artService *articleService, userService *userService) *
 		userService: userService,
 	}
 }
-func (m *migrationService) Migrate() error {
+func (m *migrationService) Migrate(adminPasswd string) error {
 	if _, err := os.Stat("articles"); os.IsNotExist(err) {
 		err = os.Mkdir("articles", os.ModePerm)
 		if err != nil {
@@ -29,8 +29,9 @@ func (m *migrationService) Migrate() error {
 	_, err := m.userService.GetUserByName("admin")
 	if err != nil {
 		if strings.Contains(err.Error(), "user not found") {
-			newUsr, err := m.userService.CreateNewUser("admin", "Administrator", "adminADMIN1", "admin", true)
+			newUsr, err := m.userService.CreateNewUser("admin", "Administrator", adminPasswd, "admin", true)
 			fmt.Printf("migrate:\nadmin user created:[%+v]\n", newUsr)
+			fmt.Println("please change the admin password first")
 			if err != nil {
 				return fmt.Errorf("migrate:\nunable to create admin user: %w", err)
 			}

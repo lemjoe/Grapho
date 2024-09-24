@@ -30,7 +30,7 @@ func (a *App) Run() error {
 	}
 	bundle := i18n.NewBundle(language.English)
 	services := service.NewService(repos)
-	err = services.MigrationService.Migrate()
+	err = services.MigrationService.Migrate(confApp.AdminPasswd)
 	if err != nil {
 		return err
 	}

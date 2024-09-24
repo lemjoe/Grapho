@@ -6,6 +6,7 @@ type User interface {
 	CreateUser(user models.User) (models.User, error)
 	GetUserByUsername(username string) (models.User, error)
 	GetUserById(id string) (models.User, error)
+	ChangeUserPassword(string, string) error
 	ChangeUserSettings(id string, settings map[string]string) error
 }
 type Article interface {

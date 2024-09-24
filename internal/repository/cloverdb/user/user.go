@@ -136,6 +136,14 @@ func (u *User) GetUserById(id string) (models.User, error) {
 
 }
 
+func (u *User) ChangeUserPassword(id string, passwd string) error {
+	err := u.db.UpdateById(u.collectionName, id, func(doc *d.Document) *d.Document {
+		doc.Set("passwd", passwd)
+		return doc
+	})
+	return err
+}
+
 // ChangeUserSettings(id string, settings map[string]string) error
 func (u *User) ChangeUserSettings(id string, settings map[string]string) error {
 	err := u.db.UpdateById(u.collectionName, id, func(doc *d.Document) *d.Document {

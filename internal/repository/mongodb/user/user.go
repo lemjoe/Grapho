@@ -133,6 +133,20 @@ func (u *User) GetUserById(id string) (models.User, error) {
 	}, nil
 }
 
+func (u *User) ChangeUserPassword(id string, passwd string) error {
+	usrObjId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+	_, err = u.ct.UpdateOne(context.TODO(), bson.M{"_id": usrObjId}, bson.M{"$set": bson.M{
+		"passwd": passwd,
+	}})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (u *User) ChangeUserSettings(id string, settings map[string]string) error {
 	usrObjId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {

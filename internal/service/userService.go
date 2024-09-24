@@ -58,6 +58,18 @@ func (u *userService) GetUserByName(username string) (models.User, error) {
 	return user, nil
 }
 
+func (u *userService) ChangeUserPassword(id string, passwd string) error {
+	hash, err := bcrypt.GenerateFromPassword([]byte(passwd), 10)
+	if err != nil {
+		return err
+	}
+	err = u.repository.User.ChangeUserPassword(id, string(hash))
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (u *userService) ChangeUserSettings(id string, settings map[string]string) error {
 	err := u.repository.User.ChangeUserSettings(id, settings)
 	if err != nil {

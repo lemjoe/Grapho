@@ -135,7 +135,7 @@ func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Send 403 wrong user
-	if curUser.Id != doc.AuthorId {
+	if !curUser.IsAdmin && curUser.Id != doc.AuthorId {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	} else {
 		log.Println("OK user!")

@@ -44,7 +44,7 @@ func (h *Handler) SignUpPost(w http.ResponseWriter, r *http.Request) {
 	_, err := h.services.UserService.GetUserById(login)
 	if err != nil {
 		if strings.Contains(err.Error(), "user not found") {
-			newUsr, err := h.services.UserService.CreateNewUser(login, fullName, password, email, true)
+			newUsr, err := h.services.UserService.CreateNewUser(login, fullName, password, email, false)
 			if err != nil {
 				log.Print("unable to create user: ", err)
 			} else {

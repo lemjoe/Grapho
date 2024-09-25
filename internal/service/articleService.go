@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"sort"
 	"time"
 
 	"github.com/lemjoe/md-blog/internal/models"
@@ -84,6 +85,9 @@ func (a *articleService) GetArticlesList() ([]models.Article, error) {
 	if err != nil {
 		return nil, err
 	}
+	sort.Slice(arts, func(i, j int) bool {
+		return arts[i].CreationDate.After(arts[j].CreationDate)
+	})
 	return arts, nil
 }
 

@@ -44,14 +44,15 @@ go run cmd/main.go
 
 Then type `localhost:4007` in your browser's address bar.
 
-## Roadmap to beta:
+## Roadmap to release:
 
 | Milestone                   |       Ready?       |
 | --------------------------- | :----------------: |
-| Translation en-ru           |        :x:         |
 | Integration with database   | :heavy_check_mark: |
 | Authentication              | :heavy_check_mark: |
 | Working editor with preview | :heavy_check_mark: |
 | Code refactoring            | :heavy_check_mark: |
-| Docker-ready                |        :x:         |
 | Dark/light theme            | :heavy_check_mark: |
+| Docker-ready                |        :x:         |
+| Translation en-ru           |        :x:         |
+| Admin panel                 |        :x:         |

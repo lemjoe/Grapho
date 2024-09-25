@@ -29,6 +29,10 @@ func (h *Handler) ChangeTheme(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) Settings(w http.ResponseWriter, r *http.Request) {
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
 
+	if curUser.FullName == "Guest" {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
+
 	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
@@ -50,6 +54,11 @@ func (h *Handler) ChangeUserPassword(w http.ResponseWriter, r *http.Request) {
 	log.Println("Trying to change user password")
 
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+
+	if curUser.FullName == "Guest" {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
+
 	old_passwd := r.FormValue("old_password")
 	new_passwd := r.FormValue("new_password")
 	r_new_passwd := r.FormValue("r_new_password")
@@ -66,6 +75,12 @@ func (h *Handler) ChangeUserPassword(w http.ResponseWriter, r *http.Request) {
 				log.Print("unable to change password: ", err)
 			} else {
 				log.Println("password was successfully changed")
+				alert := AlertMessage{
+					Title:       "Congratulations!",
+					Description: "Your password was successfully changed",
+				}
+				h.SendAlert(w, r, alert)
+				return
 			}
 		}
 	}

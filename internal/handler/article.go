@@ -122,6 +122,7 @@ func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 
 	// Send 401 if unauthorized
 	if curUser.UserName == "guest" {
+		log.Println("Unauthorized status code 401")
 		h.SendCode(w, r, statusCodes[http.StatusUnauthorized])
 		return
 	}
@@ -136,7 +137,9 @@ func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 
 	// Send 403 wrong user
 	if !curUser.IsAdmin && curUser.Id != doc.AuthorId {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		log.Println("Wrong user. Action forbidden: status code 403")
+		h.SendCode(w, r, statusCodes[http.StatusForbidden])
+		return
 	} else {
 		log.Println("OK user!")
 		err := h.services.ArticleService.DeleteArticle(artclPath)

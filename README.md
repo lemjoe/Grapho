@@ -15,12 +15,20 @@ Here you can store, organize and collaborate on information in a way that suits 
 
 - Create a config file `.env` with the following content:
 
+For CloverDB:
 ```
-DB_TYPE=cloverdb # todo add mongodb
-DB_PATH=./db # for cloverdb
-DB_HOST=localhost # for mongodb or postgresql
-DB_PORT=5432 # for mongodb or postgresql
-DB_NAME=md_blog  # for mongodb or postgresql
+DB_TYPE=cloverdb
+DB_PATH=./db
+```
+
+For MongoDB:
+```
+DB_TYPE=mongodb
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=md_blog
+DB_USER=user
+DB_PASSWD=password
 ```
 
 ## Usage
@@ -46,5 +54,4 @@ Then type `localhost:4007` in your browser's address bar.
 | Working editor with preview | :heavy_check_mark: |
 | Code refactoring            | :heavy_check_mark: |
 | Docker-ready                |        :x:         |
-| Add PostgreSQL              |        :x:         |
 | Dark/light theme            | :heavy_check_mark: |

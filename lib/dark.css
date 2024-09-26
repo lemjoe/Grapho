@@ -15,6 +15,17 @@ html {
     color: #acadb6;
  }
 
+#footer {
+    position: fixed;
+    width: 41%;
+    background: #222222;
+    bottom: 0;
+}
+
+#content-wrap {
+    padding-bottom: 4.5rem;    /* Footer height */
+}
+
 @media (min-width: 768px) {
     html {
         max-width: 52em;
@@ -22,6 +33,7 @@ html {
 
 h1, h2, h3, h4 {
     margin: 2.5rem 0 1.5rem 0;
+    padding: 2px;
     line-height: 1.25;
     color: #acadb6;
  }
@@ -37,6 +49,7 @@ a:hover, a:focus, a:active {
 p {
     margin: 1em 0;
     line-height: 1.5;
+    padding: 2px;
  }
 p code {
     background-color: #382f3c;
@@ -44,7 +57,7 @@ p code {
     border: 1px solid #726890;
  }
 
- pre {
+pre {
     font-size: 14px;
     overflow: auto;
     background-color: #382f3c;
@@ -113,7 +126,7 @@ table tbody {
 table td {
     padding: 0.25em;
  }
- table th {
+table th {
     background-color: rgba(56, 47, 60, 0.2);
     padding: 0.25em;
  }

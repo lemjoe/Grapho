@@ -16,16 +16,17 @@
         <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" align="right" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a> 
         <hr>
         <i>Uploaded by <b>{{.Author}}</b> {{.CreationDate}} (last update: {{.UpdateDate}})</i>
-        <div>{{.MDArticle}}</div>
-        <hr>
-        <tr>
-            <td>
-                <a href="https://github.com/lemjoe/Grapho" target="_blank"><img style="padding: 10px;" height="50" align="left" src="../images/{{.Theme}}/logo.png" alt="Grapho." title="Grapho."></a>
-            </td>
-            <td>
-                <p>© 2024</p>
-            </td>
-        </tr>
-        <br>
+        <div id="content-wrap">{{.MDArticle}}</div>
+        <div id="footer">
+            <hr>
+            <tr>
+                <td>
+                    <a href="https://github.com/lemjoe/Grapho" target="_blank"><img style="padding: 10px;" height="50" align="left" src="../images/{{.Theme}}/logo.png" alt="Grapho." title="Grapho."></a>
+                </td>
+                <td>
+                    <p>© 2024</p>
+                </td>
+            </tr>
+        </div>
     </body>
 </html>

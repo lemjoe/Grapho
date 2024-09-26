@@ -1,8 +1,8 @@
-# md-blog
+![Grapho.](/images/dark/logo.png)
 
 ## Overview
 
-**md-blog** is a simple personal blog/wiki engine with markdown support.
+**Grapho** is a simple personal blog/wiki engine with markdown support.
 
 Here you can store, organize and collaborate on information in a way that suits you best. Create, explore and share your knowledge with ease!
 
@@ -26,7 +26,7 @@ For MongoDB:
 DB_TYPE=mongodb
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=md_blog
+DB_NAME=grapho
 DB_USER=user
 DB_PASSWD=password
 ```
@@ -36,8 +36,8 @@ DB_PASSWD=password
 Just clone this repo and run the file `/cmd/main.go`.
 
 ```
-git clone https://github.com/lemjoe/md-blog.git
-cd md-blog
+git clone https://github.com/lemjoe/Grapho.git
+cd Grapho
 go mod tidy
 go run cmd/main.go
 ```

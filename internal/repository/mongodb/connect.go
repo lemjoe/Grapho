@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/lemjoe/md-blog/internal/repository/mongodb/article"
-	"github.com/lemjoe/md-blog/internal/repository/mongodb/user"
-	"github.com/lemjoe/md-blog/internal/repository/repotypes"
+	"github.com/lemjoe/Grapho/internal/repository/mongodb/article"
+	"github.com/lemjoe/Grapho/internal/repository/mongodb/user"
+	"github.com/lemjoe/Grapho/internal/repository/repotypes"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )

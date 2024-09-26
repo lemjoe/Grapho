@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/lemjoe/md-blog/internal/models"
+	"github.com/lemjoe/Grapho/internal/models"
 )
 
 // Home page (Articles list)

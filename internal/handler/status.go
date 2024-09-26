@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/lemjoe/md-blog/internal/models"
+	"github.com/lemjoe/Grapho/internal/models"
 )
 
 type StatusCode struct {

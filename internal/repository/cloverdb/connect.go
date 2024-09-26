@@ -5,9 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/lemjoe/md-blog/internal/repository/cloverdb/article"
-	"github.com/lemjoe/md-blog/internal/repository/cloverdb/user"
-	"github.com/lemjoe/md-blog/internal/repository/repotypes"
+	"github.com/lemjoe/Grapho/internal/repository/cloverdb/article"
+	"github.com/lemjoe/Grapho/internal/repository/cloverdb/user"
+	"github.com/lemjoe/Grapho/internal/repository/repotypes"
 	"github.com/ostafen/clover/v2"
 )
 

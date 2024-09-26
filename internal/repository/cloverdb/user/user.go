@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/lemjoe/md-blog/internal/models"
+	"github.com/lemjoe/Grapho/internal/models"
 	c "github.com/ostafen/clover/v2"
 	d "github.com/ostafen/clover/v2/document"
 	q "github.com/ostafen/clover/v2/query"

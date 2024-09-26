@@ -3,10 +3,10 @@ package repository
 import (
 	"fmt"
 
-	"github.com/lemjoe/md-blog/internal/models"
-	"github.com/lemjoe/md-blog/internal/repository/cloverdb"
-	"github.com/lemjoe/md-blog/internal/repository/mongodb"
-	"github.com/lemjoe/md-blog/internal/repository/repotypes"
+	"github.com/lemjoe/Grapho/internal/models"
+	"github.com/lemjoe/Grapho/internal/repository/cloverdb"
+	"github.com/lemjoe/Grapho/internal/repository/mongodb"
+	"github.com/lemjoe/Grapho/internal/repository/repotypes"
 )
 
 type DB interface {

@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/lemjoe/md-blog/internal/models"
+	"github.com/lemjoe/Grapho/internal/models"
 	"golang.org/x/crypto/bcrypt"
 )
 

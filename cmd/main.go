@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/lemjoe/md-blog/internal"
+	"github.com/lemjoe/Grapho/internal"
 )
 
 func main() {

@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/lemjoe/md-blog/internal/models"
+	"github.com/lemjoe/Grapho/internal/models"
 	"golang.org/x/crypto/bcrypt"
 )
 

@@ -3,8 +3,8 @@ package service
 import (
 	"time"
 
-	"github.com/lemjoe/md-blog/internal/models"
-	"github.com/lemjoe/md-blog/internal/repository/repotypes"
+	"github.com/lemjoe/Grapho/internal/models"
+	"github.com/lemjoe/Grapho/internal/repository/repotypes"
 	"golang.org/x/crypto/bcrypt"
 )
 

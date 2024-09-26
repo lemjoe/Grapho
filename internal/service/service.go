@@ -1,6 +1,6 @@
 package service
 
-import "github.com/lemjoe/md-blog/internal/repository/repotypes"
+import "github.com/lemjoe/Grapho/internal/repository/repotypes"
 
 type Service struct {
 	repository       *repotypes.Repository

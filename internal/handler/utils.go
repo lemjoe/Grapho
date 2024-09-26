@@ -6,8 +6,8 @@ import (
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
-	"github.com/lemjoe/md-blog/internal/models"
-	"github.com/lemjoe/md-blog/internal/service"
+	"github.com/lemjoe/Grapho/internal/models"
+	"github.com/lemjoe/Grapho/internal/service"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 

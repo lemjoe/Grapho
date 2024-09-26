@@ -5,8 +5,8 @@ import (
 	"sort"
 	"time"
 
-	"github.com/lemjoe/md-blog/internal/models"
-	"github.com/lemjoe/md-blog/internal/repository/repotypes"
+	"github.com/lemjoe/Grapho/internal/models"
+	"github.com/lemjoe/Grapho/internal/repository/repotypes"
 )
 
 type articleService struct {

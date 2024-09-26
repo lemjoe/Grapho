@@ -1,6 +1,6 @@
 package service
 
-import "github.com/lemjoe/md-blog/internal/models"
+import "github.com/lemjoe/Grapho/internal/models"
 
 type ArticleService interface {
 	CreateNewArticle(string, string, []byte) (models.Article, error)

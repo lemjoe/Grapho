@@ -1,6 +1,6 @@
 package repotypes
 
-import "github.com/lemjoe/md-blog/internal/models"
+import "github.com/lemjoe/Grapho/internal/models"
 
 type User interface {
 	CreateUser(user models.User) (models.User, error)

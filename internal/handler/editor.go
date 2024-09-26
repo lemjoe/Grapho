@@ -9,7 +9,7 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/lemjoe/md-blog/internal/models"
+	"github.com/lemjoe/Grapho/internal/models"
 )
 
 func (h *Handler) Editor(w http.ResponseWriter, r *http.Request) {

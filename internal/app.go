@@ -1,10 +1,10 @@
 package internal
 
 import (
-	"github.com/lemjoe/md-blog/internal/config"
-	"github.com/lemjoe/md-blog/internal/handler"
-	"github.com/lemjoe/md-blog/internal/repository"
-	"github.com/lemjoe/md-blog/internal/service"
+	"github.com/lemjoe/Grapho/internal/config"
+	"github.com/lemjoe/Grapho/internal/handler"
+	"github.com/lemjoe/Grapho/internal/repository"
+	"github.com/lemjoe/Grapho/internal/service"
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"golang.org/x/text/language"
 )

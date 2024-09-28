@@ -4,6 +4,7 @@ import "github.com/lemjoe/Grapho/internal/models"
 
 type User interface {
 	CreateUser(user models.User) (models.User, error)
+	GetAllUsers() ([]models.User, error)
 	GetUserByUsername(username string) (models.User, error)
 	GetUserById(id string) (models.User, error)
 	ChangeUserPassword(string, string) error

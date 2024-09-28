@@ -78,6 +78,34 @@ func (u *User) CreateUser(user models.User) (models.User, error) {
 	}, nil
 }
 
+func (u *User) GetAllUsers() ([]models.User, error) {
+	var users []models.User
+	docs, err := u.db.FindAll(q.NewQuery(u.collectionName))
+	if err != nil {
+		return nil, fmt.Errorf("unable to find documents[%s]: %w", u.collectionName, err)
+	}
+	for _, doc := range docs {
+		var user userSchema
+		err := doc.Unmarshal(&user)
+		if err != nil {
+			return nil, fmt.Errorf("unable to unmarshal document[%s]: %w", u.collectionName, err)
+		}
+
+		users = append(users, models.User{
+			UserName:     user.UserName,
+			FullName:     user.FullName,
+			Password:     user.Password,
+			Email:        user.Email,
+			IsAdmin:      user.IsAdmin,
+			Id:           user.Id,
+			LastLogin:    user.LastLogin,
+			CreationDate: user.CreationDate,
+			Settings:     user.Settings,
+		})
+	}
+	return users, nil
+}
+
 // GetUser(username string) (models.User, error)
 func (u *User) GetUserByUsername(username string) (models.User, error) {
 	userRow, err := u.db.FindFirst(q.NewQuery(u.collectionName).Where(q.Field("user_name").Eq(username)))

@@ -85,6 +85,38 @@ func (u *User) CreateUser(user models.User) (models.User, error) {
 	}, nil
 }
 
+func (u *User) GetAllUsers() ([]models.User, error) {
+	var findedUsers []models.User
+	cur, err := u.ct.Find(context.TODO(), bson.M{})
+	if err != nil {
+		return nil, err
+	}
+
+	defer cur.Close(context.TODO())
+	for cur.Next(context.TODO()) {
+		var usr UserScheme
+		err := cur.Decode(&usr)
+		if err != nil {
+			return nil, err
+		}
+		findedUsers = append(findedUsers, models.User{
+			UserName:     usr.UserName,
+			FullName:     usr.FullName,
+			Password:     usr.Password,
+			Email:        usr.Email,
+			IsAdmin:      usr.IsAdmin,
+			Id:           usr.Id.Hex(),
+			LastLogin:    usr.LastLogin,
+			CreationDate: usr.CreationDate,
+			Settings:     usr.Settings,
+		})
+	}
+	if err := cur.Err(); err != nil {
+		return nil, err
+	}
+	return findedUsers, nil
+}
+
 // GetUser(username string) (models.User, error)
 func (u *User) GetUserByUsername(username string) (models.User, error) {
 	var findedUser UserScheme

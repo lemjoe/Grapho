@@ -87,9 +87,6 @@ func (a *Article) GetAllArticles() ([]models.Article, error) {
 	if err != nil {
 		return nil, err
 	}
-	if err != nil {
-		return nil, err
-	}
 
 	defer cur.Close(context.TODO())
 	for cur.Next(context.TODO()) {
@@ -113,6 +110,7 @@ func (a *Article) GetAllArticles() ([]models.Article, error) {
 	}
 	return findedArticles, nil
 }
+
 func (a *Article) GetArticleById(id string) (models.Article, error) {
 	artObjId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {

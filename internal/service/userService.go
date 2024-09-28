@@ -1,6 +1,7 @@
 package service
 
 import (
+	"sort"
 	"time"
 
 	"github.com/lemjoe/Grapho/internal/models"
@@ -76,4 +77,15 @@ func (u *userService) ChangeUserSettings(id string, settings map[string]string) 
 		return err
 	}
 	return nil
+}
+
+func (u *userService) GetUsersList() ([]models.User, error) {
+	users, err := u.repository.User.GetAllUsers()
+	if err != nil {
+		return nil, err
+	}
+	sort.Slice(users, func(i, j int) bool {
+		return users[i].CreationDate.After(users[j].CreationDate)
+	})
+	return users, nil
 }

@@ -27,4 +27,5 @@ type UserService interface {
 	GetUserByName(string) (models.User, error)
 	ChangeUserPassword(string, string) error
 	ChangeUserSettings(string, map[string]string) error
+	GetUsersList() ([]models.User, error)
 }

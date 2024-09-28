@@ -40,6 +40,7 @@ func (h *Handler) Run(port string) error {
 	r.Handle("/settings", http.HandlerFunc(h.Settings)).Methods("GET")
 	r.Handle("/changepasswd", http.HandlerFunc(h.ChangeUserPassword)).Methods("POST")
 	r.Handle("/changetheme", http.HandlerFunc(h.ChangeTheme))
+	r.Handle("/admin", http.HandlerFunc(h.GetUsersList)).Methods("GET")
 	r.NotFoundHandler = http.HandlerFunc(h.PageNotFound)
 	r.Use(authMiddleware) // JWT check
 

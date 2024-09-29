@@ -192,3 +192,19 @@ func (u *User) ChangeUserSettings(id string, settings map[string]string) error {
 	}
 	return nil
 }
+
+func (u *User) UpdateUserData(id string, fullname string, email string, isadmin bool) error {
+	usrObjId, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+	_, err = u.ct.UpdateOne(context.TODO(), bson.M{"_id": usrObjId}, bson.M{"$set": bson.M{
+		"full_name": fullname,
+		"email":     email,
+		"is_admin":  isadmin,
+	}})
+	if err != nil {
+		return err
+	}
+	return nil
+}

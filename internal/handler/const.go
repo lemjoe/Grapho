@@ -13,3 +13,5 @@ var statusCodes = map[int]StatusCode{
 		"Page not found!",
 		"The page that you've requested has not been found on this website, please try something else"},
 }
+
+var adminPanel = []byte("\n<h2>Admin panel</h2><hr><table><tr><td><b>manage portal users</b></td><td><a href=\"/admin\">GO</a></td></tr></table>")

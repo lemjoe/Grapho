@@ -55,4 +55,4 @@ Then type `localhost:4007` in your browser's address bar.
 | Dark/light theme            | :heavy_check_mark: |
 | Docker-ready                |        :x:         |
 | Translation en-ru           |        :x:         |
-| Admin panel                 |        :x:         |
+| Admin panel                 | :heavy_check_mark: |

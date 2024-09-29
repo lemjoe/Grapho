@@ -40,9 +40,16 @@ func (h *Handler) Settings(w http.ResponseWriter, r *http.Request) {
 	if err != nil {                                                   // if there is an error
 		log.Print("template parsing error: ", err) // log it
 	}
+
+	adminInterface := []byte("")
+	if curUser.IsAdmin {
+		adminInterface = adminPanel
+	}
+
 	UserSettingsPageVars := models.PageVariables{ //store the date and time in a struct
 		HomeButton: translation["homeButton"],
 		Theme:      curUser.Settings["theme"],
+		AdminPanel: template.HTML(adminInterface),
 	}
 	err = t.Execute(w, UserSettingsPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                          // if there is an error
@@ -55,8 +62,11 @@ func (h *Handler) ChangeUserPassword(w http.ResponseWriter, r *http.Request) {
 
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
 
-	if curUser.FullName == "Guest" {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+	// Send 401 if unauthorized
+	if curUser.UserName == "guest" {
+		log.Println("Unauthorized status code 401")
+		h.SendCode(w, r, statusCodes[http.StatusUnauthorized])
+		return
 	}
 
 	old_passwd := r.FormValue("old_password")

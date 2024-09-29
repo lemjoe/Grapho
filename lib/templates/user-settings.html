@@ -11,7 +11,8 @@
     <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" align="right" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a>
     <hr>
     <div>
-      <h2>Security settings</h2>
+      <h1>Settings</h1>
+      <h2>Security</h2>
       <hr>
         <form enctype="multipart/form-data" action="/changepasswd" method="post">
             <b>current password</b> <i> (Must contain upcase, downcase, number and at least 8 characters)</i><br>
@@ -22,6 +23,7 @@
             <input type="password" size="40" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="r_new_password" /><br>
             <input type="submit" value="Change password" />
         </form>
+        {{.AdminPanel}}
     </div>
     <div id="footer">
       <hr>

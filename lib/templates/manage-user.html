@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/lib/{{.Theme}}.css">
+    <title>{{.Title}}</title>
+  </head>
+  <body>
+    <tr>
+      <td><a href="/">{{.HomeButton}}</a></td>
+      <td>|</td>
+      <td>User: <a href="/settings">{{.UserName}}</a></td>
+      <td>(<a href="/signup">register</a> | <a href="/signin">login</a> | <a href="/logout">logout</a>)</td>
+  </tr>
+  <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" align="right" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a> 
+    <hr>
+    <div>
+      <h1>Manage user</h1>
+        <form enctype="multipart/form-data" action="/changeuser" method="post">
+            <b>user: </b><input type="text" size="34" name="user_name" value="{{.ManagedUserName}}" readonly/><br>
+            <b>full name </b><br><input type="text" size="40" name="full_name" value="{{.ManagedUserFullName}}" /><br>
+            <b>e-mail</b><br><input type="text" size="40" name="e_mail" value="{{.ManagedUserEmail}}" /><br>
+            <b>is admin?  </b><input type="checkbox" name="is_admin" {{.ManagedUserIsAdmin}} /><br>
+            <input type="submit" value="Change user" />
+        </form>
+        <br><a href="/admin">back to users list</a>
+    </div>
+    <div id="footer">
+      <hr>
+      <tr>
+          <td>
+              <a href="https://github.com/lemjoe/Grapho" target="_blank"><img style="padding: 10px;" height="50" align="left" src="../images/{{.Theme}}/logo.png" alt="Grapho." title="Grapho."></a>
+          </td>
+          <td>
+              <p>© 2024</p>
+          </td>
+      </tr>
+  </div>
+  </body>
+</html>

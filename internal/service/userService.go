@@ -79,6 +79,14 @@ func (u *userService) ChangeUserSettings(id string, settings map[string]string) 
 	return nil
 }
 
+func (u *userService) UpdateUserData(id string, fullname string, email string, isadmin bool) error {
+	err := u.repository.User.UpdateUserData(id, fullname, email, isadmin)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (u *userService) GetUsersList() ([]models.User, error) {
 	users, err := u.repository.User.GetAllUsers()
 	if err != nil {

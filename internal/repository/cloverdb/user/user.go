@@ -180,3 +180,13 @@ func (u *User) ChangeUserSettings(id string, settings map[string]string) error {
 	})
 	return err
 }
+
+func (u *User) UpdateUserData(id string, fullname string, email string, isadmin bool) error {
+	err := u.db.UpdateById(u.collectionName, id, func(doc *d.Document) *d.Document {
+		doc.Set("full_name", fullname)
+		doc.Set("email", email)
+		doc.Set("is_admin", isadmin)
+		return doc
+	})
+	return err
+}

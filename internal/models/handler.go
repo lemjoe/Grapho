@@ -6,8 +6,6 @@ type PageVariables struct {
 	Id                  string
 	Md                  string
 	MDArticle           template.HTML
-	HomeButton          string
-	AddButton           string
 	Title               string
 	Path                string
 	Author              string
@@ -22,4 +20,6 @@ type PageVariables struct {
 	ManagedUserEmail    string
 	ManagedUserIsAdmin  string
 	AdminPanel          template.HTML
+	Translation         map[string]string
+	Settings            map[string]string
 }

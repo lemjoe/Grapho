@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/BurntSushi/toml"
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
@@ -39,8 +40,10 @@ func (h *Handler) GetCurrentUser(userID string) *models.User {
 }
 
 func Localizer(input []string, lang string, bundle *i18n.Bundle) map[string]string {
-	defaultLang := "en"
-	localizer := i18n.NewLocalizer(bundle, lang, defaultLang)
+	// defaultLang := "en"
+	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
+	bundle.LoadMessageFile("lang/active.ru.toml")
+	localizer := i18n.NewLocalizer(bundle, lang)
 	localization := make(map[string]string)
 	output := make(map[string]string)
 
@@ -73,6 +76,30 @@ func Localizer(input []string, lang string, bundle *i18n.Bundle) map[string]stri
 		DefaultMessage: &i18n.Message{
 			ID:    "Title",
 			Other: "Articles list",
+		},
+	})
+	localization["user"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "User",
+			Other: "User",
+		},
+	})
+	localization["register"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Register",
+			Other: "register",
+		},
+	})
+	localization["login"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Login",
+			Other: "login",
+		},
+	})
+	localization["logout"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Logout",
+			Other: "logout",
 		},
 	})
 

@@ -24,7 +24,8 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 
 	theme := curUser.Settings["theme"]
 	lang := curUser.Settings["language"]
-	translation := Localizer([]string{"listOfArticles", "homeButton", "addButton", "lastModification", "pageTitle"}, lang, h.bundle)
+	logger.Info("Current user settings: " + theme + " " + lang)
+	translation := Localizer(localization, lang, h.bundle)
 
 	docs, err := h.services.ArticleService.GetArticlesList()
 	if err != nil {
@@ -46,12 +47,10 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 	html += "</ul>"
 
 	HomePageVars := models.PageVariables{ //store the date and time in a struct
-		MDArticle:  template.HTML(html),
-		HomeButton: translation["homeButton"],
-		AddButton:  translation["addButton"],
-		Title:      translation["pageTitle"],
-		UserName:   curUser.FullName,
-		Theme:      theme,
+		MDArticle:   template.HTML(html),
+		UserName:    curUser.FullName,
+		Theme:       theme,
+		Translation: translation,
 	}
 
 	t, err := template.ParseFiles("lib/templates/home.html") //parse the html file homepage.html
@@ -74,7 +73,7 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 	logger.Info("Current user: " + curUser.FullName)
 
 	lang := curUser.Settings["language"]
-	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
+	translation := Localizer(localization, lang, h.bundle)
 
 	artId := r.URL.Query().Get("md")
 	md, err := h.services.FileService.ReadFile("articles/" + artId)
@@ -96,12 +95,12 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 		Path:         artId,
 		Id:           artId,
 		Title:        doc.Title,
-		HomeButton:   translation["homeButton"],
 		Author:       doc.Author,
 		CreationDate: doc.CreationDate.Format("2006-Jan-02 15:04 MST"),
 		UpdateDate:   doc.ModificationDate.Format("2006-Jan-02 15:04 MST"),
 		UserName:     curUser.FullName,
 		Theme:        curUser.Settings["theme"],
+		Translation:  translation,
 	}
 
 	t, err := template.ParseFiles("lib/templates/view.html") //parse the html file homepage.html
@@ -169,7 +168,7 @@ func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	lang := curUser.Settings["language"]
-	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
+	translation := Localizer(localization, lang, h.bundle)
 
 	t, err := template.ParseFiles("lib/templates/upload.html") //parse the html file homepage.html
 	if err != nil {                                            // if there is an error
@@ -177,9 +176,9 @@ func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	UploadPageVars := models.PageVariables{ //store the date and time in a struct
-		HomeButton: translation["homeButton"],
-		UserName:   curUser.FullName,
-		Theme:      curUser.Settings["theme"],
+		UserName:    curUser.FullName,
+		Theme:       curUser.Settings["theme"],
+		Translation: translation,
 	}
 	err = t.Execute(w, UploadPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error

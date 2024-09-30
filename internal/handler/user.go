@@ -37,7 +37,7 @@ func (h *Handler) Settings(w http.ResponseWriter, r *http.Request) {
 	}
 
 	lang := curUser.Settings["language"]
-	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
+	translation := Localizer(localization, lang, h.bundle)
 
 	t, err := template.ParseFiles("lib/templates/user-settings.html") //parse the html file homepage.html
 	if err != nil {                                                   // if there is an error
@@ -49,10 +49,16 @@ func (h *Handler) Settings(w http.ResponseWriter, r *http.Request) {
 		adminInterface = adminPanel
 	}
 
+	tmpSettings := map[string]string{
+		curUser.Settings["language"]: "selected",
+		curUser.Settings["theme"]:    "selected",
+	}
+
 	UserSettingsPageVars := models.PageVariables{ //store the date and time in a struct
-		HomeButton: translation["homeButton"],
-		Theme:      curUser.Settings["theme"],
-		AdminPanel: template.HTML(adminInterface),
+		Theme:       curUser.Settings["theme"],
+		AdminPanel:  template.HTML(adminInterface),
+		Translation: translation,
+		Settings:    tmpSettings,
 	}
 	err = t.Execute(w, UserSettingsPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                          // if there is an error
@@ -98,6 +104,25 @@ func (h *Handler) ChangeUserPassword(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		}
+	}
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func (h *Handler) ChangeSettings(w http.ResponseWriter, r *http.Request) {
+	logger := service.GetLogger()
+	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	theme := r.FormValue("theme")
+	lang := r.FormValue("language")
+
+	newSettings := curUser.Settings
+	newSettings["theme"] = theme
+	newSettings["language"] = lang
+	logger.Info("Selected settings:", newSettings)
+
+	err := h.services.UserService.ChangeUserSettings(curUser.Id, newSettings)
+	if err != nil {
+		logger.Error("Unable to change user settings: ", err)
 	}
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)

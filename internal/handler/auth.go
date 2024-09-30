@@ -19,15 +19,15 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	logger := service.GetLogger()
 
 	lang := curUser.Settings["language"]
-	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
+	translation := Localizer(localization, lang, h.bundle)
 
 	t, err := template.ParseFiles("lib/templates/sign-up.html") //parse the html file homepage.html
 	if err != nil {                                             // if there is an error
 		logger.Error("template parsing error: ", err) // log it
 	}
 	SingUpPageVars := models.PageVariables{ //store the date and time in a struct
-		HomeButton: translation["homeButton"],
-		Theme:      curUser.Settings["theme"],
+		Theme:       curUser.Settings["theme"],
+		Translation: translation,
 	}
 	err = t.Execute(w, SingUpPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error
@@ -39,6 +39,7 @@ func (h *Handler) SignUpPost(w http.ResponseWriter, r *http.Request) {
 	logger := service.GetLogger()
 
 	logger.Info("Registration form load")
+
 	login := r.FormValue("login")
 	password := r.FormValue("password")
 	email := r.FormValue("email")
@@ -66,15 +67,15 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 	logger := service.GetLogger()
 
 	lang := curUser.Settings["language"]
-	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
+	translation := Localizer(localization, lang, h.bundle)
 
 	t, err := template.ParseFiles("lib/templates/sign-in.html") //parse the html file homepage.html
 	if err != nil {                                             // if there is an error
 		logger.Error("template parsing error: ", err) // log it
 	}
 	SingInPageVars := models.PageVariables{ //store the date and time in a struct
-		HomeButton: translation["homeButton"],
-		Theme:      curUser.Settings["theme"],
+		Theme:       curUser.Settings["theme"],
+		Translation: translation,
 	}
 	err = t.Execute(w, SingInPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error

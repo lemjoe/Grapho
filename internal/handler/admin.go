@@ -33,7 +33,7 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 
 	theme := curUser.Settings["theme"]
 	lang := curUser.Settings["language"]
-	translation := Localizer([]string{"listOfArticles", "homeButton", "addButton", "lastModification"}, lang, h.bundle)
+	translation := Localizer(localization, lang, h.bundle)
 
 	users, err := h.services.UserService.GetUsersList()
 	if err != nil {
@@ -55,12 +55,11 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 	html += "</table>"
 
 	HomePageVars := models.PageVariables{ //store the date and time in a struct
-		MDArticle:  template.HTML(html),
-		HomeButton: translation["homeButton"],
-		AddButton:  translation["addButton"],
-		Title:      "Admin | Users list",
-		UserName:   curUser.FullName,
-		Theme:      theme,
+		MDArticle:   template.HTML(html),
+		Title:       "Admin | Users list",
+		Translation: translation,
+		UserName:    curUser.FullName,
+		Theme:       theme,
 	}
 
 	t, err := template.ParseFiles("lib/templates/home.html") //parse the html file homepage.html
@@ -97,7 +96,7 @@ func (h *Handler) ManageUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	lang := curUser.Settings["language"]
-	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
+	translation := Localizer(localization, lang, h.bundle)
 
 	usrId := r.URL.Query().Get("usr")
 	managedUsr, err := h.services.UserService.GetUserById(usrId)
@@ -112,13 +111,13 @@ func (h *Handler) ManageUser(w http.ResponseWriter, r *http.Request) {
 
 	ManageUserPageVars := models.PageVariables{ //store the date and time in a struct
 		Title:               "Admin | Manage user",
-		HomeButton:          translation["homeButton"],
 		UserName:            curUser.FullName,
 		Theme:               curUser.Settings["theme"],
 		ManagedUserName:     managedUsr.UserName,
 		ManagedUserFullName: managedUsr.FullName,
 		ManagedUserEmail:    managedUsr.Email,
 		ManagedUserIsAdmin:  mngUsrIsAdm,
+		Translation:         translation,
 	}
 
 	t, err := template.ParseFiles("lib/templates/manage-user.html") //parse the html file homepage.html

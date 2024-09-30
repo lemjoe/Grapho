@@ -39,6 +39,7 @@ func (h *Handler) Run(port string) error {
 	r.Handle("/settings", http.HandlerFunc(h.Settings)).Methods("GET")
 	r.Handle("/changepasswd", http.HandlerFunc(h.ChangeUserPassword)).Methods("POST")
 	r.Handle("/changetheme", http.HandlerFunc(h.ChangeTheme))
+	r.Handle("/changeusersettings", http.HandlerFunc(h.ChangeSettings))
 	r.Handle("/admin", http.HandlerFunc(h.GetUsersList)).Methods("GET")
 	r.Handle("/manageuser", http.HandlerFunc(h.ManageUser)).Methods("GET")
 	r.Handle("/changeuser", http.HandlerFunc(h.ChangeUser)).Methods("POST")

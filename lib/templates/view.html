@@ -6,12 +6,12 @@
     </head>
     <body>
         <tr>
-            <td><a href="/">{{.HomeButton}}</a></td>
+            <td><a href="/">{{index .Translation "homeButton"}}</a></td>
             <td>|</td>
             <td><a href="download?md={{.Path}}">Download</a></td>
             <td>|</td>
-            <td>User: <a href="/settings">{{.UserName}}</a></td>
-            <td>(<a href="/signup">register</a> | <a href="/signin">login</a> | <a href="/logout">logout</a>)</td>
+            <td>{{index .Translation "user"}}: <a href="/settings">{{.UserName}}</a></td>
+            <td>(<a href="/signup">{{index .Translation "register"}}</a> | <a href="/signin">{{index .Translation "login"}}</a> | <a href="/logout">{{index .Translation "logout"}}</a>)</td>
         </tr>
         <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" align="right" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a> 
         <hr>

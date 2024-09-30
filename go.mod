@@ -5,6 +5,7 @@ go 1.22.0
 toolchain go1.22.7
 
 require (
+	github.com/BurntSushi/toml v1.3.2
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/gomarkdown/markdown v0.0.0-20240730141124-034f12af3bf6
 	github.com/gorilla/mux v1.8.1

@@ -2,24 +2,27 @@ package handler
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/lemjoe/Grapho/internal/service"
 )
 
 func authMiddleware(next http.Handler) http.Handler {
+	logger := service.GetLogger()
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println("You hit the: " + r.RequestURI)
+
+		logger.Info("You hit the: " + r.RequestURI)
 		// Do stuff here
 		tokenString, err := r.Cookie("Authorization")
 		if err != nil {
-			log.Println("Can't get the cookie")
+			logger.Error("Can't get the cookie")
 			w.Header().Set("userID", "guest")
 		} else if tokenString.Value == "" {
-			log.Println("User logged out")
+			logger.Info("User logged out")
 			w.Header().Set("userID", "guest")
 		} else {
 
@@ -31,20 +34,20 @@ func authMiddleware(next http.Handler) http.Handler {
 				return []byte(os.Getenv("JWT_SECRET")), nil
 			})
 			if err != nil {
-				log.Println(err)
+				logger.Error(err)
 				w.Header().Set("userID", "guest")
 			}
 
 			if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 				if float64(time.Now().Unix()) > claims["exp"].(float64) {
-					log.Println("Token expired")
+					logger.Info("Token expired")
 					w.Header().Set("userID", "guest")
 				} else {
 					w.Header().Set("userID", claims["sub"].(string))
 				}
 
 			} else {
-				log.Println(err)
+				logger.Error(err)
 				w.Header().Set("userID", "guest")
 			}
 		}

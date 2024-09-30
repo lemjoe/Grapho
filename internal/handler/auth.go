@@ -2,7 +2,6 @@ package handler
 
 import (
 	"html/template"
-	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -10,19 +9,21 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/lemjoe/Grapho/internal/models"
+	"github.com/lemjoe/Grapho/internal/service"
 	"golang.org/x/crypto/bcrypt"
 )
 
 // SingUp
 func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	logger := service.GetLogger()
 
 	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
 	t, err := template.ParseFiles("lib/templates/sign-up.html") //parse the html file homepage.html
 	if err != nil {                                             // if there is an error
-		log.Print("template parsing error: ", err) // log it
+		logger.Error("template parsing error: ", err) // log it
 	}
 	SingUpPageVars := models.PageVariables{ //store the date and time in a struct
 		HomeButton: translation["homeButton"],
@@ -30,12 +31,14 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 	err = t.Execute(w, SingUpPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error
-		log.Print("template executing error: ", err) //log it
+		logger.Error("template executing error: ", err) //log it
 	}
 }
 
 func (h *Handler) SignUpPost(w http.ResponseWriter, r *http.Request) {
-	log.Println("Registration form load")
+	logger := service.GetLogger()
+
+	logger.Info("Registration form load")
 	login := r.FormValue("login")
 	password := r.FormValue("password")
 	email := r.FormValue("email")
@@ -46,12 +49,12 @@ func (h *Handler) SignUpPost(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(err.Error(), "user not found") {
 			newUsr, err := h.services.UserService.CreateNewUser(login, fullName, password, email, false)
 			if err != nil {
-				log.Print("unable to create user: ", err)
+				logger.Error("unable to create user: ", err)
 			} else {
-				log.Printf("new user was created:[%+v]\n", newUsr)
+				logger.Infof("new user was created:[%+v]\n", newUsr)
 			}
 		} else {
-			log.Print("unable to get user: ", err)
+			logger.Error("unable to get user: ", err)
 		}
 	}
 	http.Redirect(w, r, "/", http.StatusSeeOther)
@@ -60,13 +63,14 @@ func (h *Handler) SignUpPost(w http.ResponseWriter, r *http.Request) {
 // SingIn
 func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	logger := service.GetLogger()
 
 	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
 	t, err := template.ParseFiles("lib/templates/sign-in.html") //parse the html file homepage.html
 	if err != nil {                                             // if there is an error
-		log.Print("template parsing error: ", err) // log it
+		logger.Error("template parsing error: ", err) // log it
 	}
 	SingInPageVars := models.PageVariables{ //store the date and time in a struct
 		HomeButton: translation["homeButton"],
@@ -74,23 +78,25 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 	}
 	err = t.Execute(w, SingInPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error
-		log.Print("template executing error: ", err) //log it
+		logger.Error("template executing error: ", err) //log it
 	}
 }
 
 func (h *Handler) SignInPost(w http.ResponseWriter, r *http.Request) {
-	log.Println("Login form load")
+	logger := service.GetLogger()
+
+	logger.Info("Login form load")
 	login := r.FormValue("login")
 	password := r.FormValue("password")
 
 	user, err := h.services.UserService.GetUserByName(login)
 	if err != nil {
-		log.Print("invalid login or password: ", err)
+		logger.Error("invalid login or password: ", err)
 		return
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
-		log.Print("invalid login or password: ", err)
+		logger.Error("invalid login or password: ", err)
 		return
 	}
 
@@ -100,10 +106,10 @@ func (h *Handler) SignInPost(w http.ResponseWriter, r *http.Request) {
 	})
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
-		log.Print("failed to create token: ", err)
+		logger.Error("failed to create token: ", err)
 		return
 	}
-	log.Print("token created: ", tokenString)
+	logger.Info("token created: ", tokenString)
 
 	// Set cookie
 	cookie := http.Cookie{

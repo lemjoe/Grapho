@@ -12,14 +12,16 @@ import (
 	"strings"
 
 	"github.com/lemjoe/Grapho/internal/models"
+	"github.com/lemjoe/Grapho/internal/service"
 )
 
 // Home page (Articles list)
 func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	logger := service.GetLogger()
 
-	log.Println("Current user: " + curUser.FullName)
+	logger.Info("Current user: " + curUser.FullName)
 
 	theme := curUser.Settings["theme"]
 	lang := curUser.Settings["language"]
@@ -28,7 +30,7 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 
 	docs, err := h.services.ArticleService.GetArticlesList()
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 	}
 
 	html := "<h1>" + translation["listOfArticles"] + "</h1><ul>"
@@ -39,7 +41,7 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 		html += "<p>There is no articles here! Why don't you add one?"
 	}
 	for _, article := range docs {
-		log.Println(article)
+		logger.Info(article)
 		html += "<li>" + "<a href='show?md=" + article.Id + "'>" + article.Title + "</a><i> by <b>" + article.Author + "</b> (" + translation["lastModification"] + ": " + article.ModificationDate.Format("2006-Jan-02 15:04 MST") + ") </i><a href='edit?md=" + article.Id + "'><i>" + editImg + "</i></a> | <a href='delete?md=" + article.Id + "'><i>" + deleteImg + "</i></a></li>"
 	}
 
@@ -56,11 +58,11 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 
 	t, err := template.ParseFiles("lib/templates/home.html") //parse the html file homepage.html
 	if err != nil {                                          // if there is an error
-		log.Print("Template parsing error: ", err) // log it
+		logger.Error("Template parsing error: ", err) // log it
 	}
 	err = t.Execute(w, HomePageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                  // if there is an error
-		log.Print("Template executing error: ", err) //log it
+		logger.Error("Template executing error: ", err) //log it
 	}
 
 }
@@ -69,8 +71,9 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	logger := service.GetLogger()
 
-	log.Println("Current user: " + curUser.FullName)
+	logger.Info("Current user: " + curUser.FullName)
 
 	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
@@ -78,14 +81,14 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 	artId := r.URL.Query().Get("md")
 	md, err := h.services.FileService.ReadFile("articles/" + artId)
 	if err != nil {
-		log.Print("MD file open error: ", err, artId)
+		logger.Error("MD file open error: ", err, artId)
 	}
 	// always normalize newlines!
 	html := append(MdToHTML(md), toTheTop[:]...)
 
 	doc, err := h.services.ArticleService.GetArticleInfo(artId)
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 		return
 	}
 	//doc.Unmarshal(article)
@@ -105,11 +108,11 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 
 	t, err := template.ParseFiles("lib/templates/view.html") //parse the html file homepage.html
 	if err != nil {                                          // if there is an error
-		log.Print("template parsing error: ", err) // log it
+		logger.Error("template parsing error: ", err) // log it
 	}
 	err = t.Execute(w, ArticlePageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                     // if there is an error
-		log.Print("template executing error: ", err) //log it
+		logger.Error("template executing error: ", err) //log it
 	}
 }
 
@@ -117,12 +120,13 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	logger := service.GetLogger()
 
-	log.Println("Current user: " + curUser.FullName)
+	logger.Info("Current user: " + curUser.FullName)
 
 	// Send 401 if unauthorized
 	if curUser.UserName == "guest" {
-		log.Println("Unauthorized status code 401")
+		logger.Error("Unauthorized status code 401")
 		h.SendCode(w, r, statusCodes[http.StatusUnauthorized])
 		return
 	}
@@ -131,24 +135,24 @@ func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 
 	doc, err := h.services.ArticleService.GetArticleInfo(artclPath)
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 		return
 	}
 
 	// Send 403 wrong user
 	if !curUser.IsAdmin && curUser.Id != doc.AuthorId {
-		log.Println("Wrong user. Action forbidden: status code 403")
+		logger.Error("Wrong user. Action forbidden: status code 403")
 		h.SendCode(w, r, statusCodes[http.StatusForbidden])
 		return
 	} else {
-		log.Println("OK user!")
+		logger.Info("OK user!")
 		err := h.services.ArticleService.DeleteArticle(artclPath)
 		if err != nil {
-			log.Print("DB entry delete error: ", err)
+			logger.Error("DB entry delete error: ", err)
 		}
 
 		http.Redirect(w, r, "/", http.StatusSeeOther)
-		log.Println("Successfully Deleted File")
+		logger.Info("Successfully Deleted File")
 	}
 }
 
@@ -156,8 +160,9 @@ func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	logger := service.GetLogger()
 
-	log.Println("Current user: " + curUser.FullName)
+	logger.Info("Current user: " + curUser.FullName)
 
 	// Send 401 if unauthorized
 	if curUser.UserName == "guest" {
@@ -170,8 +175,7 @@ func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 
 	t, err := template.ParseFiles("lib/templates/upload.html") //parse the html file homepage.html
 	if err != nil {                                            // if there is an error
-		log.Print("template parsing error: ", err) // log it
-		fmt.Fprintln(w, "template parsing error: ", err)
+		logger.Error("template parsing error: ", err) // log it
 		return
 	}
 	UploadPageVars := models.PageVariables{ //store the date and time in a struct
@@ -181,7 +185,7 @@ func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 	}
 	err = t.Execute(w, UploadPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error
-		log.Print("template executing error: ", err) //log it
+		logger.Error("template executing error: ", err) //log it
 		fmt.Fprintln(w, "template executing error: ", err)
 		return
 	}
@@ -191,20 +195,21 @@ func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) DownloadArticle(w http.ResponseWriter, r *http.Request) {
 
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	logger := service.GetLogger()
 
 	log.Println("Current user: " + curUser.FullName)
 
 	artclPath := r.URL.Query().Get("md")
 	md, err := h.services.ArticleService.GetArticleBody(artclPath)
 	if err != nil {
-		log.Print("MD file open error: ", err)
+		logger.Error("MD file open error: ", err)
 		fmt.Fprintln(w, "MD file open error: ", err)
 		return
 	}
 
 	doc, err := h.services.ArticleService.GetArticleInfo(artclPath)
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 		fmt.Fprintln(w, err)
 		return
 	}
@@ -219,7 +224,7 @@ func (h *Handler) DownloadArticle(w http.ResponseWriter, r *http.Request) {
 	reader := bytes.NewReader(md)
 	_, err = io.Copy(w, reader)
 	if err != nil {
-		log.Print("Unable to download a file: ", err)
+		logger.Error("Unable to download a file: ", err)
 		fmt.Fprintln(w, "Unable to download a file: ", err)
 		return
 	}
@@ -231,8 +236,9 @@ func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
 
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
 	curUserString := curUser.UserName
+	logger := service.GetLogger()
 
-	log.Println("Current user: " + curUser.FullName)
+	logger.Info("Current user: " + curUser.FullName)
 
 	// Send 401 if unauthorized
 	if curUser.UserName == "guest" {
@@ -240,7 +246,7 @@ func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("File Upload Endpoint Hit")
+	logger.Info("File Upload Endpoint Hit")
 
 	// Parse our multipart form, 10 << 20 specifies a maximum
 	// upload of 1 MB files.
@@ -251,37 +257,37 @@ func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
 	file, handler, err := r.FormFile("myFile")
 	title := r.FormValue("title")
 	if err != nil {
-		log.Print("Error Retrieving the File", err)
+		logger.Error("Error Retrieving the File", err)
 		return
 	}
 
 	ftype := handler.Filename[len(handler.Filename)-3:]
 	if ftype != ".md" {
-		log.Println("File type must be text/markdown" + ftype)
+		logger.Error("File type must be text/markdown" + ftype)
 		return
 	}
 	defer file.Close()
-	log.Printf("Uploaded File: %+v\n", handler.Filename)
-	log.Printf("File Size: %+v\n", handler.Size)
-	log.Printf("MIME Header: %+v\n", handler.Header)
+	logger.Infof("Uploaded File: %+v\n", handler.Filename)
+	logger.Infof("File Size: %+v\n", handler.Size)
+	logger.Infof("MIME Header: %+v\n", handler.Header)
 
 	// read all of the contents of our uploaded file into a
 	// byte array
 	fileBytes, err := io.ReadAll(file)
 	if err != nil {
-		log.Println("Error Reading File", err)
+		logger.Error("Error Reading File", err)
 		return
 	}
 
 	_, err = h.services.ArticleService.CreateNewArticle(title, curUserString, fileBytes)
 	if err != nil {
-		log.Println("Error Creating Article", err)
+		logger.Error("Error Creating Article", err)
 		return
 	}
 
 	// return that we have successfully uploaded our file!
 	http.Redirect(w, r, "/", http.StatusSeeOther)
-	log.Println("Successfully Uploaded File")
+	logger.Info("Successfully Uploaded File")
 }
 
 // SaveFile
@@ -289,16 +295,17 @@ func (h *Handler) SaveFile(w http.ResponseWriter, r *http.Request) {
 	md := []byte(r.FormValue("textEditArea"))
 	artclPath := r.FormValue("articlePath")
 	err := os.WriteFile("articles/"+artclPath, md, 0644)
+	logger := service.GetLogger()
 	if err != nil {
-		log.Print("MD file write error: ", err, artclPath)
+		logger.Error("MD file write error: ", err, artclPath)
 		return
 	} else {
-		log.Println("Successfully Edited File")
+		logger.Info("Successfully Edited File")
 	}
 
 	err = h.services.ArticleService.UpdateArticle(artclPath)
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 		return
 	}
 

@@ -2,14 +2,16 @@ package handler
 
 import (
 	"html/template"
-	"log"
+
 	"net/http"
 
 	"github.com/lemjoe/Grapho/internal/models"
+	"github.com/lemjoe/Grapho/internal/service"
 	"golang.org/x/crypto/bcrypt"
 )
 
 func (h *Handler) ChangeTheme(w http.ResponseWriter, r *http.Request) {
+	logger := service.GetLogger()
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
 	theme := "light"
 	curSettings := curUser.Settings
@@ -19,7 +21,7 @@ func (h *Handler) ChangeTheme(w http.ResponseWriter, r *http.Request) {
 	curSettings["theme"] = theme
 	err := h.services.UserService.ChangeUserSettings(curUser.Id, curSettings)
 	if err != nil {
-		log.Println("Unable to change current theme: ", err)
+		logger.Error("Unable to change current theme: ", err)
 	}
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
@@ -28,6 +30,7 @@ func (h *Handler) ChangeTheme(w http.ResponseWriter, r *http.Request) {
 // User settings
 func (h *Handler) Settings(w http.ResponseWriter, r *http.Request) {
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	logger := service.GetLogger()
 
 	if curUser.FullName == "Guest" {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
@@ -38,7 +41,7 @@ func (h *Handler) Settings(w http.ResponseWriter, r *http.Request) {
 
 	t, err := template.ParseFiles("lib/templates/user-settings.html") //parse the html file homepage.html
 	if err != nil {                                                   // if there is an error
-		log.Print("template parsing error: ", err) // log it
+		logger.Error("template parsing error: ", err) // log it
 	}
 
 	adminInterface := []byte("")
@@ -53,18 +56,20 @@ func (h *Handler) Settings(w http.ResponseWriter, r *http.Request) {
 	}
 	err = t.Execute(w, UserSettingsPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                          // if there is an error
-		log.Print("template executing error: ", err) //log it
+		logger.Error("template executing error: ", err) //log it
 	}
 }
 
 func (h *Handler) ChangeUserPassword(w http.ResponseWriter, r *http.Request) {
-	log.Println("Trying to change user password")
+	logger := service.GetLogger()
+
+	logger.Info("Trying to change user password")
 
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
 
 	// Send 401 if unauthorized
 	if curUser.UserName == "guest" {
-		log.Println("Unauthorized status code 401")
+		logger.Error("Unauthorized status code 401")
 		h.SendCode(w, r, statusCodes[http.StatusUnauthorized])
 		return
 	}
@@ -75,16 +80,16 @@ func (h *Handler) ChangeUserPassword(w http.ResponseWriter, r *http.Request) {
 
 	err := bcrypt.CompareHashAndPassword([]byte(curUser.Password), []byte(old_passwd))
 	if err != nil {
-		log.Print("invalid password: ", err)
+		logger.Error("invalid password: ", err)
 	} else {
 		if new_passwd != r_new_passwd {
-			log.Println("passwords must match!")
+			logger.Error("passwords must match!")
 		} else {
 			err := h.services.UserService.ChangeUserPassword(curUser.Id, new_passwd)
 			if err != nil {
-				log.Print("unable to change password: ", err)
+				logger.Info("unable to change password: ", err)
 			} else {
-				log.Println("password was successfully changed")
+				logger.Info("password was successfully changed")
 				alert := AlertMessage{
 					Title:       "Congratulations!",
 					Description: "Your password was successfully changed",

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -50,6 +49,7 @@ func (h *Handler) Run(port string) error {
 	r.PathPrefix("/lib/").Handler(http.StripPrefix("/lib/", http.FileServer(http.Dir("./lib/"))))
 	r.PathPrefix("/images/").Handler(http.StripPrefix("/images/", http.FileServer(http.Dir("./images/"))))
 
-	log.Print("Server is running on port ", port)
+	logger := service.GetLogger()
+	logger.Info("Server is running on port ", port)
 	return http.ListenAndServe(port, r)
 }

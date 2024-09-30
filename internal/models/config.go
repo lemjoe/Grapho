@@ -14,4 +14,5 @@ type ConfigApp struct {
 	Port        string
 	JwtSecret   string
 	AdminPasswd string
+	MainLog     string
 }

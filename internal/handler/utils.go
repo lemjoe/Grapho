@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"log"
-
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
@@ -26,9 +24,10 @@ func MdToHTML(md []byte) []byte {
 }
 
 func (h *Handler) GetCurrentUser(userID string) *models.User {
+	logger := service.GetLogger()
 	curUser, err := h.services.UserService.GetUserById(userID)
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 		return &models.User{
 			UserName: "guest",
 			FullName: "Guest",

@@ -4,19 +4,20 @@ import (
 	"encoding/json"
 	"html/template"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"regexp"
 
 	"github.com/lemjoe/Grapho/internal/models"
+	"github.com/lemjoe/Grapho/internal/service"
 )
 
 func (h *Handler) Editor(w http.ResponseWriter, r *http.Request) {
 
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	logger := service.GetLogger()
 
-	log.Println("Current user: " + curUser.FullName)
+	logger.Info("Current user: " + curUser.FullName)
 
 	// Send 401 if unauthorized
 	if curUser.UserName == "guest" {
@@ -30,7 +31,7 @@ func (h *Handler) Editor(w http.ResponseWriter, r *http.Request) {
 	artclPath := r.URL.Query().Get("md")
 	md, err := os.ReadFile("articles/" + artclPath) // just pass the file name
 	if err != nil {
-		log.Print("MD file open error: ", err)
+		logger.Error("MD file open error: ", err)
 	}
 	html := MdToHTML(md)
 
@@ -44,11 +45,11 @@ func (h *Handler) Editor(w http.ResponseWriter, r *http.Request) {
 	}
 	t, err := template.ParseFiles("lib/templates/editor.html") //parse the html file homepage.html
 	if err != nil {                                            // if there is an error
-		log.Print("template parsing error: ", err) // log it
+		logger.Error("template parsing error: ", err) // log it
 	}
 	err = t.Execute(w, HomePageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                  // if there is an error
-		log.Print("template executing error: ", err) //log it
+		logger.Error("template executing error: ", err) //log it
 	}
 }
 

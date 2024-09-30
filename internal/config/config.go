@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strconv"
 
@@ -32,7 +31,6 @@ func fileExists(filename string) bool {
 }
 
 func CreateDefaultConfig() error {
-	log.Println("Config file is missing. Creating default config")
 	input, err := os.ReadFile("./.env.default")
 	if err != nil {
 		return err
@@ -66,6 +64,7 @@ func InitConfig(confPath string) (models.ConfigDB, models.ConfigApp, error) {
 		Port:        "4007",
 		JwtSecret:   "default_secret",
 		AdminPasswd: "admin",
+		MainLog:     "main.log",
 	}
 	APP_PORT, exist := os.LookupEnv("APP_PORT")
 	if !exist {
@@ -84,6 +83,12 @@ func InitConfig(confPath string) (models.ConfigDB, models.ConfigApp, error) {
 		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "ADMIN_PASSWD"))
 	} else {
 		defaultConfApp.AdminPasswd = ADMIN_PASSWD
+	}
+	MAIN_LOG, exist := os.LookupEnv("MAIN_LOG")
+	if !exist {
+		fmt.Printf("warn: %s\n", fmt.Errorf("env '%s' not found", "MAIN_LOG"))
+	} else {
+		defaultConfApp.MainLog = MAIN_LOG
 	}
 
 	// Database config

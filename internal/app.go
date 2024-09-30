@@ -20,6 +20,7 @@ func (a *App) Run() error {
 	if err != nil {
 		return err
 	}
+	service.InitLogs(confApp.MainLog)
 	db, err := repository.InitializeDB(confDB.DbType, confDB)
 	if err != nil {
 		return err

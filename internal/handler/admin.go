@@ -3,29 +3,30 @@ package handler
 
 import (
 	"html/template"
-	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/lemjoe/Grapho/internal/models"
+	"github.com/lemjoe/Grapho/internal/service"
 )
 
 func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	logger := service.GetLogger()
 
-	log.Println("Current user: " + curUser.FullName)
+	logger.Info("Current user: " + curUser.FullName)
 
 	// Send 401 if unauthorized
 	if curUser.UserName == "guest" {
-		log.Println("Unauthorized status code 401")
+		logger.Error("Unauthorized status code 401")
 		h.SendCode(w, r, statusCodes[http.StatusUnauthorized])
 		return
 	}
 
 	// Send 403 wrong user
 	if !curUser.IsAdmin {
-		log.Println("Wrong user. Action forbidden: status code 403")
+		logger.Error("Wrong user. Action forbidden: status code 403")
 		h.SendCode(w, r, statusCodes[http.StatusForbidden])
 		return
 	}
@@ -37,7 +38,7 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 
 	users, err := h.services.UserService.GetUsersList()
 	if err != nil {
-		log.Println(err)
+		logger.Error(err)
 	}
 
 	html := "<h1>" + "List of registered users:" + "</h1><table><tr><th>#</th><th>Name</th><th>Full Name</th><th>Email</th><th>Admin?</th><th>Manage</th></tr>"
@@ -48,7 +49,7 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 	// 	html += "<p>There is no articles here! Why don't you add one?"
 	// }
 	for i, user := range users {
-		log.Println(user)
+		logger.Info(user)
 		html += "<tr><td>" + strconv.Itoa(i+1) + "</td><td>" + user.UserName + "</td><td>" + user.FullName + "</td><td>" + user.Email + "</td><td>" + strconv.FormatBool(user.IsAdmin) + "</td><td></a><a href='manageuser?usr=" + user.Id + "'><i>" + editImg + "</i></a></td></tr>"
 	}
 
@@ -65,11 +66,11 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 
 	t, err := template.ParseFiles("lib/templates/home.html") //parse the html file homepage.html
 	if err != nil {                                          // if there is an error
-		log.Print("Template parsing error: ", err) // log it
+		logger.Error("Template parsing error: ", err) // log it
 	}
 	err = t.Execute(w, HomePageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                  // if there is an error
-		log.Print("Template executing error: ", err) //log it
+		logger.Error("Template executing error: ", err) //log it
 	}
 
 }
@@ -78,19 +79,20 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) ManageUser(w http.ResponseWriter, r *http.Request) {
 
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	logger := service.GetLogger()
 
-	log.Println("Current user: " + curUser.FullName)
+	logger.Info("Current user: " + curUser.FullName)
 
 	// Send 401 if unauthorized
 	if curUser.UserName == "guest" {
-		log.Println("Unauthorized status code 401")
+		logger.Error("Unauthorized status code 401")
 		h.SendCode(w, r, statusCodes[http.StatusUnauthorized])
 		return
 	}
 
 	// Send 403 wrong user
 	if !curUser.IsAdmin {
-		log.Println("Wrong user. Action forbidden: status code 403")
+		logger.Error("Wrong user. Action forbidden: status code 403")
 		h.SendCode(w, r, statusCodes[http.StatusForbidden])
 		return
 	}
@@ -101,7 +103,7 @@ func (h *Handler) ManageUser(w http.ResponseWriter, r *http.Request) {
 	usrId := r.URL.Query().Get("usr")
 	managedUsr, err := h.services.UserService.GetUserById(usrId)
 	if err != nil {
-		log.Print("Can't load user data: ", err, managedUsr)
+		logger.Error("Can't load user data: ", err, managedUsr)
 	}
 
 	mngUsrIsAdm := ""
@@ -122,29 +124,30 @@ func (h *Handler) ManageUser(w http.ResponseWriter, r *http.Request) {
 
 	t, err := template.ParseFiles("lib/templates/manage-user.html") //parse the html file homepage.html
 	if err != nil {                                                 // if there is an error
-		log.Print("template parsing error: ", err) // log it
+		logger.Error("template parsing error: ", err) // log it
 	}
 	err = t.Execute(w, ManageUserPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                        // if there is an error
-		log.Print("template executing error: ", err) //log it
+		logger.Error("template executing error: ", err) //log it
 	}
 }
 
 func (h *Handler) ChangeUser(w http.ResponseWriter, r *http.Request) {
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	logger := service.GetLogger()
 
-	log.Println("Current user: " + curUser.FullName)
+	logger.Info("Current user: " + curUser.FullName)
 
 	// Send 401 if unauthorized
 	if curUser.UserName == "guest" {
-		log.Println("Unauthorized status code 401")
+		logger.Error("Unauthorized status code 401")
 		h.SendCode(w, r, statusCodes[http.StatusUnauthorized])
 		return
 	}
 
 	// Send 403 wrong user
 	if !curUser.IsAdmin {
-		log.Println("Wrong user. Action forbidden: status code 403")
+		logger.Error("Wrong user. Action forbidden: status code 403")
 		h.SendCode(w, r, statusCodes[http.StatusForbidden])
 		return
 	}
@@ -159,12 +162,12 @@ func (h *Handler) ChangeUser(w http.ResponseWriter, r *http.Request) {
 
 	managedUser, err := h.services.UserService.GetUserByName(user_name)
 	if err != nil {
-		log.Print("Can't load user data: ", err)
+		logger.Error("Can't load user data: ", err)
 	}
 
 	err = h.services.UserService.UpdateUserData(managedUser.Id, full_name, e_mail, is_admin)
 	if err != nil {
-		log.Print("Something went wrong: ", err)
+		logger.Error("Something went wrong: ", err)
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}

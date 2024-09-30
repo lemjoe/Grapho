@@ -3,11 +3,11 @@ package handler
 import (
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/lemjoe/Grapho/internal/models"
+	"github.com/lemjoe/Grapho/internal/service"
 )
 
 type StatusCode struct {
@@ -23,13 +23,14 @@ type AlertMessage struct {
 
 func (h *Handler) SendCode(w http.ResponseWriter, r *http.Request, status StatusCode) {
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	logger := service.GetLogger()
 
 	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
 	intCode, err := strconv.Atoi(status.Code)
 	if err != nil { // if there is an error
-		log.Print("status conversion error: ", err) // log it
+		logger.Error("status conversion error: ", err) // log it
 		fmt.Fprintln(w, "status conversion error: ", err)
 		return
 	}
@@ -37,7 +38,7 @@ func (h *Handler) SendCode(w http.ResponseWriter, r *http.Request, status Status
 
 	t, err := template.ParseFiles("lib/templates/status.html") //parse the html file homepage.html
 	if err != nil {                                            // if there is an error
-		log.Print("template parsing error: ", err) // log it
+		logger.Error("template parsing error: ", err) // log it
 		fmt.Fprintln(w, "template parsing error: ", err)
 		return
 	}
@@ -50,7 +51,7 @@ func (h *Handler) SendCode(w http.ResponseWriter, r *http.Request, status Status
 	}
 	err = t.Execute(w, StatusPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error
-		log.Print("template executing error: ", err) //log it
+		logger.Error("template executing error: ", err) //log it
 		fmt.Fprintln(w, "template executing error: ", err)
 		return
 	}
@@ -58,13 +59,14 @@ func (h *Handler) SendCode(w http.ResponseWriter, r *http.Request, status Status
 
 func (h *Handler) SendAlert(w http.ResponseWriter, r *http.Request, alert AlertMessage) {
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	logger := service.GetLogger()
 
 	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"homeButton"}, lang, h.bundle)
 
 	t, err := template.ParseFiles("lib/templates/status.html") //parse the html file homepage.html
 	if err != nil {                                            // if there is an error
-		log.Print("template parsing error: ", err) // log it
+		logger.Error("template parsing error: ", err) // log it
 		fmt.Fprintln(w, "template parsing error: ", err)
 		return
 	}
@@ -77,7 +79,7 @@ func (h *Handler) SendAlert(w http.ResponseWriter, r *http.Request, alert AlertM
 	}
 	err = t.Execute(w, AlertPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                   // if there is an error
-		log.Print("template executing error: ", err) //log it
+		logger.Error("template executing error: ", err) //log it
 		fmt.Fprintln(w, "template executing error: ", err)
 		return
 	}

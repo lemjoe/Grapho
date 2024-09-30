@@ -34,7 +34,6 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 	theme := curUser.Settings["theme"]
 	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"listOfArticles", "homeButton", "addButton", "lastModification"}, lang, h.bundle)
-	// log.Println(translation)
 
 	users, err := h.services.UserService.GetUsersList()
 	if err != nil {

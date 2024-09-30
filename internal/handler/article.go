@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -26,7 +25,6 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 	theme := curUser.Settings["theme"]
 	lang := curUser.Settings["language"]
 	translation := Localizer([]string{"listOfArticles", "homeButton", "addButton", "lastModification", "pageTitle"}, lang, h.bundle)
-	// log.Println(translation)
 
 	docs, err := h.services.ArticleService.GetArticlesList()
 	if err != nil {
@@ -197,7 +195,7 @@ func (h *Handler) DownloadArticle(w http.ResponseWriter, r *http.Request) {
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
 	logger := service.GetLogger()
 
-	log.Println("Current user: " + curUser.FullName)
+	logger.Info("Current user: " + curUser.FullName)
 
 	artclPath := r.URL.Query().Get("md")
 	md, err := h.services.ArticleService.GetArticleBody(artclPath)

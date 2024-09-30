@@ -28,11 +28,9 @@ func ConnectDB(dir string) (*DB, error) {
 		if os.IsNotExist(err) {
 			err = os.MkdirAll(absDir, 0740)
 			if err != nil {
-				//log.Print("Unable to create database: ", err)
 				return nil, fmt.Errorf("unable to create database: %w", err)
 			}
 		} else {
-			//log.Print("Unable to create database: ", err)
 			return nil, fmt.Errorf("unable to create database: %w", err)
 		}
 	}

@@ -3,11 +3,11 @@ package mongodb
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/lemjoe/Grapho/internal/repository/mongodb/article"
 	"github.com/lemjoe/Grapho/internal/repository/mongodb/user"
 	"github.com/lemjoe/Grapho/internal/repository/repotypes"
+	"github.com/lemjoe/Grapho/internal/service"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -37,8 +37,9 @@ func ConnectDB(url, dbname string, user string, password string) (*DB, error) {
 	// Check the connection
 	err = client.Ping(context.TODO(), nil)
 
+	logger := service.GetLogger()
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	fmt.Println("Connected to MongoDB!")
@@ -51,8 +52,9 @@ func ConnectDB(url, dbname string, user string, password string) (*DB, error) {
 }
 
 func (db *DB) Close() {
+	logger := service.GetLogger()
 	if err := db.client.Disconnect(context.TODO()); err != nil {
-		panic(err)
+		logger.Panic(err)
 	}
 }
 

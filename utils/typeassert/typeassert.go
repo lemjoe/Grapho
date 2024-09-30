@@ -1,11 +1,14 @@
 package typeassert
 
-import "log"
+import (
+	"github.com/lemjoe/Grapho/internal/service"
+)
 
 func InterfaceToString(i interface{}) string {
+	logger := service.GetLogger()
 	val, ok := i.(string)
 	if !ok {
-		log.Printf("Failed to cast interface to string: %v", i)
+		logger.Errorf("Failed to cast interface to string: %v", i)
 		return ""
 	}
 	return val

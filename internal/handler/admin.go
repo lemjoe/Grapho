@@ -54,9 +54,9 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 
 	html += "</table>"
 
-	HomePageVars := models.PageVariables{ //store the date and time in a struct
+	AdminPanelPageVars := models.PageVariables{ //store the date and time in a struct
 		MDArticle:   template.HTML(html),
-		Title:       "Admin | Users list",
+		Title:       "Admin panel | Users list",
 		Translation: translation,
 		UserName:    curUser.FullName,
 		Theme:       theme,
@@ -66,8 +66,8 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 	if err != nil {                                          // if there is an error
 		logger.Error("Template parsing error: ", err) // log it
 	}
-	err = t.Execute(w, HomePageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
-	if err != nil {                  // if there is an error
+	err = t.Execute(w, AdminPanelPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
+	if err != nil {                        // if there is an error
 		logger.Error("Template executing error: ", err) //log it
 	}
 
@@ -110,7 +110,7 @@ func (h *Handler) ManageUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ManageUserPageVars := models.PageVariables{ //store the date and time in a struct
-		Title:               "Admin | Manage user",
+		Title:               "Admin panel | Manage user",
 		UserName:            curUser.FullName,
 		Theme:               curUser.Settings["theme"],
 		ManagedUserName:     managedUsr.UserName,

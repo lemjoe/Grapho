@@ -16,4 +16,4 @@ var statusCodes = map[int]StatusCode{
 
 var adminPanel = []byte("\n<h2>Admin panel</h2><hr><table><tr><td><b>manage portal users</b></td><td><a href=\"/admin\">GO</a></td></tr></table>")
 
-var localization = []string{"listOfArticles", "homeButton", "addButton", "lastModification", "pageTitle", "user", "register", "login", "logout"}
+var localization = []string{"listOfArticles", "homeButton", "addButton", "lastModification", "titleMain", "user", "register", "login", "logout"}

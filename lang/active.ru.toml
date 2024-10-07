@@ -2,6 +2,14 @@
 hash = "sha1-b64bac1d7751d24f68089ce4665da1d1ec1d9b76"
 other = "Добавить статью"
 
+[ArticleTitle]
+hash = "sha1-d7cee3773a4ec8c6386bac150f8e4dd5a5e0cbf6"
+other = "Заголовок статьи"
+
+[BackToTop]
+hash = "sha1-2ed8e7de1b8db564a5d623cff367097cbe23f9b8"
+other = "наверх"
+
 [HomeButton]
 hash = "sha1-497e6f048137fb0222a45a2b21129da2b80946f4"
 other = "Домой"
@@ -22,14 +30,58 @@ other = "войти"
 hash = "sha1-55525e1b3dfd8787fd202aed45fb04494e3242d0"
 other = "выход"
 
+[Preview]
+hash = "sha1-f1fbb2b43dca281d0138f4fcc92543ad143ef0b1"
+other = "Предпросмотр"
+
 [Register]
 hash = "sha1-13a2828b3adecc1c32ea3888d08afa51e147b3f3"
 other = "зарегистрироваться"
 
-[Title]
+[TitleAdmManageUser]
+hash = "sha1-b14fb7f6a01f52127ec24104c0fb31ac090611e3"
+other = "Администрирование | Управление пользователем"
+
+[TitleAdmUsersList]
+hash = "sha1-73598fb94237fc0481fa7534044b4ba9738db773"
+other = "Администрирование | Список пользователей"
+
+[TitleEdit]
+hash = "sha1-28e80f82c94d88a7e9a32272306b2ea0b5f05eca"
+other = "Редактировать статью"
+
+[TitleLogin]
+hash = "sha1-8aed47d87311b4d4def762fd2dc2e31f4bd20b07"
+other = "Форма входа"
+
+[TitleMain]
 hash = "sha1-23b2b58e5f6117b31db82d95999364aaf4d62cd9"
 other = "Список статей"
+
+[TitleSignUp]
+hash = "sha1-8f45adddd26bfa755b65acaae9af966b4a627cf8"
+other = "Форма регистрации"
+
+[TitleUploadArt]
+hash = "sha1-42dac0cf8345adbe3f3948be3c0332067233b4c3"
+other = "Добавить статью"
+
+[TitleUserSettings]
+hash = "sha1-f2b85332c2be75ec98d44f8f953f11e6f57cd507"
+other = "Настройки пользователя"
+
+[Upload]
+hash = "sha1-8bdf057f91e76ae328b2a21d35f682daa08a0ec0"
+other = "Добавить"
+
+[UploadedBy]
+hash = "sha1-4fdc58b29dd4909dfcc5ed75302ef96e31b65b87"
+other = "Загружено пользователем"
 
 [User]
 hash = "sha1-9f8a2389a20ca0752aa9e95093515517e90e194c"
 other = "Пользователь"
+
+[save]
+hash = "sha1-efc007a393f66cdb14d57d385822a3d9e36ef873"
+other = "Сохранить"

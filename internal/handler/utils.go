@@ -48,12 +48,8 @@ func Localizer(input []string, lang string, bundle *i18n.Bundle) map[string]stri
 	output := make(map[string]string)
 
 	// Translation strings
-	localization["listOfArticles"] = localizer.MustLocalize(&i18n.LocalizeConfig{
-		DefaultMessage: &i18n.Message{
-			ID:    "ListOfArticles",
-			Other: "List of available articles:",
-		},
-	})
+
+	// Top menu
 	localization["homeButton"] = localizer.MustLocalize(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
 			ID:    "HomeButton",
@@ -64,18 +60,6 @@ func Localizer(input []string, lang string, bundle *i18n.Bundle) map[string]stri
 		DefaultMessage: &i18n.Message{
 			ID:    "AddButton",
 			Other: "Add an article",
-		},
-	})
-	localization["lastModification"] = localizer.MustLocalize(&i18n.LocalizeConfig{
-		DefaultMessage: &i18n.Message{
-			ID:    "LastModification",
-			Other: "Last modification",
-		},
-	})
-	localization["pageTitle"] = localizer.MustLocalize(&i18n.LocalizeConfig{
-		DefaultMessage: &i18n.Message{
-			ID:    "Title",
-			Other: "Articles list",
 		},
 	})
 	localization["user"] = localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -100,6 +84,106 @@ func Localizer(input []string, lang string, bundle *i18n.Bundle) map[string]stri
 		DefaultMessage: &i18n.Message{
 			ID:    "Logout",
 			Other: "logout",
+		},
+	})
+
+	// Page titles
+	localization["titleMain"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "TitleMain",
+			Other: "Articles list",
+		},
+	})
+	localization["titleEdit"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "TitleEdit",
+			Other: "Edit article",
+		},
+	})
+	localization["titleUploadArt"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "TitleUploadArt",
+			Other: "Upload an article",
+		},
+	})
+	localization["titleSignUp"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "TitleSignUp",
+			Other: "Sign up form",
+		},
+	})
+	localization["titleLogin"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "TitleLogin",
+			Other: "Log in form",
+		},
+	})
+	localization["titleUserSettings"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "TitleUserSettings",
+			Other: "User settings",
+		},
+	})
+	localization["titleAdmUsersList"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "TitleAdmUsersList",
+			Other: "Admin panel | Users list",
+		},
+	})
+	localization["titleAdmManageUser"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "TitleAdmManageUser",
+			Other: "Admin panel | Manage user",
+		},
+	})
+
+	// Strings
+	localization["listOfArticles"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ListOfArticles",
+			Other: "List of available articles:",
+		},
+	})
+	localization["lastModification"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "LastModification",
+			Other: "Last modification",
+		},
+	})
+	localization["uploadedBy"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "UploadedBy",
+			Other: "Uploaded by",
+		},
+	})
+	localization["backToTop"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "BackToTop",
+			Other: "back to top",
+		},
+	})
+	localization["preview"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Preview",
+			Other: "Preview",
+		},
+	})
+	localization["save"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "save",
+			Other: "Save",
+		},
+	})
+	localization["articleTitle"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ArticleTitle",
+			Other: "Article Title",
+		},
+	})
+	localization["upload"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Upload",
+			Other: "Upload",
 		},
 	})
 

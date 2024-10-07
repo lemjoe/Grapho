@@ -54,5 +54,5 @@ Then type `localhost:4007` in your browser's address bar.
 | Code refactoring            | :heavy_check_mark: |
 | Dark/light theme            | :heavy_check_mark: |
 | Docker-ready                |        :x:         |
-| Translation en-ru           |        :x:         |
+| Translation en-ru           | :heavy_check_mark: |
 | Admin panel                 | :heavy_check_mark: |

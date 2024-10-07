@@ -2,6 +2,10 @@
 hash = "sha1-b64bac1d7751d24f68089ce4665da1d1ec1d9b76"
 other = "Добавить статью"
 
+[AdminPanel]
+hash = "sha1-93711db98eb0c79098c09e0e7d87dd859fe86edd"
+other = "Панель администратора"
+
 [ArticleTitle]
 hash = "sha1-d7cee3773a4ec8c6386bac150f8e4dd5a5e0cbf6"
 other = "Заголовок статьи"
@@ -10,9 +14,53 @@ other = "Заголовок статьи"
 hash = "sha1-2ed8e7de1b8db564a5d623cff367097cbe23f9b8"
 other = "наверх"
 
+[BackToUsersList]
+hash = "sha1-ed9ee5ccb814d4697f2a86d2892b7a9f36120d4d"
+other = "назад к списку пользователей"
+
+[By]
+hash = "sha1-408158643ed564c72fa0921826f8294d71ccbf7c"
+other = "от"
+
+[ChangePassButton]
+hash = "sha1-8c684290ce0b8a8e6cee79a145e17554064a4760"
+other = "Сменить пароль"
+
+[ChangeSettingsButton]
+hash = "sha1-602e2cd2d83a3e0f526f9af5f57d1bf0a692cc49"
+other = "Изменить настройки"
+
+[ChangeUserButton]
+hash = "sha1-239e56865c3d507f9d67b0eb25f3c327b150a6fc"
+other = "Изменить"
+
+[ColorTheme]
+hash = "sha1-bad00aa82d9fcaca973b2aa2cb47aeeccfa1e27e"
+other = "тема оформления"
+
+[CurrentPass]
+hash = "sha1-959abc007443bd493805ad85239342856c3b36eb"
+other = "текущий пароль"
+
+[Download]
+hash = "sha1-a479c9c34e878d07b4d67a73a48f432ad7dc53c8"
+other = "Скачать"
+
+[FullNameString]
+hash = "sha1-f626892d30cd04459f4571971f1fb675445565ba"
+other = "полное имя"
+
 [HomeButton]
 hash = "sha1-497e6f048137fb0222a45a2b21129da2b80946f4"
 other = "Домой"
+
+[IsAdmin]
+hash = "sha1-1c78ff6eceb81f9333d46e494d0a00277da91d67"
+other = "администратор?"
+
+[Language]
+hash = "sha1-e11523c5ff23fc1600aca2d8ee5adb542c5ce4b3"
+other = "язык"
 
 [LastModification]
 hash = "sha1-08526a0990d119b26ecc5400f6caea4f17efd8ed"
@@ -22,21 +70,89 @@ other = "Последнее изменение"
 hash = "sha1-190f65088f39e557dc30589ce533c1f769a4fef5"
 other = "Список доступных статей:"
 
+[ListOfUsers]
+hash = "sha1-191a4e170816432d9457e54d3b74523e7bc2f987"
+other = "Список зарегистрированных пользователей"
+
 [Login]
 hash = "sha1-2736fab291f04e69b62d490c3c09361f5b82461a"
 other = "войти"
+
+[LoginString]
+hash = "sha1-2736fab291f04e69b62d490c3c09361f5b82461a"
+other = "логин"
 
 [Logout]
 hash = "sha1-55525e1b3dfd8787fd202aed45fb04494e3242d0"
 other = "выход"
 
+[ManagePortalUsers]
+hash = "sha1-eb0a10b2b603f1a78ee1059b29f4ba16f09956de"
+other = "управление пользователями"
+
+[ManageUser]
+hash = "sha1-579e3b1268c2e45b90d014cc7be9ab890779a8d3"
+other = "Управление пользователем"
+
+[Misc]
+hash = "sha1-0a893ece8e469a3ca3d935c49f41d08d04b75ecc"
+other = "Разное"
+
+[MustBeEmail]
+hash = "sha1-07379a354f8a0df2e478eadc01e0cf53ec809af5"
+other = "Должен быть действительным e-mail адресом"
+
+[MustContain]
+hash = "sha1-c6f1b67a4782b1d200d7bda8ec8612e9b6c8f029"
+other = "Должен содержать не менее 8 символов верхнего и нижнего регистров и цифры"
+
+[NewPass]
+hash = "sha1-a1fc568e8104d91580079594101035b92e3fcce1"
+other = "новый пароль"
+
+[OnlyLatin]
+hash = "sha1-777211ad2e32e12c520a17db937d4bf53c383b95"
+other = "Только латинница в нижнем регистре и цифры"
+
+[PasswordString]
+hash = "sha1-5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8"
+other = "пароль"
+
 [Preview]
 hash = "sha1-f1fbb2b43dca281d0138f4fcc92543ad143ef0b1"
 other = "Предпросмотр"
 
+[ReNewPass]
+hash = "sha1-ed83d361796190862d9b9977db7c4be479fb3919"
+other = "повторите новый пароль"
+
 [Register]
 hash = "sha1-13a2828b3adecc1c32ea3888d08afa51e147b3f3"
 other = "зарегистрироваться"
+
+[Security]
+hash = "sha1-f25ce1b8a399bd8621a57427a20039b4b13935db"
+other = "Безопасность"
+
+[Settings]
+hash = "sha1-c7f73bb54d928922c3838bb789ee9fb8a5b1eb37"
+other = "Настройки"
+
+[SubmitButton]
+hash = "sha1-2dacf65959849884a011f36f76a04eebea94c5ea"
+other = "Отправить"
+
+[ThFullName]
+hash = "sha1-eeb692087d629b32f2f1820369d9756d60c5cba8"
+other = "Полное имя"
+
+[ThManage]
+hash = "sha1-bf58d17e561b1b858e35f9202f811297dac2e9db"
+other = "Управлять"
+
+[ThName]
+hash = "sha1-709a23220f2c3d64d1e1d6d18c4d5280f8d82fca"
+other = "Имя"
 
 [TitleAdmManageUser]
 hash = "sha1-b14fb7f6a01f52127ec24104c0fb31ac090611e3"
@@ -81,6 +197,14 @@ other = "Загружено пользователем"
 [User]
 hash = "sha1-9f8a2389a20ca0752aa9e95093515517e90e194c"
 other = "Пользователь"
+
+[UserStr]
+hash = "sha1-12dea96fec20593566ab75692c9949596833adc9"
+other = "пользователь"
+
+[loginButton]
+hash = "sha1-4e5a2893bdcc7d239c1db72e4c4ffbe4bea73174"
+other = "Войти"
 
 [save]
 hash = "sha1-efc007a393f66cdb14d57d385822a3d9e36ef873"

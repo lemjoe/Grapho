@@ -40,7 +40,7 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 		logger.Error(err)
 	}
 
-	html := "<h1>" + "List of registered users:" + "</h1><table><tr><th>#</th><th>Name</th><th>Full Name</th><th>Email</th><th>Admin?</th><th>Manage</th></tr>"
+	html := "<h1>" + translation["listOfUsers"] + ":</h1><table><tr><th>#</th><th>" + translation["thName"] + "</th><th>" + translation["thFullName"] + "</th><th>Email</th><th>Admin?</th><th>" + translation["thManage"] + "</th></tr>"
 	editImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/" + theme + "/edit-pen.png\" alt=\"Edit\" title=\"Edit\">"
 	// deleteImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/" + theme + "/red-trash-can.png\" alt=\"Edit\" title=\"Edit\">"
 
@@ -56,7 +56,7 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 
 	AdminPanelPageVars := models.PageVariables{ //store the date and time in a struct
 		MDArticle:   template.HTML(html),
-		Title:       "Admin panel | Users list",
+		Title:       translation["titleAdmUsersList"],
 		Translation: translation,
 		UserName:    curUser.FullName,
 		Theme:       theme,
@@ -73,7 +73,6 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// Show article
 func (h *Handler) ManageUser(w http.ResponseWriter, r *http.Request) {
 
 	curUser := h.GetCurrentUser(w.Header().Get("userID"))
@@ -110,7 +109,7 @@ func (h *Handler) ManageUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ManageUserPageVars := models.PageVariables{ //store the date and time in a struct
-		Title:               "Admin panel | Manage user",
+		Title:               translation["titleAdmManageUser"],
 		UserName:            curUser.FullName,
 		Theme:               curUser.Settings["theme"],
 		ManagedUserName:     managedUsr.UserName,

@@ -42,6 +42,7 @@ func (h *Handler) Editor(w http.ResponseWriter, r *http.Request) {
 		UserName:    curUser.FullName,
 		Theme:       curUser.Settings["theme"],
 		Translation: translation,
+		Title:       translation["titleEdit"],
 	}
 	t, err := template.ParseFiles("lib/templates/editor.html") //parse the html file homepage.html
 	if err != nil {                                            // if there is an error

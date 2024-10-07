@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Edit article</title>
+    <title>{{.Title}}</title>
     <link rel="stylesheet" href="/lib/{{.Theme}}.css">
     <script src="/lib/scriptor.js" defer></script>
     <script>
@@ -22,7 +22,7 @@
   </tr>
   <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" align="right" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a>
   <hr>
-    Preview:
+    {{index .Translation "preview"}}:
     <div id="preview-area" style="height: 55%; overflow-y: hidden;">{{.MDArticle}}</div>
   <hr><br>
     <div>
@@ -47,7 +47,7 @@
       <form enctype="multipart/form-data" action="/save" method="post">
         <input hidden type="text" name="articlePath" value="{{.Path}}"/>
         <textarea id="text-editor" name="textEditArea" onscroll="SyncScroll()" spellcheck="false" rows="15" cols="150" style="width: 100%; resize: none;">{{.Md}}</textarea>
-        <input type="submit" value="Save" />
+        <input type="submit" value="{{index .Translation "save"}}" />
       </form>
     </div>
     <div id="footer">

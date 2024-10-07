@@ -2,7 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="/lib/{{.Theme}}.css">
-    <title>Upload an article</title>
+    <title>{{.Title}}</title>
   </head>
   <body>
     <tr>
@@ -15,9 +15,9 @@
     <hr>
     <div>
         <form enctype="multipart/form-data" action="/upload" method="post">
-          Article title: <input type="text" size="40" required="true" name="title" /><br>
+          {{index .Translation "articleTitle"}}: <input type="text" size="40" required="true" name="title" /><br>
           <input type="file" required="true" name="myFile" accept=".md" /><br>
-          <input type="submit" value="Upload" />
+          <input type="submit" value="{{index .Translation "upload"}}" />
         </form>
     </div>
     <div id="footer">

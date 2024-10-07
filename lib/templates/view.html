@@ -8,14 +8,14 @@
         <tr>
             <td><a href="/">{{index .Translation "homeButton"}}</a></td>
             <td>|</td>
-            <td><a href="download?md={{.Path}}">Download</a></td>
+            <td><a href="download?md={{.Path}}">{{index .Translation "download"}}</a></td>
             <td>|</td>
             <td>{{index .Translation "user"}}: <a href="/settings">{{.UserName}}</a></td>
             <td>(<a href="/signup">{{index .Translation "register"}}</a> | <a href="/signin">{{index .Translation "login"}}</a> | <a href="/logout">{{index .Translation "logout"}}</a>)</td>
         </tr>
         <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" align="right" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a> 
         <hr>
-        <i>Uploaded by <b>{{.Author}}</b> {{.CreationDate}} (last update: {{.UpdateDate}})</i>
+        <i>{{index .Translation "uploadedBy"}} <b>{{.Author}}</b> {{.CreationDate}} ({{index .Translation "lastModification"}}: {{.UpdateDate}})</i>
         <div id="content-wrap">{{.MDArticle}}</div>
         <div id="footer">
             <hr>

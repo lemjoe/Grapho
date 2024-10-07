@@ -2,7 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="/lib/{{.Theme}}.css">
-    <title>User settings</title>
+    <title>{{.Title}}</title>
   </head>
   <body>
     <tr>
@@ -11,32 +11,32 @@
     <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" align="right" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a>
     <hr>
     <div>
-      <h1>Settings</h1>
-      <h2>Security</h2>
+      <h1>{{index .Translation "settings"}}</h1>
+      <h2>{{index .Translation "security"}}</h2>
       <hr>
         <form enctype="multipart/form-data" action="/changepasswd" method="post">
-            <b>current password</b> <i> (Must contain upcase, downcase, number and at least 8 characters)</i><br>
+            <b>{{index .Translation "currentPass"}}</b> <i> ({{index .Translation "mustContain"}})</i><br>
             <input type="password" size="40" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="old_password" /><br>
-            <b>new password</b> <i> (Must contain upcase, downcase, number and at least 8 characters)</i><br>
+            <b>{{index .Translation "newPass"}}</b> <i> ({{index .Translation "mustContain"}})</i><br>
             <input type="password" size="40" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="new_password" /><br>
-            <b>retype new password</b> <i> (Must contain upcase, downcase, number and at least 8 characters)</i><br>
+            <b>{{index .Translation "reNewPass"}}</b> <i> ({{index .Translation "mustContain"}})</i><br>
             <input type="password" size="40" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="r_new_password" /><br>
             <input type="submit" value="Change password" />
         </form>
-        <h2>Misc</h2>
+        <h2>{{index .Translation "misc"}}</h2>
         <hr>
         <form enctype="multipart/form-data" action="/changeusersettings" method="post">
-          <b>language</b>
+          <b>{{index .Translation "language"}}</b>
           <select name="language">
             <option value="en" {{index .Settings "en"}}>English</option>
             <option value="ru" {{index .Settings "ru"}}>Русский</option>
           </select><br>
-          <b>color theme</b>
+          <b>{{index .Translation "colorTheme"}}</b>
           <select name="theme">
             <option value="light" {{index .Settings "light"}}>Light</option>
             <option value="dark" {{index .Settings "dark"}}>Dark</option>
           </select><br>
-          <input type="submit" value="Change settings" />
+          <input type="submit" value="{{index .Translation "changeSettingsButton"}}" />
       </form>
         {{.AdminPanel}}
     </div>

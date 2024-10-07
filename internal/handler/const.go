@@ -1,7 +1,5 @@
 package handler
 
-var toTheTop = []byte("\n<a href=\"#top\"><i>back to top</i></a>")
-
 var statusCodes = map[int]StatusCode{
 	401: {"401",
 		"Authorization required!",
@@ -14,6 +12,4 @@ var statusCodes = map[int]StatusCode{
 		"The page that you've requested has not been found on this website, please try something else"},
 }
 
-var adminPanel = []byte("\n<h2>Admin panel</h2><hr><table><tr><td><b>manage portal users</b></td><td><a href=\"/admin\">GO</a></td></tr></table>")
-
-var localization = []string{"listOfArticles", "homeButton", "addButton", "lastModification", "titleMain", "user", "register", "login", "logout"}
+var localization = []string{"homeButton", "addButton", "user", "register", "login", "logout", "titleMain", "titleEdit", "titleUploadArt", "titleSignUp", "titleLogin", "titleUserSettings", "titleAdmUsersList", "titleAdmManageUser", "listOfArticles", "lastModification", "uploadedBy", "backToTop", "preview", "save", "articleTitle", "upload", "by", "loginString", "passwordString", "fullNameString", "onlyLatin", "mustContain", "mustBeEmail", "submitButton", "loginButton", "settings", "security", "currentPass", "newPass", "reNewPass", "changePassButton", "misc", "language", "colorTheme", "changeSettingsButton", "adminPanel", "managePortalUsers", "listOfUsers", "thName", "thFullName", "thManage", "manageUser", "userStr", "isAdmin", "changeUserButton", "backToUsersList", "download"}

@@ -44,6 +44,8 @@ func (h *Handler) Settings(w http.ResponseWriter, r *http.Request) {
 		logger.Error("template parsing error: ", err) // log it
 	}
 
+	adminPanel := []byte("\n<h2>" + translation["adminPanel"] + "</h2><hr><table><tr><td><b>" + translation["managePortalUsers"] + "</b></td><td><a href=\"/admin\">GO</a></td></tr></table>")
+
 	adminInterface := []byte("")
 	if curUser.IsAdmin {
 		adminInterface = adminPanel
@@ -59,6 +61,7 @@ func (h *Handler) Settings(w http.ResponseWriter, r *http.Request) {
 		AdminPanel:  template.HTML(adminInterface),
 		Translation: translation,
 		Settings:    tmpSettings,
+		Title:       translation["titleUserSettings"],
 	}
 	err = t.Execute(w, UserSettingsPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                          // if there is an error

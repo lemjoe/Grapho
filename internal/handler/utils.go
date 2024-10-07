@@ -86,6 +86,12 @@ func Localizer(input []string, lang string, bundle *i18n.Bundle) map[string]stri
 			Other: "logout",
 		},
 	})
+	localization["download"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Download",
+			Other: "Download",
+		},
+	})
 
 	// Page titles
 	localization["titleMain"] = localizer.MustLocalize(&i18n.LocalizeConfig{
@@ -184,6 +190,186 @@ func Localizer(input []string, lang string, bundle *i18n.Bundle) map[string]stri
 		DefaultMessage: &i18n.Message{
 			ID:    "Upload",
 			Other: "Upload",
+		},
+	})
+	localization["by"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "By",
+			Other: "by",
+		},
+	})
+	localization["loginString"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "LoginString",
+			Other: "login",
+		},
+	})
+	localization["passwordString"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "PasswordString",
+			Other: "password",
+		},
+	})
+	localization["fullNameString"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "FullNameString",
+			Other: "full name",
+		},
+	})
+	localization["onlyLatin"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "OnlyLatin",
+			Other: "Only latin downcase letters and numbers",
+		},
+	})
+	localization["mustContain"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "MustContain",
+			Other: "Must contain upcase, downcase, number and at least 8 characters",
+		},
+	})
+	localization["mustBeEmail"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "MustBeEmail",
+			Other: "Must be a valid e-mail address",
+		},
+	})
+	localization["submitButton"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "SubmitButton",
+			Other: "Submit",
+		},
+	})
+	localization["loginButton"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "loginButton",
+			Other: "Login",
+		},
+	})
+	localization["settings"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Settings",
+			Other: "Settings",
+		},
+	})
+	localization["security"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Security",
+			Other: "Security",
+		},
+	})
+	localization["currentPass"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "CurrentPass",
+			Other: "current password",
+		},
+	})
+	localization["newPass"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "NewPass",
+			Other: "new password",
+		},
+	})
+	localization["reNewPass"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ReNewPass",
+			Other: "retype new password",
+		},
+	})
+	localization["changePassButton"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ChangePassButton",
+			Other: "Change password",
+		},
+	})
+	localization["misc"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Misc",
+			Other: "Misc",
+		},
+	})
+	localization["language"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Language",
+			Other: "language",
+		},
+	})
+	localization["colorTheme"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ColorTheme",
+			Other: "color theme",
+		},
+	})
+	localization["changeSettingsButton"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ChangeSettingsButton",
+			Other: "Change settings",
+		},
+	})
+	localization["adminPanel"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "AdminPanel",
+			Other: "Admin Panel",
+		},
+	})
+	localization["managePortalUsers"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ManagePortalUsers",
+			Other: "manage portal users",
+		},
+	})
+	localization["listOfUsers"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ListOfUsers",
+			Other: "List of registered users",
+		},
+	})
+	localization["thName"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ThName",
+			Other: "Name",
+		},
+	})
+	localization["thFullName"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ThFullName",
+			Other: "Full name",
+		},
+	})
+	localization["thManage"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ThManage",
+			Other: "Manage",
+		},
+	})
+	localization["manageUser"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ManageUser",
+			Other: "Manage user",
+		},
+	})
+	localization["userStr"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "UserStr",
+			Other: "user",
+		},
+	})
+	localization["isAdmin"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "IsAdmin",
+			Other: "is admin?",
+		},
+	})
+	localization["changeUserButton"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ChangeUserButton",
+			Other: "Change user",
+		},
+	})
+	localization["backToUsersList"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "BackToUsersList",
+			Other: "back to users list",
 		},
 	})
 

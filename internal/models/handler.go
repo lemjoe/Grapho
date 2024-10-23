@@ -22,4 +22,5 @@ type PageVariables struct {
 	AdminPanel          template.HTML
 	Translation         map[string]string
 	Settings            map[string]string
+	Licenses            template.HTML
 }

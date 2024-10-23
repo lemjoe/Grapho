@@ -1,6 +1,10 @@
 package handler
 
 import (
+	"html/template"
+	"net/http"
+	"strings"
+
 	"github.com/BurntSushi/toml"
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
@@ -378,4 +382,51 @@ func Localizer(input []string, lang string, bundle *i18n.Bundle) map[string]stri
 	}
 
 	return output
+}
+
+// Show licinses information
+func (h *Handler) ShowLicenses(w http.ResponseWriter, r *http.Request) {
+
+	curUser := h.GetCurrentUser(w.Header().Get("userID"))
+	logger := service.GetLogger()
+
+	logger.Info("Current user: " + curUser.FullName)
+
+	lang := curUser.Settings["language"]
+	translation := Localizer(localization, lang, h.bundle)
+
+	md, err := h.services.FileService.ReadFile("LICENSE")
+	if err != nil {
+		logger.Error("License file open error: ", err)
+	}
+
+	licenses, err := h.services.FileService.ListFolder("lib/licenses")
+	if err != nil {
+		logger.Error("Can't get licenses list: ", err)
+	}
+	var licensesHTML []byte
+	for _, license := range licenses {
+		str := "<li><a href=\"lib/licenses/" + string(license) + "\" target=\"_blank\">" + strings.Replace(string(license), "^", "/", 1) + "</a></li>"
+		licensesHTML = append(licensesHTML, []byte(str)...)
+	}
+
+	// always normalize newlines!
+	html := MdToHTML(md)
+
+	ArticlePageVars := models.PageVariables{ //store the date and time in a struct
+		MDArticle:   template.HTML(html),
+		UserName:    curUser.FullName,
+		Theme:       curUser.Settings["theme"],
+		Translation: translation,
+		Licenses:    template.HTML(licensesHTML),
+	}
+
+	t, err := template.ParseFiles("lib/templates/licenses.html") //parse the html file homepage.html
+	if err != nil {                                              // if there is an error
+		logger.Error("template parsing error: ", err) // log it
+	}
+	err = t.Execute(w, ArticlePageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
+	if err != nil {                     // if there is an error
+		logger.Error("template executing error: ", err) //log it
+	}
 }

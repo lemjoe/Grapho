@@ -43,6 +43,7 @@ func (h *Handler) Run(port string) error {
 	r.Handle("/admin", http.HandlerFunc(h.GetUsersList)).Methods("GET")
 	r.Handle("/manageuser", http.HandlerFunc(h.ManageUser)).Methods("GET")
 	r.Handle("/changeuser", http.HandlerFunc(h.ChangeUser)).Methods("POST")
+	r.Handle("/licenses", http.HandlerFunc(h.ShowLicenses)).Methods("GET")
 	r.NotFoundHandler = http.HandlerFunc(h.PageNotFound)
 	r.Use(authMiddleware) // JWT check
 

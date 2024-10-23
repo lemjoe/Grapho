@@ -8,15 +8,19 @@
         <tr>
             <td><a href="/">{{index .Translation "homeButton"}}</a></td>
             <td>|</td>
-            <td><a href="download?md={{.Path}}">{{index .Translation "download"}}</a></td>
-            <td>|</td>
             <td>{{index .Translation "user"}}: <a href="/settings">{{.UserName}}</a></td>
             <td>(<a href="/signup">{{index .Translation "register"}}</a> | <a href="/signin">{{index .Translation "login"}}</a> | <a href="/logout">{{index .Translation "logout"}}</a>)</td>
         </tr>
         <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" align="right" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a> 
         <hr>
-        <i>{{index .Translation "uploadedBy"}} <b>{{.Author}}</b> {{.CreationDate}} ({{index .Translation "lastModification"}}: {{.UpdateDate}})</i>
+        <i>Binaries and source code of this software are available <a href="https://github.com/lemjoe/Grapho" target="_blank">here</a> under the terms of BSD 3-Clause License.</i>
         <div id="content-wrap">{{.MDArticle}}</div>
+        <hr>
+        <i>Information about the licenses of the software used in the development of Grapho. The names of developers and organizations are not mentioned for the purpose of endorsing or promoting Grapho.</i>
+        <ul>
+            {{.Licenses}}
+        </ul>
+        <br><br><br>
         <div id="footer">
             <hr>
             <tr>

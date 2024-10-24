@@ -1,24 +1,59 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="/lib/{{.Theme}}.css">
     <title>{{.Title}}</title>
+    <link rel="stylesheet" href="/lib/{{.Theme}}.css">
+    <script src="/lib/scriptor.js" defer></script>
+    <script>
+      function SyncScroll() {
+        var id1 = document.getElementById("preview-area");
+        var id2 = document.getElementById("text-editor");
+        var step = id1.scrollHeight / id2.scrollHeight;
+        id1.scrollTop = id2.scrollTop * step;
+      }
+    </script>
   </head>
-  <body>
-    <tr>
-      <td><a href="/">{{index .Translation "homeButton"}}</a></td>
-      <td>|</td>
-      <td>{{index .Translation "user"}}: <a href="/settings">{{.UserName}}</a></td>
-      <td>(<a href="/signup">{{index .Translation "register"}}</a> | <a href="/signin">{{index .Translation "login"}}</a> | <a href="/logout">{{index .Translation "logout"}}</a>)</td>
+  <body style="height: 100%;">
+  <tr>
+    <td><a href="/">{{index .Translation "homeButton"}}</a></td>
+    <td>|</td>
+    <td>{{index .Translation "user"}}: <a href="/settings">{{.UserName}}</a></td>
+    <td>(<a href="/signup">{{index .Translation "register"}}</a> | <a href="/signin">{{index .Translation "login"}}</a> | <a href="/logout">{{index .Translation "logout"}}</a>)</td>
   </tr>
-    <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" align="right" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a>
-    <hr>
+  <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" align="right" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a>
+  <hr>
+  <div>
+    <form enctype="multipart/form-data" action="/upload" method="post">
+      {{index .Translation "articleTitle"}}: <input type="text" size="40" required="true" name="title" /><br>
+      Upload an article <input type="file" name="myFile" accept=".md" /><input type="submit" value="{{index .Translation "upload"}}" name="submit" />
+  </div>
+  <hr>
+    {{index .Translation "preview"}}:
+    <div id="preview-area" style="height: 50%; overflow-y: hidden;">{{.MDArticle}}</div>
+  <hr>or write it from scratch
     <div>
-        <form enctype="multipart/form-data" action="/upload" method="post">
-          {{index .Translation "articleTitle"}}: <input type="text" size="40" required="true" name="title" /><br>
-          <input type="file" required="true" name="myFile" accept=".md" /><br>
-          <input type="submit" value="{{index .Translation "upload"}}" />
-        </form>
+      <button data-scriptor-btn value="# " htmltags="false" wrap="false" type="button">H1</button>
+
+      <button data-scriptor-btn value="## " wrap="false" htmltags="false" type="button">H2</button>
+
+      <button data-scriptor-btn value="### " htmltags="false" wrap="false" type="button">H3</button>
+
+      <button data-scriptor-btn value="**" htmltags="false" wrap="True" type="button">Bold</button>
+
+      <button data-scriptor-btn value="_" htmltags="false" wrap="True" type="button">Italic</button>
+
+      <button data-scriptor-btn value="~~~" htmltags="false" wrap="True" type="button">Code</button>
+
+      <button data-scriptor-btn value=">" htmltags="false" wrap="false" type="button">Quote</button>
+
+      <button data-scriptor-btn value="* " htmltags="false" wrap="false" type="button">List</button>
+
+      <button data-scriptor-btn value="***" htmltags="false" insert="true" wrap="false" type="button">---</button>
+
+        <input hidden type="text" name="articlePath" value="{{.Path}}"/>
+        <textarea id="text-editor" name="textEditArea" onscroll="SyncScroll()" spellcheck="false" rows="13" cols="150" style="width: 100%; resize: none;">{{.Md}}</textarea>
+        <input type="submit" value="{{index .Translation "save"}}" name="submit" />
+      </form>
     </div>
     <div id="footer">
       <hr>

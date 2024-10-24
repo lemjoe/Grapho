@@ -242,46 +242,61 @@ func (h *Handler) Upload(w http.ResponseWriter, r *http.Request) {
 
 	logger.Info("Current user: " + curUser.FullName)
 
+	lang := curUser.Settings["language"]
+	translation := Localizer(localization, lang, h.bundle)
+
 	// Send 401 if unauthorized
 	if curUser.UserName == "guest" {
 		h.SendCode(w, r, statusCodes[http.StatusUnauthorized])
 		return
 	}
 
-	logger.Info("File Upload Endpoint Hit")
+	var fileBytes []byte
+	title := "New article"
 
-	// Parse our multipart form, 10 << 20 specifies a maximum
-	// upload of 1 MB files.
-	r.ParseMultipartForm(1 << 20)
-	// FormFile returns the first file for the given key `myFile`
-	// it also returns the FileHeader so we can get the Filename,
-	// the Header and the size of the file
-	file, handler, err := r.FormFile("myFile")
-	title := r.FormValue("title")
-	if err != nil {
-		logger.Error("Error Retrieving the File", err)
-		return
+	if r.FormValue("submit") == translation["upload"] {
+		logger.Info("File Upload Endpoint Hit")
+
+		// Parse our multipart form, 10 << 20 specifies a maximum
+		// upload of 1 MB files.
+		r.ParseMultipartForm(1 << 20)
+		// FormFile returns the first file for the given key `myFile`
+		// it also returns the FileHeader so we can get the Filename,
+		// the Header and the size of the file
+		file, handler, err := r.FormFile("myFile")
+		title = r.FormValue("title")
+		if err != nil {
+			logger.Error("Error Retrieving the File", err)
+			return
+		}
+
+		ftype := handler.Filename[len(handler.Filename)-3:]
+		if ftype != ".md" {
+			logger.Error("File type must be text/markdown" + ftype)
+			return
+		}
+		defer file.Close()
+		logger.Infof("Uploaded File: %+v\n", handler.Filename)
+		logger.Infof("File Size: %+v\n", handler.Size)
+		logger.Infof("MIME Header: %+v\n", handler.Header)
+
+		// read all of the contents of our uploaded file into a
+		// byte array
+		fileBytes, err = io.ReadAll(file)
+		if err != nil {
+			logger.Error("Error Reading File", err)
+			return
+		}
+	} else if r.FormValue("submit") == translation["save"] {
+		logger.Info("New article upload endpoint hit")
+
+		file := r.FormValue("textEditArea")
+		fileBytes = []byte(file)
+
+		title = r.FormValue("title")
 	}
 
-	ftype := handler.Filename[len(handler.Filename)-3:]
-	if ftype != ".md" {
-		logger.Error("File type must be text/markdown" + ftype)
-		return
-	}
-	defer file.Close()
-	logger.Infof("Uploaded File: %+v\n", handler.Filename)
-	logger.Infof("File Size: %+v\n", handler.Size)
-	logger.Infof("MIME Header: %+v\n", handler.Header)
-
-	// read all of the contents of our uploaded file into a
-	// byte array
-	fileBytes, err := io.ReadAll(file)
-	if err != nil {
-		logger.Error("Error Reading File", err)
-		return
-	}
-
-	_, err = h.services.ArticleService.CreateNewArticle(title, curUserString, fileBytes)
+	_, err := h.services.ArticleService.CreateNewArticle(title, curUserString, fileBytes)
 	if err != nil {
 		logger.Error("Error Creating Article", err)
 		return

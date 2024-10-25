@@ -46,7 +46,7 @@
 
       <form enctype="multipart/form-data" action="/save" method="post">
         <input hidden type="text" name="articlePath" value="{{.Path}}"/>
-        <textarea id="text-editor" name="textEditArea" onscroll="SyncScroll()" spellcheck="false" rows="13" cols="150" style="width: 100%; resize: none;">{{.Md}}</textarea>
+        <textarea id="text-editor" name="textEditArea" onscroll="SyncScroll()" spellcheck="false" cols="150" style="width: 100%; max-height: 25vh; min-height: 25vh; resize: none;">{{.Md}}</textarea>
         <input type="submit" value="{{index .Translation "save"}}" />
       </form>
     </div>

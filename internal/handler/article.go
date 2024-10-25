@@ -41,7 +41,12 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 	}
 	for _, article := range docs {
 		logger.Info(article)
-		html += "<li>" + "<a href='show?md=" + article.Id + "'>" + article.Title + "</a><i> " + translation["by"] + " <b>" + article.Author + "</b> (" + translation["lastModification"] + ": " + article.ModificationDate.Format("2006-Jan-02 15:04 MST") + ") </i><a href='edit?md=" + article.Id + "'><i>" + editImg + "</i></a> | <a href='delete?md=" + article.Id + "'><i>" + deleteImg + "</i></a></li>"
+		html += "<li>" + "<a href='show?md=" + article.Id + "'>" + article.Title + "</a><i> " + translation["by"] + " <b>" + article.Author + "</b> (" + translation["lastModification"] + ": " + article.ModificationDate.Format("2006-Jan-02 15:04 MST") + ") </i>"
+		if !curUser.IsAdmin && curUser.Id != article.AuthorId {
+			html += "</li>"
+		} else {
+			html += "<a href='edit?md=" + article.Id + "'><i>" + editImg + "</i></a> | <a href='delete?md=" + article.Id + "'><i>" + deleteImg + "</i></a></li>"
+		}
 	}
 
 	html += "</ul>"

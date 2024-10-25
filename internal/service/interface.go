@@ -23,11 +23,11 @@ type MigrationService interface {
 	Migrate(string) error
 }
 type UserService interface {
-	CreateNewUser(string, string, string, string, bool) (models.User, error)
+	CreateNewUser(string, string, string, string, bool, bool) (models.User, error)
 	GetUserById(string) (models.User, error)
 	GetUserByName(string) (models.User, error)
 	ChangeUserPassword(string, string) error
 	ChangeUserSettings(string, map[string]string) error
 	GetUsersList() ([]models.User, error)
-	UpdateUserData(string, string, string, bool) error
+	UpdateUserData(string, string, string, bool, bool) error
 }

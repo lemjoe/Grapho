@@ -20,7 +20,7 @@ func NewUserService(repository *repotypes.Repository) *userService {
 }
 
 // implement func ArticleService interface
-func (u *userService) CreateNewUser(username string, fullname string, password string, email string, isadmin bool) (models.User, error) {
+func (u *userService) CreateNewUser(username string, fullname string, password string, email string, isadmin bool, iswriter bool) (models.User, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), 10)
 	if err != nil {
 		return models.User{}, err
@@ -33,6 +33,7 @@ func (u *userService) CreateNewUser(username string, fullname string, password s
 		Password:     string(hash),
 		Email:        email,
 		IsAdmin:      isadmin,
+		IsWriter:     iswriter,
 		CreationDate: time.Now(),
 		LastLogin:    time.Unix(int64(0), int64(0)),
 		Settings:     DefaultUserSettings,
@@ -79,8 +80,8 @@ func (u *userService) ChangeUserSettings(id string, settings map[string]string) 
 	return nil
 }
 
-func (u *userService) UpdateUserData(id string, fullname string, email string, isadmin bool) error {
-	err := u.repository.User.UpdateUserData(id, fullname, email, isadmin)
+func (u *userService) UpdateUserData(id string, fullname string, email string, isadmin bool, iswriter bool) error {
+	err := u.repository.User.UpdateUserData(id, fullname, email, isadmin, iswriter)
 	if err != nil {
 		return err
 	}

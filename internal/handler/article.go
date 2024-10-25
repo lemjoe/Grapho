@@ -145,6 +145,10 @@ func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 		logger.Error("Wrong user. Action forbidden: status code 403")
 		h.SendCode(w, r, statusCodes[http.StatusForbidden])
 		return
+	} else if !curUser.IsWriter {
+		logger.Error("Wrong permissions. You are unable to write articles: status code 403")
+		h.SendCode(w, r, statusCodes[http.StatusForbidden])
+		return
 	} else {
 		logger.Info("OK user!")
 		err := h.services.ArticleService.DeleteArticle(artclPath)
@@ -167,7 +171,15 @@ func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 
 	// Send 401 if unauthorized
 	if curUser.UserName == "guest" {
+		logger.Error("Unauthorized status code 401")
 		h.SendCode(w, r, statusCodes[http.StatusUnauthorized])
+		return
+	}
+
+	// Send 403 wrong user
+	if !curUser.IsWriter {
+		logger.Error("Wrong user. Action forbidden: status code 403")
+		h.SendCode(w, r, statusCodes[http.StatusForbidden])
 		return
 	}
 

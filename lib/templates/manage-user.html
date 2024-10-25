@@ -20,6 +20,7 @@
             <b>{{index .Translation "fullNameString"}} </b><br><input type="text" size="40" name="full_name" value="{{.ManagedUserFullName}}" /><br>
             <b>e-mail</b><br><input type="text" size="40" name="e_mail" value="{{.ManagedUserEmail}}" /><br>
             <b>{{index .Translation "isAdmin"}}  </b><input type="checkbox" name="is_admin" {{.ManagedUserIsAdmin}} /><br>
+            <b>is writer?  </b><input type="checkbox" name="is_writer" {{.ManagedUserIsWriter}} /><br>
             <input type="submit" value="{{index .Translation "changeUserButton"}}" />
         </form>
         <br><a href="/admin">{{index .Translation "backToUsersList"}}</a>

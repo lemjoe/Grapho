@@ -20,6 +20,7 @@ type userSchema struct {
 	Password     string            `json:"passwd"`
 	Email        string            `json:"email"`
 	IsAdmin      bool              `json:"is_admin"`
+	IsWriter     bool              `json:"is_writer"`
 	Id           string            `json:"_id"`
 	LastLogin    time.Time         `json:"last_login"`
 	CreationDate time.Time         `json:"creation_date"`
@@ -58,6 +59,7 @@ func (u *User) CreateUser(user models.User) (models.User, error) {
 	doc.Set("passwd", user.Password)
 	doc.Set("email", user.Email)
 	doc.Set("is_admin", user.IsAdmin)
+	doc.Set("is_writer", user.IsWriter)
 	doc.Set("creation_date", time.Now())
 	doc.Set("last_login", time.Now())
 	doc.Set("settings", user.Settings)
@@ -71,6 +73,7 @@ func (u *User) CreateUser(user models.User) (models.User, error) {
 		Password:     user.Password,
 		Email:        user.Email,
 		IsAdmin:      user.IsAdmin,
+		IsWriter:     user.IsWriter,
 		Id:           docId,
 		LastLogin:    time.Now(),
 		CreationDate: time.Now(),
@@ -97,6 +100,7 @@ func (u *User) GetAllUsers() ([]models.User, error) {
 			Password:     user.Password,
 			Email:        user.Email,
 			IsAdmin:      user.IsAdmin,
+			IsWriter:     user.IsWriter,
 			Id:           user.Id,
 			LastLogin:    user.LastLogin,
 			CreationDate: user.CreationDate,
@@ -128,6 +132,7 @@ func (u *User) GetUserByUsername(username string) (models.User, error) {
 		Password:     user.Password,
 		Email:        user.Email,
 		IsAdmin:      user.IsAdmin,
+		IsWriter:     user.IsWriter,
 		Id:           user.Id,
 		LastLogin:    user.LastLogin,
 		CreationDate: user.CreationDate,
@@ -156,6 +161,7 @@ func (u *User) GetUserById(id string) (models.User, error) {
 		Password:     user.Password,
 		Email:        user.Email,
 		IsAdmin:      user.IsAdmin,
+		IsWriter:     user.IsWriter,
 		Id:           user.Id,
 		LastLogin:    user.LastLogin,
 		CreationDate: user.CreationDate,
@@ -181,11 +187,12 @@ func (u *User) ChangeUserSettings(id string, settings map[string]string) error {
 	return err
 }
 
-func (u *User) UpdateUserData(id string, fullname string, email string, isadmin bool) error {
+func (u *User) UpdateUserData(id string, fullname string, email string, isadmin bool, iswriter bool) error {
 	err := u.db.UpdateById(u.collectionName, id, func(doc *d.Document) *d.Document {
 		doc.Set("full_name", fullname)
 		doc.Set("email", email)
 		doc.Set("is_admin", isadmin)
+		doc.Set("is_writer", iswriter)
 		return doc
 	})
 	return err

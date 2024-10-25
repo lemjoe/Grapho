@@ -9,7 +9,7 @@ type User interface {
 	GetUserById(id string) (models.User, error)
 	ChangeUserPassword(string, string) error
 	ChangeUserSettings(id string, settings map[string]string) error
-	UpdateUserData(id string, fullname string, email string, isadmin bool) error
+	UpdateUserData(id string, fullname string, email string, isadmin bool, iswriter bool) error
 }
 type Article interface {
 	CreateArticle(article models.Article) (models.Article, error)

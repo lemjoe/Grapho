@@ -19,6 +19,7 @@ type UserScheme struct {
 	Password     string             `bson:"passwd"`
 	Email        string             `bson:"email"`
 	IsAdmin      bool               `bson:"is_admin"`
+	IsWriter     bool               `bson:"is_writer"`
 	Id           primitive.ObjectID `bson:"_id"`
 	LastLogin    time.Time          `bson:"last_login"`
 	CreationDate time.Time          `bson:"creation_date"`
@@ -47,6 +48,7 @@ func Init(driver *mongo.Database) (*User, error) {
 		ct: driver.Collection(collectionName),
 	}, nil
 }
+
 func (u *User) CreateUser(user models.User) (models.User, error) {
 	usScheme := UserScheme{
 		UserName:     user.UserName,
@@ -54,6 +56,7 @@ func (u *User) CreateUser(user models.User) (models.User, error) {
 		Password:     user.Password,
 		Email:        user.Email,
 		IsAdmin:      user.IsAdmin,
+		IsWriter:     user.IsWriter,
 		LastLogin:    time.Now(),
 		CreationDate: time.Now(),
 		Settings:     user.Settings,
@@ -64,6 +67,7 @@ func (u *User) CreateUser(user models.User) (models.User, error) {
 		"passwd":        usScheme.Password,
 		"email":         usScheme.Email,
 		"is_admin":      usScheme.IsAdmin,
+		"is_writer":     usScheme.IsWriter,
 		"last_login":    usScheme.LastLogin,
 		"creation_date": usScheme.CreationDate,
 		"settings":      usScheme.Settings,
@@ -78,6 +82,7 @@ func (u *User) CreateUser(user models.User) (models.User, error) {
 		Password:     usScheme.Password,
 		Email:        usScheme.Email,
 		IsAdmin:      usScheme.IsAdmin,
+		IsWriter:     usScheme.IsWriter,
 		Id:           usScheme.Id.Hex(),
 		LastLogin:    usScheme.LastLogin,
 		CreationDate: usScheme.CreationDate,
@@ -105,6 +110,7 @@ func (u *User) GetAllUsers() ([]models.User, error) {
 			Password:     usr.Password,
 			Email:        usr.Email,
 			IsAdmin:      usr.IsAdmin,
+			IsWriter:     usr.IsWriter,
 			Id:           usr.Id.Hex(),
 			LastLogin:    usr.LastLogin,
 			CreationDate: usr.CreationDate,
@@ -135,6 +141,7 @@ func (u *User) GetUserByUsername(username string) (models.User, error) {
 		Password:     findedUser.Password,
 		Email:        findedUser.Email,
 		IsAdmin:      findedUser.IsAdmin,
+		IsWriter:     findedUser.IsWriter,
 		Id:           findedUser.Id.Hex(),
 		LastLogin:    findedUser.LastLogin,
 		CreationDate: findedUser.CreationDate,
@@ -158,6 +165,7 @@ func (u *User) GetUserById(id string) (models.User, error) {
 		Password:     findedUser.Password,
 		Email:        findedUser.Email,
 		IsAdmin:      findedUser.IsAdmin,
+		IsWriter:     findedUser.IsWriter,
 		Id:           findedUser.Id.Hex(),
 		LastLogin:    findedUser.LastLogin,
 		CreationDate: findedUser.CreationDate,
@@ -193,7 +201,7 @@ func (u *User) ChangeUserSettings(id string, settings map[string]string) error {
 	return nil
 }
 
-func (u *User) UpdateUserData(id string, fullname string, email string, isadmin bool) error {
+func (u *User) UpdateUserData(id string, fullname string, email string, isadmin bool, iswriter bool) error {
 	usrObjId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
@@ -202,6 +210,7 @@ func (u *User) UpdateUserData(id string, fullname string, email string, isadmin 
 		"full_name": fullname,
 		"email":     email,
 		"is_admin":  isadmin,
+		"is_writer": iswriter,
 	}})
 	if err != nil {
 		return err

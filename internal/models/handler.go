@@ -19,6 +19,7 @@ type PageVariables struct {
 	ManagedUserFullName string
 	ManagedUserEmail    string
 	ManagedUserIsAdmin  string
+	ManagedUserIsWriter string
 	AdminPanel          template.HTML
 	Translation         map[string]string
 	Settings            map[string]string

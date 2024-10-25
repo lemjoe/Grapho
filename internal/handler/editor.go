@@ -25,10 +25,28 @@ func (h *Handler) Editor(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	artclPath := r.URL.Query().Get("md")
+
+	doc, err := h.services.ArticleService.GetArticleInfo(artclPath)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+
+	// Send 403 wrong user
+	if !curUser.IsAdmin && curUser.Id != doc.AuthorId {
+		logger.Error("Wrong user. Action forbidden: status code 403")
+		h.SendCode(w, r, statusCodes[http.StatusForbidden])
+		return
+	} else if !curUser.IsWriter {
+		logger.Error("Wrong permissions. You are unable to write articles: status code 403")
+		h.SendCode(w, r, statusCodes[http.StatusForbidden])
+		return
+	}
+
 	lang := curUser.Settings["language"]
 	translation := Localizer(localization, lang, h.bundle)
 
-	artclPath := r.URL.Query().Get("md")
 	md, err := os.ReadFile("articles/" + artclPath) // just pass the file name
 	if err != nil {
 		logger.Error("MD file open error: ", err)

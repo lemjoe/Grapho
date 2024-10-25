@@ -29,7 +29,7 @@ func (m *migrationService) Migrate(adminPasswd string) error {
 	_, err := m.userService.GetUserByName("admin")
 	if err != nil {
 		if strings.Contains(err.Error(), "user not found") {
-			newUsr, err := m.userService.CreateNewUser("admin", "Administrator", adminPasswd, "admin", true)
+			newUsr, err := m.userService.CreateNewUser("admin", "Administrator", adminPasswd, "admin", true, true)
 			fmt.Printf("migrate:\nadmin user created:[%+v]\n", newUsr)
 			fmt.Println("please change the admin password first")
 			if err != nil {

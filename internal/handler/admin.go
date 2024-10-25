@@ -40,7 +40,7 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 		logger.Error(err)
 	}
 
-	html := "<h1>" + translation["listOfUsers"] + ":</h1><table><tr><th>#</th><th>" + translation["thName"] + "</th><th>" + translation["thFullName"] + "</th><th>Email</th><th>Admin?</th><th>" + translation["thManage"] + "</th></tr>"
+	html := "<h1>" + translation["listOfUsers"] + ":</h1><table><tr><th>#</th><th>" + translation["thName"] + "</th><th>" + translation["thFullName"] + "</th><th>Email</th><th>Writer?</th><th>Admin?</th><th>" + translation["thManage"] + "</th></tr>"
 	editImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/" + theme + "/edit-pen.png\" alt=\"Edit\" title=\"Edit\">"
 	// deleteImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/" + theme + "/red-trash-can.png\" alt=\"Edit\" title=\"Edit\">"
 
@@ -49,7 +49,7 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 	// }
 	for i, user := range users {
 		logger.Info(user)
-		html += "<tr><td>" + strconv.Itoa(i+1) + "</td><td>" + user.UserName + "</td><td>" + user.FullName + "</td><td>" + user.Email + "</td><td>" + strconv.FormatBool(user.IsAdmin) + "</td><td></a><a href='manageuser?usr=" + user.Id + "'><i>" + editImg + "</i></a></td></tr>"
+		html += "<tr><td>" + strconv.Itoa(i+1) + "</td><td>" + user.UserName + "</td><td>" + user.FullName + "</td><td>" + user.Email + "</td><td>" + strconv.FormatBool(user.IsWriter) + "</td><td>" + strconv.FormatBool(user.IsAdmin) + "</td><td></a><a href='manageuser?usr=" + user.Id + "'><i>" + editImg + "</i></a></td></tr>"
 	}
 
 	html += "</table>"
@@ -107,6 +107,10 @@ func (h *Handler) ManageUser(w http.ResponseWriter, r *http.Request) {
 	if managedUsr.IsAdmin {
 		mngUsrIsAdm = "checked"
 	}
+	mngUsrIsWriter := ""
+	if managedUsr.IsWriter {
+		mngUsrIsWriter = "checked"
+	}
 
 	ManageUserPageVars := models.PageVariables{ //store the date and time in a struct
 		Title:               translation["titleAdmManageUser"],
@@ -116,6 +120,7 @@ func (h *Handler) ManageUser(w http.ResponseWriter, r *http.Request) {
 		ManagedUserFullName: managedUsr.FullName,
 		ManagedUserEmail:    managedUsr.Email,
 		ManagedUserIsAdmin:  mngUsrIsAdm,
+		ManagedUserIsWriter: mngUsrIsWriter,
 		Translation:         translation,
 	}
 
@@ -156,13 +161,17 @@ func (h *Handler) ChangeUser(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("is_admin") == "on" {
 		is_admin = true
 	}
+	is_writer := false
+	if r.FormValue("is_writer") == "on" {
+		is_writer = true
+	}
 
 	managedUser, err := h.services.UserService.GetUserByName(user_name)
 	if err != nil {
 		logger.Error("Can't load user data: ", err)
 	}
 
-	err = h.services.UserService.UpdateUserData(managedUser.Id, full_name, e_mail, is_admin)
+	err = h.services.UserService.UpdateUserData(managedUser.Id, full_name, e_mail, is_admin, is_writer)
 	if err != nil {
 		logger.Error("Something went wrong: ", err)
 		http.Redirect(w, r, "/", http.StatusSeeOther)

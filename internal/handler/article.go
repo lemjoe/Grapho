@@ -57,6 +57,7 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 		Theme:       theme,
 		Translation: translation,
 		Title:       translation["titleMain"],
+		IsWriter:    curUser.IsWriter,
 	}
 
 	t, err := template.ParseFiles("lib/templates/home.html") //parse the html file homepage.html

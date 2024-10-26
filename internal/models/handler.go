@@ -24,4 +24,5 @@ type PageVariables struct {
 	Translation         map[string]string
 	Settings            map[string]string
 	Licenses            template.HTML
+	IsWriter            bool
 }

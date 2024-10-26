@@ -11,7 +11,7 @@
             <td>{{index .Translation "user"}}: <a href="/settings">{{.UserName}}</a></td>
             <td>(
             {{if eq .UserName "Guest"}}
-                <a href="/signup">{{index .Translation "register"}}</a> | <a href="/signin">{{index .Translation "login"}}</a>
+                <a href="/signin">{{index .Translation "login"}}</a> or <a href="/signup">{{index .Translation "register"}}</a>
             {{else}}
                 <a href="/logout">{{index .Translation "logout"}}</a>
             {{end}}

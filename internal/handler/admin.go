@@ -40,30 +40,31 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 		logger.Error(err)
 	}
 
-	html := "<h1>" + translation["listOfUsers"] + ":</h1><table><tr><th>#</th><th>" + translation["thName"] + "</th><th>" + translation["thFullName"] + "</th><th>Email</th><th>Writer?</th><th>Admin?</th><th>" + translation["thManage"] + "</th></tr>"
-	editImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/" + theme + "/edit-pen.png\" alt=\"Edit\" title=\"Edit\">"
-	// deleteImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/" + theme + "/red-trash-can.png\" alt=\"Edit\" title=\"Edit\">"
+	usersInfo := make([][7]string, len(users))
 
-	// if len(docs) == 0 {
-	// 	html += "<p>There is no articles here! Why don't you add one?"
-	// }
 	for i, user := range users {
 		logger.Info(user)
-		html += "<tr><td>" + strconv.Itoa(i+1) + "</td><td>" + user.UserName + "</td><td>" + user.FullName + "</td><td>" + user.Email + "</td><td>" + strconv.FormatBool(user.IsWriter) + "</td><td>" + strconv.FormatBool(user.IsAdmin) + "</td><td></a><a href='manageuser?usr=" + user.Id + "'><i>" + editImg + "</i></a></td></tr>"
+		usersInfo[i] = [7]string{
+			strconv.Itoa(i + 1),
+			user.UserName,
+			user.FullName,
+			user.Email,
+			strconv.FormatBool(user.IsWriter),
+			strconv.FormatBool(user.IsAdmin),
+			user.Id,
+		}
 	}
 
-	html += "</table>"
-
 	AdminPanelPageVars := models.PageVariables{ //store the date and time in a struct
-		MDArticle:   template.HTML(html),
 		Title:       translation["titleAdmUsersList"],
 		Translation: translation,
 		UserName:    curUser.FullName,
 		Theme:       theme,
+		UsersInfo:   usersInfo,
 	}
 
-	t, err := template.ParseFiles("lib/templates/home.html") //parse the html file homepage.html
-	if err != nil {                                          // if there is an error
+	t, err := template.ParseFiles("lib/templates/users.html") //parse the html file homepage.html
+	if err != nil {                                           // if there is an error
 		logger.Error("Template parsing error: ", err) // log it
 	}
 	err = t.Execute(w, AdminPanelPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps

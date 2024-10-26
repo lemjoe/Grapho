@@ -1,6 +1,8 @@
 package models
 
-import "html/template"
+import (
+	"html/template"
+)
 
 type PageVariables struct {
 	Id                  string
@@ -26,4 +28,6 @@ type PageVariables struct {
 	Licenses            template.HTML
 	IsWriter            bool
 	ToTheTop            bool
+	UsersInfo           [][7]string
+	ArticlesInfo        [][5]string
 }

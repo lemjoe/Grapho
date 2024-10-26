@@ -24,23 +24,23 @@
         <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" align="right" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a>
         <hr>
         <div>
-            <h1>{{index .Translation "listOfArticles"}}</h1>
-            <ul>
-                {{if .ArticlesInfo}}
-                    {{range .ArticlesInfo}}
-                    <li>
-                        <a href='show?md={{index . 0}}'>
-                        {{index . 1}}</a><i> {{index $.Translation "by"}} <b></b>{{index . 2}}</b> ({{index $.Translation "lastModification"}}": "{{index . 3}})</i>
-                        {{if (index . 4)}}
-                            <a href='edit?md={{index . 0}}'><i><img style="padding: 0px; display: inline-block" width="16" height="16" src="../images/{{$.Theme}}/edit-pen.png" alt="Edit" title="Edit"></i></a> | <a href='delete?md={{index . 0}}'><i><img style="padding: 0px; display: inline-block" width="16" height="16" src="../images/{{$.Theme}}/red-trash-can.png" alt="Edit" title="Edit"></i></a>
-                        {{end}}
-                    </li>
-                    {{end}}
-                {{else}}
-                    <p>There is no articles here! Why don't you add one?</p>
+            <h1>{{index .Translation "listOfUsers"}}:</h1>
+            <table>
+                <tr>
+                    <th>#</th><th>{{index .Translation "thName"}}</th><th>{{index .Translation "thFullName"}}</th><th>Email</th><th>Writer?</th><th>Admin?</th><th>{{index .Translation "thManage"}}</th></th>
+                </tr>
+                {{range .UsersInfo}}
+                <tr>
+                    <td>{{index . 0}}</td>
+                    <td>{{index . 1}}</td>
+                    <td>{{index . 2}}</td>
+                    <td>{{index . 3}}</td>
+                    <td>{{index . 4}}</td>
+                    <td>{{index . 5}}</td>
+                    <td><a href='manageuser?usr={{index . 6}}'><i><img style="padding: 0px; display: inline-block" width="16" height="16" src="../images/{{$.Theme}}/edit-pen.png" alt="Edit" title="Edit"></i></a></td>
+                </tr>
                 {{end}}
-            </ul>
-            {{.MDArticle}}
+            </table>
         </div>
         <div id="footer">
             <hr>

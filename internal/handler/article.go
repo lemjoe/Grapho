@@ -32,32 +32,32 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 		logger.Error(err)
 	}
 
-	html := "<h1>" + translation["listOfArticles"] + "</h1><ul>"
-	editImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/" + theme + "/edit-pen.png\" alt=\"Edit\" title=\"Edit\">"
-	deleteImg := "<img style=\"padding: 0px; display: inline-block\" width=\"16\" height=\"16\" src=\"../images/" + theme + "/red-trash-can.png\" alt=\"Edit\" title=\"Edit\">"
+	articlesInfo := make([][5]string, len(docs))
 
-	if len(docs) == 0 {
-		html += "<p>There is no articles here! Why don't you add one?"
-	}
-	for _, article := range docs {
+	for i, article := range docs {
+		var canEdit string
 		logger.Info(article)
-		html += "<li>" + "<a href='show?md=" + article.Id + "'>" + article.Title + "</a><i> " + translation["by"] + " <b>" + article.Author + "</b> (" + translation["lastModification"] + ": " + article.ModificationDate.Format("2006-Jan-02 15:04 MST") + ") </i>"
 		if !curUser.IsAdmin && curUser.Id != article.AuthorId {
-			html += "</li>"
+			canEdit = ""
 		} else {
-			html += "<a href='edit?md=" + article.Id + "'><i>" + editImg + "</i></a> | <a href='delete?md=" + article.Id + "'><i>" + deleteImg + "</i></a></li>"
+			canEdit = "yes"
+		}
+		articlesInfo[i] = [5]string{
+			article.Id,
+			article.Title,
+			article.Author,
+			article.ModificationDate.Format("2006-Jan-02 15:04 MST"),
+			canEdit,
 		}
 	}
 
-	html += "</ul>"
-
 	HomePageVars := models.PageVariables{ //store the date and time in a struct
-		MDArticle:   template.HTML(html),
-		UserName:    curUser.FullName,
-		Theme:       theme,
-		Translation: translation,
-		Title:       translation["titleMain"],
-		IsWriter:    curUser.IsWriter,
+		UserName:     curUser.FullName,
+		Theme:        theme,
+		Translation:  translation,
+		Title:        translation["titleMain"],
+		IsWriter:     curUser.IsWriter,
+		ArticlesInfo: articlesInfo,
 	}
 
 	t, err := template.ParseFiles("lib/templates/home.html") //parse the html file homepage.html

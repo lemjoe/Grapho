@@ -25,4 +25,5 @@ type PageVariables struct {
 	Settings            map[string]string
 	Licenses            template.HTML
 	IsWriter            bool
+	ToTheTop            bool
 }

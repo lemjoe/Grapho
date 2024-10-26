@@ -88,10 +88,13 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 		logger.Error("MD file open error: ", err, artId)
 	}
 
-	toTheTop := []byte("\n<a href=\"#top\"><i>" + translation["backToTop"] + "</i></a>")
+	toTheTop := false
 
 	// always normalize newlines!
-	html := append(MdToHTML(md), toTheTop[:]...)
+	html := MdToHTML(md)
+	if len(html) > 2000 {
+		toTheTop = true
+	}
 
 	doc, err := h.services.ArticleService.GetArticleInfo(artId)
 	if err != nil {
@@ -111,6 +114,7 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 		UserName:     curUser.FullName,
 		Theme:        curUser.Settings["theme"],
 		Translation:  translation,
+		ToTheTop:     toTheTop,
 	}
 
 	t, err := template.ParseFiles("lib/templates/view.html") //parse the html file homepage.html

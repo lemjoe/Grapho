@@ -22,7 +22,11 @@
         <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" align="right" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a> 
         <hr>
         <i>{{index .Translation "uploadedBy"}} <b>{{.Author}}</b> {{.CreationDate}} ({{index .Translation "lastModification"}}: {{.UpdateDate}})</i>
-        <div id="content-wrap">{{.MDArticle}}</div>
+        <div id="content-wrap">{{.MDArticle}}<br>
+            {{if .ToTheTop}}
+                <a href="#top"><i>{{index .Translation "backToTop"}}</i></a>
+            {{end}}
+        </div>
         <div id="footer">
             <hr>
             <tr>

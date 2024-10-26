@@ -30,7 +30,7 @@
                     {{range .ArticlesInfo}}
                     <li>
                         <a href='show?md={{index . 0}}'>
-                        {{index . 1}}</a><i> {{index $.Translation "by"}} <b></b>{{index . 2}}</b> ({{index $.Translation "lastModification"}}": "{{index . 3}})</i>
+                        {{index . 1}}</a><i> {{index $.Translation "by"}} <b>{{index . 2}}</b> ({{index $.Translation "lastModification"}}: {{index . 3}})</i>
                         {{if (index . 4)}}
                             <a href='edit?md={{index . 0}}'><i><img style="padding: 0px; display: inline-block" width="16" height="16" src="../images/{{$.Theme}}/edit-pen.png" alt="Edit" title="Edit"></i></a> | <a href='delete?md={{index . 0}}'><i><img style="padding: 0px; display: inline-block" width="16" height="16" src="../images/{{$.Theme}}/red-trash-can.png" alt="Edit" title="Edit"></i></a>
                         {{end}}

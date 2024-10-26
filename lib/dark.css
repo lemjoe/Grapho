@@ -141,6 +141,36 @@ table, .highlight > pre, pre.example {
     border: 1px dashed rgba(114, 104, 144, 0.5);
 }
 
+/* Стили для меню */
+.menu-table {
+    width: 100%;
+    font: 100%/1.5 sans-serif;
+    border-collapse: collapse;
+    border: none;
+    margin: 0;
+}
+
+.menu-table td, .menu-table th {
+    padding: 0;
+    margin: 0;
+    border: none;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.menu-table tr {
+    display: flex;
+    align-items: center;
+}
+
+.menu-table td:not(:last-child) {
+    margin-right: 10px;
+}
+
+.menu-table td:last-child {
+    margin-left: auto;
+}
+
 textarea {
     background-color: #222222;
     color: #acadb6;

@@ -48,6 +48,7 @@ func (h *Handler) SendCode(w http.ResponseWriter, r *http.Request, status Status
 		BodyText:     status.Description,
 		Theme:        curUser.Settings["theme"],
 		Translation:  translation,
+		UserName:     curUser.FullName,
 	}
 	err = t.Execute(w, StatusPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error

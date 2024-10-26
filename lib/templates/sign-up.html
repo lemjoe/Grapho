@@ -5,10 +5,22 @@
     <title>{{.Title}}</title>
   </head>
   <body>
-    <tr>
-      <td><a href="/">{{index .Translation "homeButton"}}</a></td>
-    </tr>
-    <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" align="right" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a>
+    <table class="menu-table">
+      <tbody>
+          <tr>
+              <td>
+                  <a href="/"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/home.png" alt="{{index .Translation "homeButton"}}" title="Back to home"></a>
+              </td>
+              <td>|</td>
+              <td>
+                  <a href="/signin">{{index .Translation "login"}}</a>
+              </td>
+              <td>
+                  <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a>
+              </td>
+          </tr>
+      </tbody>
+    </table>
     <hr>
     <div>
         <form enctype="multipart/form-data" action="/signup" method="post">

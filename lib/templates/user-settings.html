@@ -59,7 +59,18 @@
           </select><br>
           <input type="submit" value="{{index .Translation "changeSettingsButton"}}" />
       </form>
-        {{.AdminPanel}}
+      {{if .AdminPanel}}
+        <h2>{{index .Translation "adminPanel"}}</h2>
+        <hr>
+        <table>
+          <tr>
+            <td><b>{{index .Translation "managePortalUsers"}}</b>
+            </td>
+            <td><a href="/admin">GO</a>
+            </td>
+          </tr>
+        </table>
+      {{end}}
     </div>
     <div id="footer">
       <hr>

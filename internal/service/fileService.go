@@ -59,14 +59,14 @@ func (f *fileService) DeleteFile(path string) error {
 	return nil
 }
 
-func (f *fileService) ListFolder(path string) ([][]byte, error) {
+func (f *fileService) ListFolder(path string) ([]string, error) {
 	list, err := os.ReadDir(path)
 	if err != nil {
 		return nil, err
 	}
-	var fileNames [][]byte
+	var fileNames []string
 	for _, file := range list {
-		fileNames = append(fileNames, []byte(file.Name()))
+		fileNames = append(fileNames, file.Name())
 	}
 	return fileNames, nil
 }

@@ -36,7 +36,9 @@
         <hr>
         <i>{{index .Translation "thirdPartyLicenses"}}</i>
         <ul>
-            {{.Licenses}}
+            {{range $i, $item := .LicensesPath}}
+                <li><a href="lib/licenses/{{$item}}" target="_blank">{{index $.Licenses $i}}</a></li>
+            {{end}}
         </ul>
         <br><br><br>
         <div id="footer">

@@ -44,13 +44,6 @@ func (h *Handler) Settings(w http.ResponseWriter, r *http.Request) {
 		logger.Error("template parsing error: ", err) // log it
 	}
 
-	adminPanel := []byte("\n<h2>" + translation["adminPanel"] + "</h2><hr><table><tr><td><b>" + translation["managePortalUsers"] + "</b></td><td><a href=\"/admin\">GO</a></td></tr></table>")
-
-	adminInterface := []byte("")
-	if curUser.IsAdmin {
-		adminInterface = adminPanel
-	}
-
 	tmpSettings := map[string]string{
 		curUser.Settings["language"]: "selected",
 		curUser.Settings["theme"]:    "selected",
@@ -58,7 +51,7 @@ func (h *Handler) Settings(w http.ResponseWriter, r *http.Request) {
 
 	UserSettingsPageVars := models.PageVariables{ //store the date and time in a struct
 		Theme:       curUser.Settings["theme"],
-		AdminPanel:  template.HTML(adminInterface),
+		AdminPanel:  curUser.IsAdmin,
 		Translation: translation,
 		Settings:    tmpSettings,
 		Title:       translation["titleUserSettings"],

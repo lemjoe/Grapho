@@ -17,7 +17,7 @@ type FileService interface {
 	WriteFile(path string, body []byte) error
 	CreateFolder(path string) error
 	DeleteFile(path string) error
-	ListFolder(path string) ([][]byte, error)
+	ListFolder(path string) ([]string, error)
 }
 type MigrationService interface {
 	Migrate(string) error

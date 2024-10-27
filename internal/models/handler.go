@@ -22,10 +22,11 @@ type PageVariables struct {
 	ManagedUserEmail    string
 	ManagedUserIsAdmin  string
 	ManagedUserIsWriter string
-	AdminPanel          template.HTML
+	AdminPanel          bool
 	Translation         map[string]string
 	Settings            map[string]string
-	Licenses            template.HTML
+	Licenses            []string
+	LicensesPath        []string
 	IsWriter            bool
 	ToTheTop            bool
 	UsersInfo           [][7]string

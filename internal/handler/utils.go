@@ -484,26 +484,27 @@ func (h *Handler) ShowLicenses(w http.ResponseWriter, r *http.Request) {
 		logger.Error("License file open error: ", err)
 	}
 
-	licenses, err := h.services.FileService.ListFolder("lib/licenses")
+	licensesPath, err := h.services.FileService.ListFolder("lib/licenses")
 	if err != nil {
 		logger.Error("Can't get licenses list: ", err)
 	}
-	var licensesHTML []byte
-	for _, license := range licenses {
-		str := "<li><a href=\"lib/licenses/" + string(license) + "\" target=\"_blank\">" + strings.Replace(string(license), "^", "/", 1) + "</a></li>"
-		licensesHTML = append(licensesHTML, []byte(str)...)
+	var licenses []string
+	for _, license := range licensesPath {
+		str := strings.Replace(string(license), "^", "/", 1)
+		licenses = append(licenses, str)
 	}
 
 	// always normalize newlines!
 	html := MdToHTML(md)
 
 	ArticlePageVars := models.PageVariables{ //store the date and time in a struct
-		MDArticle:   template.HTML(html),
-		UserName:    curUser.FullName,
-		Theme:       curUser.Settings["theme"],
-		Translation: translation,
-		Licenses:    template.HTML(licensesHTML),
-		Title:       translation["titleLicenses"],
+		MDArticle:    template.HTML(html),
+		UserName:     curUser.FullName,
+		Theme:        curUser.Settings["theme"],
+		Translation:  translation,
+		Licenses:     licenses,
+		LicensesPath: licensesPath,
+		Title:        translation["titleLicenses"],
 	}
 
 	t, err := template.ParseFiles("lib/templates/licenses.html") //parse the html file homepage.html

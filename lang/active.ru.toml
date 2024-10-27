@@ -209,3 +209,59 @@ other = "Войти"
 [save]
 hash = "sha1-efc007a393f66cdb14d57d385822a3d9e36ef873"
 other = "Сохранить"
+
+[BinariesAndSC]
+hash = "sha1-10f1f0f08b27b04a78b52d409e0897321f8ae35d"
+other = "Исполняемые файлы и исходный код доступны"
+
+[DeleteButton]
+hash = "sha1-f6fdbe48dc54dd86f63097a03bd24094dedd713a"
+other = "Удалить"
+
+[EditButton]
+hash = "sha1-5301648dcf6b53cefc9ed52999aaa92d4603cae0"
+other = "Редактировать"
+
+[Here]
+hash = "sha1-0154c0dabe7145db37e0b81bf667e7224abec0ba"
+other = "тут"
+
+[IsWriter]
+hash = "sha1-9b916fccc83d8d6024ff727ed1a8b87d302f60f8"
+other = "редактор?"
+
+[LicenseInformation]
+hash = "sha1-b101ab009fd41d01a2a91795c2e3bec61ca1404b"
+other = "Информация о лицензии"
+
+[NoArticles]
+hash = "sha1-fa4912823a743ee6b2bddb356d4b67ac6a381cf8"
+other = "Тут пусто. Добавьте свою первую статью."
+
+[SwitchModeButton]
+hash = "sha1-7da602c7655a8ac3f91f743e381a67789a6bd567"
+other = "Сменить тему"
+
+[ThirdPartyLicenses]
+hash = "sha1-5a8a11fe44cc285ce0f0e007c2c035649422e0bd"
+other = "Информация о лицензиях ПО, используемого при разработке Grapho. Имена разработчиков и названия организаций упомянуты не в целях рекламы или продвижения Grapho."
+
+[TitleLicenses]
+hash = "sha1-b101ab009fd41d01a2a91795c2e3bec61ca1404b"
+other = "Информация о лицензии"
+
+[UnderTerms]
+hash = "sha1-73c3bfdd0583af7badaa17fce9c1a5695f75572f"
+other = "на условиях BSD 3-Clause License."
+
+[Writer]
+hash = "sha1-2ca89cc7d590d4747c2e4670c61e17a5246d5be4"
+other = "Редактор?"
+
+[FromScratch]
+hash = "sha1-9ff4d4b33e03a073c35cfd19251b2d43744535cc"
+other = "или напишите с нуля"
+
+[UploadAnArticle]
+hash = "sha1-42dac0cf8345adbe3f3948be3c0332067233b4c3"
+other = "Загрузите статью"

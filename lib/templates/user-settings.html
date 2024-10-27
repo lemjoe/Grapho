@@ -9,7 +9,7 @@
       <tbody>
           <tr>
               <td>
-                  <a href="/"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/home.png" alt="{{index .Translation "homeButton"}}" title="Back to home"></a>
+                <a href="/"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/home.png" alt="{{index .Translation "homeButton"}}" title="{{index .Translation "homeButton"}}"></a>
               </td>
               <td>|</td>
               <td>
@@ -25,7 +25,7 @@
                   )
               </td>
               <td>
-                  <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a>
+                <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/day-night.png" alt="{{index .Translation "switchModeButton"}}" title="{{index .Translation "switchModeButton"}}"></a>
               </td>
           </tr>
       </tbody>
@@ -42,7 +42,7 @@
             <input type="password" size="40" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="new_password" /><br>
             <b>{{index .Translation "reNewPass"}}</b> <i> ({{index .Translation "mustContain"}})</i><br>
             <input type="password" size="40" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="r_new_password" /><br>
-            <input type="submit" value="Change password" />
+            <input type="submit" value="{{index .Translation "changePassButton"}}" />
         </form>
         <h2>{{index .Translation "misc"}}</h2>
         <hr>
@@ -68,7 +68,7 @@
               <a href="https://github.com/lemjoe/Grapho" target="_blank"><img style="padding: 10px;" height="50" align="left" src="../images/{{.Theme}}/logo.png" alt="Grapho." title="Grapho."></a>
           </td>
           <td>
-            <p>© 2024 | <a href="/licenses">License information</a></p>
+            <p>© 2024 | <a href="/licenses">{{index .Translation "licenseInformation"}}</a></p>
           </td>
       </tr>
   </div>

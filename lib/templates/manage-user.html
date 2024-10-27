@@ -9,7 +9,7 @@
       <tbody>
           <tr>
               <td>
-                  <a href="/"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/home.png" alt="{{index .Translation "homeButton"}}" title="Back to home"></a>
+                <a href="/"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/home.png" alt="{{index .Translation "homeButton"}}" title="{{index .Translation "homeButton"}}"></a>
               </td>
               <td>|</td>
               <td>
@@ -25,7 +25,7 @@
                   )
               </td>
               <td>
-                  <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a>
+                <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/day-night.png" alt="{{index .Translation "switchModeButton"}}" title="{{index .Translation "switchModeButton"}}"></a>
               </td>
           </tr>
       </tbody>
@@ -38,7 +38,7 @@
             <b>{{index .Translation "fullNameString"}} </b><br><input type="text" size="40" name="full_name" value="{{.ManagedUserFullName}}" /><br>
             <b>e-mail</b><br><input type="text" size="40" name="e_mail" value="{{.ManagedUserEmail}}" /><br>
             <b>{{index .Translation "isAdmin"}}  </b><input type="checkbox" name="is_admin" {{.ManagedUserIsAdmin}} /><br>
-            <b>is writer?  </b><input type="checkbox" name="is_writer" {{.ManagedUserIsWriter}} /><br>
+            <b>{{index .Translation "isWriter"}}  </b><input type="checkbox" name="is_writer" {{.ManagedUserIsWriter}} /><br>
             <input type="submit" value="{{index .Translation "changeUserButton"}}" />
         </form>
         <br><a href="/admin">{{index .Translation "backToUsersList"}}</a>
@@ -50,7 +50,7 @@
               <a href="https://github.com/lemjoe/Grapho" target="_blank"><img style="padding: 10px;" height="50" align="left" src="../images/{{.Theme}}/logo.png" alt="Grapho." title="Grapho."></a>
           </td>
           <td>
-            <p>© 2024 | <a href="/licenses">License information</a></p>
+            <p>© 2024 | <a href="/licenses">{{index .Translation "licenseInformation"}}</a></p>
           </td>
       </tr>
   </div>

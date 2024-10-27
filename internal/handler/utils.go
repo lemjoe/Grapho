@@ -66,6 +66,24 @@ func Localizer(input []string, lang string, bundle *i18n.Bundle) map[string]stri
 			Other: "Add an article",
 		},
 	})
+	localization["editButton"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "EditButton",
+			Other: "Edit",
+		},
+	})
+	localization["deleteButton"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "DeleteButton",
+			Other: "Delete",
+		},
+	})
+	localization["switchModeButton"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "SwitchModeButton",
+			Other: "Switch mode",
+		},
+	})
 	localization["user"] = localizer.MustLocalize(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
 			ID:    "User",
@@ -144,6 +162,12 @@ func Localizer(input []string, lang string, bundle *i18n.Bundle) map[string]stri
 		DefaultMessage: &i18n.Message{
 			ID:    "TitleAdmManageUser",
 			Other: "Admin panel | Manage user",
+		},
+	})
+	localization["titleLicenses"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "TitleLicenses",
+			Other: "License information",
 		},
 	})
 
@@ -364,6 +388,18 @@ func Localizer(input []string, lang string, bundle *i18n.Bundle) map[string]stri
 			Other: "is admin?",
 		},
 	})
+	localization["thWriter"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Writer",
+			Other: "Writer?",
+		},
+	})
+	localization["isWriter"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "IsWriter",
+			Other: "is writer?",
+		},
+	})
 	localization["changeUserButton"] = localizer.MustLocalize(&i18n.LocalizeConfig{
 		DefaultMessage: &i18n.Message{
 			ID:    "ChangeUserButton",
@@ -374,6 +410,54 @@ func Localizer(input []string, lang string, bundle *i18n.Bundle) map[string]stri
 		DefaultMessage: &i18n.Message{
 			ID:    "BackToUsersList",
 			Other: "back to users list",
+		},
+	})
+	localization["noArticles"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "NoArticles",
+			Other: "There is no articles here! Why don't you add one?",
+		},
+	})
+	localization["licenseInformation"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "LicenseInformation",
+			Other: "License information",
+		},
+	})
+	localization["binariesAndSC"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "BinariesAndSC",
+			Other: "Binaries and source code of this software are available",
+		},
+	})
+	localization["here"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "Here",
+			Other: "here",
+		},
+	})
+	localization["underTerms"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "UnderTerms",
+			Other: "under the terms of BSD 3-Clause License.",
+		},
+	})
+	localization["thirdPartyLicenses"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "ThirdPartyLicenses",
+			Other: "Information about the licenses of the software used in the development of Grapho. The names of developers and organizations are not mentioned for the purpose of endorsing or promoting Grapho.",
+		},
+	})
+	localization["uploadAnArticle"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "UploadAnArticle",
+			Other: "Upload an article",
+		},
+	})
+	localization["fromScratch"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "FromScratch",
+			Other: "or write it from scratch",
 		},
 	})
 
@@ -419,6 +503,7 @@ func (h *Handler) ShowLicenses(w http.ResponseWriter, r *http.Request) {
 		Theme:       curUser.Settings["theme"],
 		Translation: translation,
 		Licenses:    template.HTML(licensesHTML),
+		Title:       translation["titleLicenses"],
 	}
 
 	t, err := template.ParseFiles("lib/templates/licenses.html") //parse the html file homepage.html

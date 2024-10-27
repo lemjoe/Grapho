@@ -9,7 +9,7 @@
             <tbody>
                 <tr>
                     <td>
-                        <a href="/"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/home.png" alt="{{index .Translation "homeButton"}}" title="Back to home"></a>
+                        <a href="/"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/home.png" alt="{{index .Translation "homeButton"}}" title="{{index .Translation "homeButton"}}"></a>
                     </td>
                     <td>|</td>
                     {{if .IsWriter}}
@@ -31,7 +31,7 @@
                         )
                     </td>
                     <td>
-                        <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a>
+                        <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/day-night.png" alt="{{index .Translation "switchModeButton"}}" title="{{index .Translation "switchModeButton"}}"></a>
                     </td>
                 </tr>
             </tbody>
@@ -46,12 +46,12 @@
                         <a href='show?md={{index . 0}}'>
                         {{index . 1}}</a><i> {{index $.Translation "by"}} <b>{{index . 2}}</b> ({{index $.Translation "lastModification"}}: {{index . 3}})</i>
                         {{if (index . 4)}}
-                            <a href='edit?md={{index . 0}}'><i><img style="padding: 0px; display: inline-block" width="16" height="16" src="../images/{{$.Theme}}/edit-pen.png" alt="Edit" title="Edit"></i></a> | <a href='delete?md={{index . 0}}'><i><img style="padding: 0px; display: inline-block" width="16" height="16" src="../images/{{$.Theme}}/red-trash-can.png" alt="Edit" title="Edit"></i></a>
+                            <a href='edit?md={{index . 0}}'><i><img style="padding: 0px; display: inline-block" width="16" height="16" src="../images/{{$.Theme}}/edit-pen.png" alt="{{index $.Translation "editButton"}}" title="{{index $.Translation "editButton"}}"></i></a> | <a href='delete?md={{index . 0}}'><i><img style="padding: 0px; display: inline-block" width="16" height="16" src="../images/{{$.Theme}}/red-trash-can.png" alt="{{index $.Translation "deleteButton"}}" title="{{index $.Translation "deleteButton"}}"></i></a>
                         {{end}}
                     </li>
                     {{end}}
                 {{else}}
-                    <p>There is no articles here! Why don't you add one?</p>
+                    <p>{{index .Translation "noArticles"}}</p>
                 {{end}}
             </ul>
             {{.MDArticle}}
@@ -63,7 +63,7 @@
                     <a href="https://github.com/lemjoe/Grapho" target="_blank"><img style="padding: 10px;" height="50" align="left" src="../images/{{.Theme}}/logo.png" alt="Grapho." title="Grapho."></a>
                 </td>
                 <td>
-                    <p>© 2024 | <a href="/licenses">License information</a></p>
+                    <p>© 2024 | <a href="/licenses">{{index .Translation "licenseInformation"}}</a></p>
                 </td>
             </tr>
         </div>

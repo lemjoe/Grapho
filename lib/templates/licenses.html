@@ -9,7 +9,7 @@
             <tbody>
                 <tr>
                     <td>
-                        <a href="/"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/home.png" alt="{{index .Translation "homeButton"}}" title="Back to home"></a>
+                        <a href="/"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/home.png" alt="{{index .Translation "homeButton"}}" title="{{index .Translation "homeButton"}}"></a>
                     </td>
                     <td>|</td>
                     <td>
@@ -25,16 +25,16 @@
                         )
                     </td>
                     <td>
-                        <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/day-night.png" alt="Switch mode" title="Switch mode"></a>
+                        <a href="/changetheme"><img style="padding: 0px;" width="16" height="16" src="../images/{{.Theme}}/day-night.png" alt="{{index .Translation "switchModeButton"}}" title="{{index .Translation "switchModeButton"}}"></a>
                     </td>
                 </tr>
             </tbody>
         </table>
         <hr>
-        <i>Binaries and source code of this software are available <a href="https://github.com/lemjoe/Grapho" target="_blank">here</a> under the terms of BSD 3-Clause License.</i>
+        <i>{{index .Translation "binariesAndSC"}} <a href="https://github.com/lemjoe/Grapho" target="_blank">{{index .Translation "here"}}</a> {{index .Translation "underTerms"}}</i>
         <div id="content-wrap">{{.MDArticle}}</div>
         <hr>
-        <i>Information about the licenses of the software used in the development of Grapho. The names of developers and organizations are not mentioned for the purpose of endorsing or promoting Grapho.</i>
+        <i>{{index .Translation "thirdPartyLicenses"}}</i>
         <ul>
             {{.Licenses}}
         </ul>
@@ -46,7 +46,7 @@
                     <a href="https://github.com/lemjoe/Grapho" target="_blank"><img style="padding: 10px;" height="50" align="left" src="../images/{{.Theme}}/logo.png" alt="Grapho." title="Grapho."></a>
                 </td>
                 <td>
-                    <p>© 2024 | <a href="/licenses">License information</a></p>
+                    <p>© 2024 | <a href="/licenses">{{index .Translation "licenseInformation"}}</a></p>
                 </td>
             </tr>
         </div>

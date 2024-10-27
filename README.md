@@ -1,4 +1,7 @@
+
 ![Grapho.](/images/dark/logo.png)
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/lemjoe/Grapho)](https://goreportcard.com/report/github.com/lemjoe/Grapho) [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://github.com/lemjoe/Grapho/blob/main/LICENSE)
 
 ## Overview
 

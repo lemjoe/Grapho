@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  grapho:
+    build:
+      context: .  
+      dockerfile: Dockerfile  
+    container_name: grapho_container
+    ports:
+      - "4007:4007"
+    environment:
+      JWT_SECRET: "your_jwt_secret"
+      ADMIN_PASSWD: "Admin321"
+      MAIN_LOG: "main.log"
+      DB_PATH: "./db"
+      DB_TYPE: "cloverdb"
+    volumes:
+      - ~/Grapho/db:/opt/Grapho/db:z
+      - ~/Grapho/articles:/opt/Grapho/articles:z
+      - ~/Grapho/main.log:/opt/Grapho/main.log:z
+    restart: unless-stopped

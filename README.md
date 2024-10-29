@@ -56,6 +56,6 @@ Then type `localhost:4007` in your browser's address bar.
 | Working editor with preview | :heavy_check_mark: |
 | Code refactoring            | :heavy_check_mark: |
 | Dark/light theme            | :heavy_check_mark: |
-| Docker-ready                |        :x:         |
+| Docker-ready                | :heavy_check_mark: |
 | Translation en-ru           | :heavy_check_mark: |
 | Admin panel                 | :heavy_check_mark: |

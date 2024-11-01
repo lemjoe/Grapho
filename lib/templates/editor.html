@@ -53,14 +53,22 @@
       <button data-scriptor-btn value="**" htmltags="false" wrap="True" type="button">Bold</button>
 
       <button data-scriptor-btn value="_" htmltags="false" wrap="True" type="button">Italic</button>
+      
+      <button data-scriptor-btn value="~~" htmltags="false" wrap="True" type="button"><s>TEXT</s></button>
 
       <button data-scriptor-btn value="~~~" htmltags="false" wrap="True" type="button">Code</button>
 
-      <button data-scriptor-btn value=">" htmltags="false" wrap="false" type="button">Quote</button>
+      <button data-scriptor-btn value="> " htmltags="false" wrap="false" type="button">Quote</button>
 
       <button data-scriptor-btn value="* " htmltags="false" wrap="false" type="button">List</button>
 
+      <button data-scriptor-btn value="0. " htmltags="false" wrap="false" type="button">1.</button>
+
       <button data-scriptor-btn value="***" htmltags="false" insert="true" wrap="false" type="button">---</button>
+      
+      <button data-scriptor-btn value="link" htmltags="false" wrap="true" type="button">Link</button>
+      
+      <button data-scriptor-btn value="img" htmltags="false" insert="true" wrap="false" type="button">Img</button>
 
       <form enctype="multipart/form-data" action="/save" method="post">
         <input hidden type="text" name="articlePath" value="{{.Path}}"/>

@@ -101,7 +101,13 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 		logger.Error(err)
 		return
 	}
-	//doc.Unmarshal(article)
+
+	var canEdit bool
+	if !curUser.IsAdmin && curUser.Id != doc.AuthorId {
+		canEdit = false
+	} else {
+		canEdit = true
+	}
 
 	ArticlePageVars := models.PageVariables{ //store the date and time in a struct
 		MDArticle:    template.HTML(html),
@@ -115,6 +121,7 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 		Theme:        curUser.Settings["theme"],
 		Translation:  translation,
 		ToTheTop:     toTheTop,
+		IsWriter:     canEdit,
 	}
 
 	t, err := template.ParseFiles("lib/templates/view.html") //parse the html file homepage.html

@@ -35,6 +35,9 @@
             </tbody>
         </table>
         <hr>
+        {{if .IsWriter}}
+            <div align="right"><i><a href="edit?md={{.Path}}">{{index .Translation "editButton"}}</a></i></div>
+        {{end}}
         <i>{{index .Translation "uploadedBy"}} <b>{{.Author}}</b> {{.CreationDate}} ({{index .Translation "lastModification"}}: {{.UpdateDate}})</i>
         <div id="content-wrap">{{.MDArticle}}<br>
             {{if .ToTheTop}}

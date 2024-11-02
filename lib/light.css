@@ -60,11 +60,29 @@ pre {
     overflow: auto;
     background-color: #eee;
     border: 1px solid grey;
-    width: 90%;
+    width: 100%;
     border-left: 3px solid #fa6432;
     border-radius: 5px;
     padding: 14px;
+    position: relative;
   }
+
+.copy-code {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #726890;
+    text-decoration: none;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 2px 5px;
+    border-radius: 3px;
+    display: none;
+}
+
+pre:hover .copy-code {
+    display: block;
+}
 
 ol, ul {
     margin: 1em;

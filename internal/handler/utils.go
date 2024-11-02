@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"bytes"
 	"html/template"
 	"net/http"
 	"strings"
@@ -24,8 +25,11 @@ func MdToHTML(md []byte) []byte {
 	htmlFlags := html.CommonFlags | html.HrefTargetBlank | html.FootnoteReturnLinks
 	opts := html.RendererOptions{Flags: htmlFlags}
 	renderer := html.NewRenderer(opts)
+	result := markdown.Render(doc, renderer)
+	copyCode := []byte("<pre><a href=\"\" class=\"copy-code\" title=\"Copy to clipboard\"><img style=\"padding:0px;opacity:0.6;filter:alpha(opacity=60);\" width=\"16\" height=\"16\" src=\"../images/copy.png\"></a><code")
+	result = bytes.ReplaceAll(result, []byte("<pre><code"), copyCode)
 
-	return markdown.Render(doc, renderer)
+	return result
 }
 
 func (h *Handler) GetCurrentUser(userID string) *models.User {

@@ -37,7 +37,7 @@
             <b>{{index .Translation "userStr"}}: </b><input type="text" size="34" name="user_name" value="{{.ManagedUserName}}" readonly/><br>
             <b>{{index .Translation "fullNameString"}} </b><br><input type="text" size="40" name="full_name" value="{{.ManagedUserFullName}}" /><br>
             <b>e-mail</b><br><input type="text" size="40" name="e_mail" value="{{.ManagedUserEmail}}" /><br>
-            <b>{{index .Translation "isAdmin"}}  </b><input type="checkbox" name="is_admin" {{.ManagedUserIsAdmin}} /><br>
+            <b>{{index .Translation "isAdmin"}}  </b><input type="checkbox" name="is_admin" {{.ManagedUserIsAdmin}} {{if eq .ManagedUserName "admin"}}disabled{{end}}/><br>
             <b>{{index .Translation "isWriter"}}  </b><input type="checkbox" name="is_writer" {{.ManagedUserIsWriter}} /><br>
             <input type="submit" value="{{index .Translation "changeUserButton"}}" />
         </form>

@@ -159,6 +159,9 @@ func (h *Handler) ChangeUser(w http.ResponseWriter, r *http.Request) {
 	full_name := r.FormValue("full_name")
 	e_mail := r.FormValue("e_mail")
 	is_admin := false
+	if user_name == "admin" {
+		is_admin = true
+	}
 	if r.FormValue("is_admin") == "on" {
 		is_admin = true
 	}

@@ -1,7 +1,8 @@
 package handler
 
 import (
-	"encoding/json"
+	"bytes"
+	"fmt"
 	"html/template"
 	"io"
 	"net/http"
@@ -75,12 +76,31 @@ func (h *Handler) Editor(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) MDConvert(w http.ResponseWriter, r *http.Request) {
 
 	md, _ := io.ReadAll(r.Body)
-	rg := regexp.MustCompile(`(?:[\t ]*(?:\r?\n|\r))`)
+	// searching code blocks with regex <pre><code>...</code></pre>
+	codeBlockPattern := regexp.MustCompile(`(?s)(<pre><code.*?>.*?</code></pre>)`)
 	html := MdToHTML(md, true)
-	str := string(html)
-	result := rg.ReplaceAllString(str, "")
-	html = []byte(result)
-	w.Header().Set("Content-Type", "application/json")
-	responseJSON := map[string]string{"msg": string(html)}
-	json.NewEncoder(w).Encode(responseJSON)
+
+	codeBlocks := codeBlockPattern.FindAll(html, -1) // memorizing code blocks
+
+	// replacing code blocks with markers
+	for i, block := range codeBlocks {
+		marker := fmt.Sprintf("<!--CODE_BLOCK_%d-->", i)
+		html = bytes.ReplaceAll(html, block, []byte(marker))
+	}
+
+	// deleting new lines but skipping code blocks without processing
+	result := regexp.MustCompile(`(?s)(<pre><code.*?>.*?</code></pre>)`).ReplaceAllStringFunc(string(html), func(match string) string {
+		if codeBlockPattern.MatchString(match) {
+			return match
+		}
+		return " "
+	})
+
+	for i, block := range codeBlocks {
+		marker := fmt.Sprintf("<!--CODE_BLOCK_%d-->", i)
+		result = string(bytes.ReplaceAll([]byte(result), []byte(marker), block))
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.Write([]byte(result)) // sending result as HTML
 }

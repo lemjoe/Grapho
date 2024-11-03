@@ -15,9 +15,23 @@ html {
 
 #footer {
     position: fixed;
-    width: 49em;
+    width: 45%;
     background: #ffffff;
     bottom: 0;
+}
+
+#edit-area {
+    position: fixed;
+    width: 45%;
+    background: #ffffff;
+    bottom: 0;
+}
+
+textarea {
+    width: 100%;
+    resize: vertical;
+    font: monospace;
+    font-size: 15px;
 }
 
 #content-wrap {
@@ -26,7 +40,7 @@ html {
 
 @media (min-width: 768px) {
     html {
-        max-width: 52em;
+        max-width: 47%;
  } }
 
 h1, h2, h3, h4 {
@@ -157,7 +171,43 @@ table, .highlight > pre, pre.example {
     border: 1px dashed rgba(250, 100, 50, 0.5);
 }
 
-/* Стили для меню */
+/* Editor style */
+.editor-table {
+    width: 100%;
+    font: 100%/1.5 sans-serif;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.editor-table button {
+    background-color: transparent;
+}
+
+.editor-table input {
+    background-color: transparent;
+}
+
+.editor-table tr {
+    border: 1px rgba(250, 100, 50, 0.5);
+    display: flex;
+}
+
+.editor-table td {
+    padding: 0;
+    margin: 0;
+    border: 1px dashed rgba(250, 100, 50, 0.5);
+    display: inline-block;
+}
+
+.editor-table td:not(:last-child) {
+    margin-right: 10px;
+}
+
+.editor-table td:last-child {
+    margin-left: auto;
+}
+
+/* Menu style */
 .menu-table {
     width: 100%;
     font: 100%/1.5 sans-serif;

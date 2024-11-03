@@ -40,54 +40,48 @@
       </tbody>
     </table>
   <hr>
-    {{index .Translation "preview"}}:
-    <div id="preview-area" style="height: 55%; overflow-y: hidden;">{{.MDArticle}}</div>
-  <hr><br>
+  {{index .Translation "preview"}}:
+  <div id="preview-area" style="height: 60%; overflow-y: hidden;">
+    {{.MDArticle}}
+  </div>
+  <hr>
+  <div id="edit-area">
     <div>
-      <button data-scriptor-btn value="# " htmltags="false" wrap="false" type="button">H1</button>
-
-      <button data-scriptor-btn value="## " wrap="false" htmltags="false" type="button">H2</button>
-
-      <button data-scriptor-btn value="### " htmltags="false" wrap="false" type="button">H3</button>
-
-      <button data-scriptor-btn value="**" htmltags="false" wrap="True" type="button">Bold</button>
-
-      <button data-scriptor-btn value="_" htmltags="false" wrap="True" type="button">Italic</button>
-      
-      <button data-scriptor-btn value="~~" htmltags="false" wrap="True" type="button"><s>TEXT</s></button>
-
-      <button data-scriptor-btn value="~~~" htmltags="false" wrap="True" type="button">Code</button>
-
-      <button data-scriptor-btn value="`" htmltags="false" wrap="True" type="button"><i>`code`</i></button>
-
-      <button data-scriptor-btn value="> " htmltags="false" wrap="false" type="button">Quote</button>
-
-      <button data-scriptor-btn value="* " htmltags="false" wrap="false" type="button">List</button>
-
-      <button data-scriptor-btn value="0. " htmltags="false" wrap="false" type="button">1.</button>
-
-      <button data-scriptor-btn value="***" htmltags="false" insert="true" wrap="false" type="button">---</button>
-      
-      <button data-scriptor-btn value="link" htmltags="false" wrap="true" type="button">Link</button>
-      
-      <button data-scriptor-btn value="img" htmltags="false" insert="true" wrap="false" type="button">Img</button>
-
-      <form enctype="multipart/form-data" action="/save" method="post">
+      <form enctype="multipart/form-data" action="/save" method="post" >
+        <table class="editor-table" >
+          <tbody>
+              <tr>
+                <td><button data-scriptor-btn value="# " htmltags="false" wrap="false" type="button">H1</button></td>
+                <td><button data-scriptor-btn value="## " wrap="false" htmltags="false" type="button">H2</button></td>
+                <td><button data-scriptor-btn value="### " htmltags="false" wrap="false" type="button">H3</button></td>
+                <td><button data-scriptor-btn value="**" htmltags="false" wrap="True" type="button">Bold</button></td>
+                <td><button data-scriptor-btn value="_" htmltags="false" wrap="True" type="button">Italic</button></td>
+                <td><button data-scriptor-btn value="~~" htmltags="false" wrap="True" type="button"><s>TEXT</s></button></td>
+                <td><button data-scriptor-btn value="~~~" htmltags="false" wrap="True" type="button">Code</button></td>
+                <td><button data-scriptor-btn value="`" htmltags="false" wrap="True" type="button"><i>`code`</i></button></td>
+                <td><button data-scriptor-btn value="> " htmltags="false" wrap="false" type="button">Quote</button></td>
+                <td><button data-scriptor-btn value="* " htmltags="false" wrap="false" type="button">List</button></td>
+                <td><button data-scriptor-btn value="0. " htmltags="false" wrap="false" type="button">1.</button></td> 
+                <td><button data-scriptor-btn value="***" htmltags="false" insert="true" wrap="false" type="button">---</button></td> 
+                <td><button data-scriptor-btn value="link" htmltags="false" wrap="true" type="button">Link</button></td> 
+                <td><button data-scriptor-btn value="img" htmltags="false" insert="true" wrap="false" type="button">Img</button></td> 
+                <td><input type="submit" align="right" value="{{index .Translation "save"}}" /></td> 
+              </tr>
+          </tbody>
+        </table>
         <input hidden type="text" name="articlePath" value="{{.Path}}"/>
-        <textarea id="text-editor" name="textEditArea" onscroll="SyncScroll()" spellcheck="false" cols="150" style="width: 100%; max-height: 25vh; min-height: 25vh; resize: none;">{{.Md}}</textarea>
-        <input type="submit" value="{{index .Translation "save"}}" />
+        <textarea id="text-editor" name="textEditArea" onscroll="SyncScroll()" spellcheck="false" cols="150" style="width: 100%; max-height: 25vh; height: 25vh; resize: none;">{{.Md}}</textarea>
       </form>
     </div>
-    <div id="footer">
-      <hr>
-      <tr>
-          <td>
-              <a href="https://github.com/lemjoe/Grapho" target="_blank"><img style="padding: 10px;" height="50" align="left" src="../images/{{.Theme}}/logo.png" alt="Grapho." title="Grapho."></a>
-          </td>
-          <td>
-            <p>© 2024 | <a href="/licenses">{{index .Translation "licenseInformation"}}</a></p>
-          </td>
-      </tr>
+    <hr>
+    <tr>
+        <td>
+            <a href="https://github.com/lemjoe/Grapho" target="_blank"><img style="padding: 10px;" height="50" align="left" src="../images/{{.Theme}}/logo.png" alt="Grapho." title="Grapho."></a>
+        </td>
+        <td>
+          <p>© 2024 | <a href="/licenses">{{index .Translation "licenseInformation"}}</a></p>
+        </td>
+    </tr>
   </div>
   </body>
 </html>

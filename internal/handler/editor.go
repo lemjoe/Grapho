@@ -51,7 +51,7 @@ func (h *Handler) Editor(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		logger.Error("MD file open error: ", err)
 	}
-	html := MdToHTML(md)
+	html := MdToHTML(md, true)
 
 	HomePageVars := models.PageVariables{ //store the date and time in a struct
 		Md:          string(md),
@@ -76,7 +76,7 @@ func (h *Handler) MDConvert(w http.ResponseWriter, r *http.Request) {
 
 	md, _ := io.ReadAll(r.Body)
 	rg := regexp.MustCompile(`(?:[\t ]*(?:\r?\n|\r))`)
-	html := MdToHTML(md)
+	html := MdToHTML(md, true)
 	str := string(html)
 	result := rg.ReplaceAllString(str, "")
 	html = []byte(result)

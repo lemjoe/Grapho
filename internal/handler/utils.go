@@ -15,7 +15,7 @@ import (
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
-func MdToHTML(md []byte) []byte {
+func MdToHTML(md []byte, editMode bool) []byte {
 	// create markdown parser with extensions
 	extensions := parser.CommonExtensions | parser.Footnotes | parser.MathJax | parser.DefinitionLists | parser.Titleblock | parser.AutoHeadingIDs
 	p := parser.NewWithExtensions(extensions)
@@ -26,9 +26,10 @@ func MdToHTML(md []byte) []byte {
 	opts := html.RendererOptions{Flags: htmlFlags}
 	renderer := html.NewRenderer(opts)
 	result := markdown.Render(doc, renderer)
-	copyCode := []byte("<pre><a href=\"\" class=\"copy-code\" title=\"Copy to clipboard\"><img style=\"padding:0px;opacity:0.6;filter:alpha(opacity=60);\" width=\"16\" height=\"16\" src=\"../images/copy.png\"></a><code")
-	result = bytes.ReplaceAll(result, []byte("<pre><code"), copyCode)
-
+	if !editMode {
+		copyCode := []byte("<pre><a href=\"\" class=\"copy-code\" title=\"Copy to clipboard\"><img style=\"padding:0px;opacity:0.6;filter:alpha(opacity=60);\" width=\"16\" height=\"16\" src=\"../images/copy.png\"></a><code")
+		result = bytes.ReplaceAll(result, []byte("<pre><code"), copyCode)
+	}
 	return result
 }
 
@@ -499,7 +500,7 @@ func (h *Handler) ShowLicenses(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// always normalize newlines!
-	html := MdToHTML(md)
+	html := MdToHTML(md, false)
 
 	ArticlePageVars := models.PageVariables{ //store the date and time in a struct
 		MDArticle:    template.HTML(html),

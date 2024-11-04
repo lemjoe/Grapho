@@ -4,14 +4,7 @@
     <title>{{.Title}}</title>
     <link rel="stylesheet" href="/lib/{{.Theme}}.css">
     <script src="/lib/scriptor.js" defer></script>
-    <script>
-      function SyncScroll() {
-        var id1 = document.getElementById("preview-area");
-        var id2 = document.getElementById("text-editor");
-        var step = id1.scrollHeight / id2.scrollHeight;
-        id1.scrollTop = id2.scrollTop * step;
-      }
-    </script>
+    <script src="/lib/scroll.js" defer></script>
   </head>
   <body style="height: 100%;">
     <table class="menu-table">

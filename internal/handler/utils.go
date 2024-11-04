@@ -15,7 +15,7 @@ import (
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 )
 
-func MdToHTML(md []byte, editMode bool) []byte {
+func MdToHTML(md []byte, editMode bool, textStrings []string) []byte {
 	// create markdown parser with extensions
 	extensions := parser.CommonExtensions | parser.Footnotes | parser.MathJax | parser.DefinitionLists | parser.Titleblock | parser.AutoHeadingIDs
 	p := parser.NewWithExtensions(extensions)
@@ -27,7 +27,7 @@ func MdToHTML(md []byte, editMode bool) []byte {
 	renderer := html.NewRenderer(opts)
 	result := markdown.Render(doc, renderer)
 	if !editMode {
-		copyCode := []byte("<pre><a href=\"\" class=\"copy-code\" title=\"Copy to clipboard\"><img style=\"padding:0px;opacity:0.6;filter:alpha(opacity=60);\" width=\"16\" height=\"16\" src=\"../images/copy.png\"></a><code")
+		copyCode := []byte("<pre><a href=\"\" class=\"copy-code\" title=\"" + textStrings[0] + "\"><img style=\"padding:0px;opacity:0.6;filter:alpha(opacity=60);\" width=\"16\" height=\"16\" src=\"../images/copy.png\"></a><code")
 		result = bytes.ReplaceAll(result, []byte("<pre><code"), copyCode)
 	}
 	return result
@@ -465,6 +465,12 @@ func Localizer(input []string, lang string, bundle *i18n.Bundle) map[string]stri
 			Other: "or write it from scratch",
 		},
 	})
+	localization["copyToClipboard"] = localizer.MustLocalize(&i18n.LocalizeConfig{
+		DefaultMessage: &i18n.Message{
+			ID:    "CopyToClipboard",
+			Other: "Copy to clipboard",
+		},
+	})
 
 	for _, val := range input {
 		output[val] = localization[val]
@@ -500,7 +506,7 @@ func (h *Handler) ShowLicenses(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// always normalize newlines!
-	html := MdToHTML(md, false)
+	html := MdToHTML(md, false, nil)
 
 	ArticlePageVars := models.PageVariables{ //store the date and time in a struct
 		MDArticle:    template.HTML(html),

@@ -91,7 +91,7 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 	toTheTop := false
 
 	// always normalize newlines!
-	html := MdToHTML(md, false)
+	html := MdToHTML(md, false, []string{translation["copyToClipboard"]})
 	if len(html) > 2000 {
 		toTheTop = true
 	}

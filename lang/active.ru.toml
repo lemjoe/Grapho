@@ -265,3 +265,7 @@ other = "или напишите с нуля"
 [UploadAnArticle]
 hash = "sha1-42dac0cf8345adbe3f3948be3c0332067233b4c3"
 other = "Загрузите статью"
+
+[CopyToClipboard]
+hash = "sha1-d8f482edf74e07a582e0836096d47a59b3bc03c2"
+other = "В буфер обмена"

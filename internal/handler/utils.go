@@ -506,7 +506,7 @@ func (h *Handler) ShowLicenses(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// always normalize newlines!
-	html := MdToHTML(md, false, nil)
+	html := MdToHTML(md, true, nil)
 
 	ArticlePageVars := models.PageVariables{ //store the date and time in a struct
 		MDArticle:    template.HTML(html),

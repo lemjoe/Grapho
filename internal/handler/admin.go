@@ -61,6 +61,7 @@ func (h *Handler) GetUsersList(w http.ResponseWriter, r *http.Request) {
 		UserName:    curUser.FullName,
 		Theme:       theme,
 		UsersInfo:   usersInfo,
+		Version:     h.version,
 	}
 
 	t, err := template.ParseFiles("lib/templates/users.html") //parse the html file homepage.html
@@ -123,6 +124,7 @@ func (h *Handler) ManageUser(w http.ResponseWriter, r *http.Request) {
 		ManagedUserIsAdmin:  mngUsrIsAdm,
 		ManagedUserIsWriter: mngUsrIsWriter,
 		Translation:         translation,
+		Version:             h.version,
 	}
 
 	t, err := template.ParseFiles("lib/templates/manage-user.html") //parse the html file homepage.html

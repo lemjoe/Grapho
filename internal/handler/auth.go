@@ -29,6 +29,7 @@ func (h *Handler) SignUp(w http.ResponseWriter, r *http.Request) {
 		Theme:       curUser.Settings["theme"],
 		Translation: translation,
 		Title:       translation["titleSignUp"],
+		Version:     h.version,
 	}
 	err = t.Execute(w, SingUpPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error
@@ -78,6 +79,7 @@ func (h *Handler) SignIn(w http.ResponseWriter, r *http.Request) {
 		Theme:       curUser.Settings["theme"],
 		Translation: translation,
 		Title:       translation["titleLogin"],
+		Version:     h.version,
 	}
 	err = t.Execute(w, SingInPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error

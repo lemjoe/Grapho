@@ -11,12 +11,14 @@ import (
 type Handler struct {
 	services *service.Service
 	bundle   *i18n.Bundle
+	version  string
 }
 
-func NewHandler(services *service.Service, bundle *i18n.Bundle) *Handler {
+func NewHandler(services *service.Service, bundle *i18n.Bundle, version string) *Handler {
 	return &Handler{
 		services: services,
 		bundle:   bundle,
+		version:  version,
 	}
 }
 

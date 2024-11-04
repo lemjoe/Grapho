@@ -15,7 +15,7 @@ type App struct {
 func NewApp() *App {
 	return &App{}
 }
-func (a *App) Run() error {
+func (a *App) Run(version string) error {
 	confDB, confApp, err := config.InitConfig("./.env")
 	if err != nil {
 		return err
@@ -36,7 +36,7 @@ func (a *App) Run() error {
 		return err
 	}
 
-	handlers := handler.NewHandler(services, bundle)
+	handlers := handler.NewHandler(services, bundle, version)
 	err = handlers.Run(":" + confApp.Port)
 	return err
 }

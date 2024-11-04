@@ -58,6 +58,7 @@ func (h *Handler) GetArticlesList(w http.ResponseWriter, r *http.Request) {
 		Title:        translation["titleMain"],
 		IsWriter:     curUser.IsWriter,
 		ArticlesInfo: articlesInfo,
+		Version:      h.version,
 	}
 
 	t, err := template.ParseFiles("lib/templates/home.html") //parse the html file homepage.html
@@ -122,6 +123,7 @@ func (h *Handler) ShowArticle(w http.ResponseWriter, r *http.Request) {
 		Translation:  translation,
 		ToTheTop:     toTheTop,
 		IsWriter:     canEdit,
+		Version:      h.version,
 	}
 
 	t, err := template.ParseFiles("lib/templates/view.html") //parse the html file homepage.html
@@ -213,6 +215,7 @@ func (h *Handler) UploadArticle(w http.ResponseWriter, r *http.Request) {
 		Theme:       curUser.Settings["theme"],
 		Translation: translation,
 		Title:       translation["titleUploadArt"],
+		Version:     h.version,
 	}
 	err = t.Execute(w, UploadPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error

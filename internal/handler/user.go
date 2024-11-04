@@ -56,6 +56,7 @@ func (h *Handler) Settings(w http.ResponseWriter, r *http.Request) {
 		Settings:    tmpSettings,
 		Title:       translation["titleUserSettings"],
 		UserName:    curUser.FullName,
+		Version:     h.version,
 	}
 	err = t.Execute(w, UserSettingsPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                          // if there is an error

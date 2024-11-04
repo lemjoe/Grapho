@@ -516,6 +516,7 @@ func (h *Handler) ShowLicenses(w http.ResponseWriter, r *http.Request) {
 		Licenses:     licenses,
 		LicensesPath: licensesPath,
 		Title:        translation["titleLicenses"],
+		Version:      h.version,
 	}
 
 	t, err := template.ParseFiles("lib/templates/licenses.html") //parse the html file homepage.html

@@ -49,6 +49,7 @@ func (h *Handler) SendCode(w http.ResponseWriter, r *http.Request, status Status
 		Theme:        curUser.Settings["theme"],
 		Translation:  translation,
 		UserName:     curUser.FullName,
+		Version:      h.version,
 	}
 	err = t.Execute(w, StatusPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                    // if there is an error
@@ -77,6 +78,7 @@ func (h *Handler) SendAlert(w http.ResponseWriter, r *http.Request, alert AlertM
 		BodyText:     alert.Description,
 		Theme:        curUser.Settings["theme"],
 		Translation:  translation,
+		Version:      h.version,
 	}
 	err = t.Execute(w, AlertPageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
 	if err != nil {                   // if there is an error

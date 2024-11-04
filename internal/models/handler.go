@@ -31,4 +31,5 @@ type PageVariables struct {
 	ToTheTop            bool
 	UsersInfo           [][7]string
 	ArticlesInfo        [][5]string
+	Version             string
 }

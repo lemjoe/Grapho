@@ -47,7 +47,7 @@ func (h *Handler) SignUpPost(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	fullName := r.FormValue("fullname")
 
-	_, err := h.services.UserService.GetUserById(login)
+	user, err := h.services.UserService.GetUserByName(login)
 	if err != nil {
 		if strings.Contains(err.Error(), "user not found") {
 			newUsr, err := h.services.UserService.CreateNewUser(login, fullName, password, email, false, false)
@@ -59,6 +59,16 @@ func (h *Handler) SignUpPost(w http.ResponseWriter, r *http.Request) {
 		} else {
 			logger.Error("unable to get user: ", err)
 		}
+	}
+	logger.Info(user.UserName + "==" + login)
+	if user.UserName == login {
+		logger.Info("error: user is already exists")
+		alert := AlertMessage{
+			Title:       "User exists!",
+			Description: "User with the given name is already exists. Try to pick another name.",
+		}
+		h.SendAlert(w, r, alert)
+		return
 	}
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

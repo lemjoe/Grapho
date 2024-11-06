@@ -60,7 +60,6 @@ func (h *Handler) SignUpPost(w http.ResponseWriter, r *http.Request) {
 			logger.Error("unable to get user: ", err)
 		}
 	}
-	logger.Info(user.UserName + "==" + login)
 	if user.UserName == login {
 		logger.Info("error: user is already exists")
 		alert := AlertMessage{
@@ -112,7 +111,11 @@ func (h *Handler) SignInPost(w http.ResponseWriter, r *http.Request) {
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		logger.Error("invalid login or password: ", err)
-		h.SendCode(w, r, statusCodes[http.StatusUnauthorized])
+		alert := AlertMessage{
+			Title:       "Incorrect password!",
+			Description: "Try again.",
+		}
+		h.SendAlert(w, r, alert)
 		return
 	}
 

@@ -189,6 +189,7 @@ table, .highlight > pre, pre.example {
 
 .editor-table tr {
     border: 1px rgba(250, 100, 50, 0.5);
+    background-color: #eee;
     display: flex;
 }
 
@@ -205,6 +206,7 @@ table, .highlight > pre, pre.example {
 
 .editor-table td:last-child {
     margin-left: auto;
+    background-color: rgba(250, 100, 50, 0.5);
 }
 
 /* Menu style */
